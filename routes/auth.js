@@ -78,7 +78,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         return error('อีเมลนี้ถูกใช้งานแล้ว')
       }
       
-      return error('เกิดข้อผิดพลาดในการสมัครสมาชิก')
+      return error('เกิดข้อผิดพลาดในการสมัครสมาชิก1')
     }
   })
   
