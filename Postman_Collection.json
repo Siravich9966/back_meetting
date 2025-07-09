@@ -1,0 +1,324 @@
+{
+  "info": {
+    "name": "ระบบจองห้องประชุม - Meeting Room API",
+    "description": "API Collection สำหรับระบบจองห้องประชุม มหาวิทยาลัยราชภัฏมหาสารคาม",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🏠 Basic APIs",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "API Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/test",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "test"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Home Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success) {",
+                  "        console.log('✅ Registration สำเร็จ:', response.user.email);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@mru.ac.th\",\n  \"password\": \"123456\",\n  \"first_name\": \"ทดสอบ\",\n  \"last_name\": \"ระบบ\",\n  \"citizen_id\": \"1234567890123\",\n  \"position\": \"นักศึกษา\",\n  \"department\": \"คณะวิทยาการคอมพิวเตอร์\",\n  \"zip_code\": \"44000\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.token) {",
+                  "        pm.collectionVariables.set('token', response.token);",
+                  "        console.log('✅ Login สำเร็จ, Token saved!');",
+                  "        console.log('📝 User:', response.user.first_name, response.user.last_name);",
+                  "        console.log('🎭 Role:', response.user.roles?.role_name);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@mru.ac.th\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔒 Protected APIs",
+      "item": [
+        {
+          "name": "Test Protected (No Auth)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/protected/test",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "protected", "test"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Profile (No Token)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/protected/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "protected", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Profile (With Token)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/protected/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "protected", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User Area",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/protected/user-area",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "protected", "user-area"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👮 Officer APIs",
+      "item": [
+        {
+          "name": "Officer Area",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/protected/officer-area",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "protected", "officer-area"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pending Reservations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/protected/pending-reservations",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "protected", "pending-reservations"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👑 Admin APIs",
+      "item": [
+        {
+          "name": "Admin Area",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/protected/admin-area",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "protected", "admin-area"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/protected/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "protected", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "System Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/protected/system-stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "protected", "system-stats"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
