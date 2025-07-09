@@ -71,7 +71,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       
       // จัดการ error เฉพาะ
       if (err.code === 'P2002' && err.meta?.target?.includes('citizen_id')) {
-        return error('เลขบัตรประชาชนนี้ถูกใช้งานแล้ว')
+        return error('เลขบัตรประชาชนนี้ถูกใช้งานแล้ว11')
       }
       
       if (err.code === 'P2002' && err.meta?.target?.includes('email')) {
