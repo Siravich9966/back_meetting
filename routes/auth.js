@@ -20,7 +20,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       
       // ตรวจสอบข้อมูลที่จำเป็น
       if (!body.email || !body.password || !body.first_name || !body.last_name) {
-        console.log('❌ ข้อมูลไม่ครบถ้วนdd')
+        console.log('❌ ข้อมูลไม่ครบถ้วน')
         return error('กรุณากรอกข้อมูลให้ครบถ้วน')
       }
       

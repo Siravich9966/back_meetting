@@ -1,59 +1,62 @@
 // ===================================================================
-// JWT Middleware สำหรับ Elysia Framework
+// JWT Middleware สำหรับ Meeting Room Backend
 // ===================================================================
-// ไฟล์นี้จัดการการตรวจสอบ JWT Token และ Role-based Access:
+// จัดการการตรวจสอบ JWT Token และ Role-based Access Control
 // 
-// Functions:
-// - verifyToken()     - ตรวจสอบ JWT token ด้วย jsonwebtoken
-// - jwtMiddleware     - Elysia middleware หลักสำหรับแปลง token เป็น user data
-// - authenticate      - ใช้กับ route ที่ต้อง login (มี user หรือไม่)
-// - restrictTo()      - ใช้กับ route ที่ต้องการ role เฉพาะ
-// 
-// Exports:
-// - requireAuth       - ต้อง login (user, officer, admin ใช้ได้)
-// - requireOfficer    - เจ้าหน้าที่ + admin เท่านั้น
-// - requireAdmin      - admin เท่านั้น
-// - requireUser       - user + officer + admin (เผื่อไว้)
+// Architecture:
+// - jwtMiddleware: Core middleware ที่ inject user data
+// - Role Guards: requireAuth, requireOfficer, requireAdmin
+// - Token Verification: ตรวจสอบ JWT และดึงข้อมูล user
 // ===================================================================
 
 import { Elysia } from 'elysia'
-import { PrismaClient } from '@prisma/client'
+import prisma from '../lib/prisma.js'
+import jwt from 'jsonwebtoken'
 
-// สร้าง Prisma client สำหรับ middleware
-const prisma = new PrismaClient()
-
-// ฟังก์ชันตรวจสอบ JWT Token
+// JWT Token Verification
 const verifyToken = async (token) => {
   try {
-    const jwt = await import('jsonwebtoken')
     return jwt.verify(token, process.env.JWT_SECRET)
   } catch (error) {
-    throw error
+    throw new Error(`Invalid token: ${error.message}`)
   }
 }
 
-// JWT Middleware หลัก
+// Core JWT Middleware
+// ฟังก์ชัน middleware หลักที่ inject user data เข้า context
 export const jwtMiddleware = new Elysia()
   .derive(async ({ headers }) => {
-    console.log('🚀 JWT Middleware started')
+    console.log('🔍 JWT Middleware: Checking headers...', headers.authorization ? 'Token found' : 'No token')
     
     // ตรวจสอบ Authorization header
     const authHeader = headers.authorization
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log('❌ JWT Middleware: No valid Bearer token')
       return { user: null }
     }
 
     try {
       // แยกและตรวจสอบ token
       const token = authHeader.substring(7)
+      console.log('🔓 JWT Middleware: Verifying token...')
       const decoded = await verifyToken(token)
-      
-      console.log('🔍 Token decoded:', { userId: decoded.userId, email: decoded.email })
+      console.log('✅ JWT Middleware: Token decoded:', { userId: decoded.userId, email: decoded.email })
 
       // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
+      console.log('🔍 JWT Middleware: Querying database for user ID:', decoded.userId)
       const user = await prisma.users.findUnique({
         where: { user_id: decoded.userId },
-        include: {
+        select: {
+          user_id: true,
+          email: true,
+          first_name: true,
+          last_name: true,
+          citizen_id: true,
+          position: true,
+          department: true,
+          zip_code: true,
+          created_at: true,
+          updated_at: true,
           roles: {
             select: {
               role_name: true,
@@ -63,80 +66,162 @@ export const jwtMiddleware = new Elysia()
         }
       })
 
+      console.log('📋 JWT Middleware: Database result:', user ? 'User found' : 'User not found')
+      
       if (!user) {
-        console.log('❌ User not found')
+        console.log('❌ JWT Middleware: User not found in database')
         return { user: null }
       }
 
-      if (user.roles?.role_status !== 'active') {
-        console.log('❌ User role inactive')
-        return { user: null }
+      // **ENHANCEMENT**: Inject user.role เพื่อให้ง่ายต่อการเข้าถึง
+      const userWithRole = {
+        ...user,
+        role: user.roles?.role_name || null
       }
 
-      // เตรียมข้อมูล user สำหรับ routes
-      const userData = {
-        user_id: user.user_id,
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        role_id: user.role_id,
-        role_name: user.roles?.role_name,
-        department: user.department
-      }
-
-      console.log('✅ User authenticated:', userData.email)
-      return { user: userData }
+      console.log('✅ JWT Middleware: User data ready:', userWithRole)
+      // Return user data สำหรับ Elysia context
+      return { user: userWithRole }
 
     } catch (error) {
-      console.error('JWT Error:', error.message)
+      console.error('❌ JWT Error:', error.message)
       return { user: null }
     }
   })
 
-// Middleware สำหรับ route ที่ต้อง authentication
-export const authenticate = new Elysia()
+// Role-Based Access Control Guards
+// ========================
+// ใช้ "restrict to" pattern - กำหนดชัดเจนว่า role ไหนเข้าได้
+
+// Restrict to: Authenticated users only (any role)
+export const requireAuth = new Elysia()
   .use(jwtMiddleware)
-  .guard(
-    {
-      beforeHandle({ user, set }) {
-        if (!user) {
-          set.status = 401
-          return { 
-            success: false,
-            error: 'กรุณาเข้าสู่ระบบ' 
-          }
+  .guard({
+    beforeHandle({ user, set }) {
+      console.log('🔐 RequireAuth: Checking user...', user ? 'User exists' : 'No user')
+      if (!user) {
+        console.log('❌ RequireAuth: Blocking request - no authentication')
+        set.status = 401
+        return { 
+          success: false, 
+          message: 'Authentication required' 
         }
       }
+      console.log('✅ RequireAuth: User authenticated, proceeding...')
     }
-  )
+  })
 
-// Middleware สำหรับตรวจสอบ role
+// Restrict to: Admin role ONLY
+export const requireAdmin = new Elysia()
+  .use(jwtMiddleware)
+  .guard({
+    beforeHandle({ user, set }) {
+      console.log('🔐 RequireAdmin: Checking user...', user ? 'User exists' : 'No user')
+      if (!user) {
+        console.log('❌ RequireAdmin: Blocking request - no authentication')
+        set.status = 401
+        return { 
+          success: false, 
+          message: 'Authentication required' 
+        }
+      }
+      // Restrict to admin role only
+      if (user?.role !== 'admin') {
+        console.log('❌ RequireAdmin: Blocking request - not admin role')
+        set.status = 403
+        return { 
+          success: false, 
+          message: 'Access restricted to admin role only' 
+        }
+      }
+      console.log('✅ RequireAdmin: Admin role verified, proceeding...')
+    }
+  })
+
+// Restrict to: Officer OR Admin roles
+export const requireOfficer = new Elysia()
+  .use(jwtMiddleware)
+  .guard({
+    beforeHandle({ user, set }) {
+      console.log('🔐 RequireOfficer: Checking user...', user ? 'User exists' : 'No user')
+      if (!user) {
+        console.log('❌ RequireOfficer: Blocking request - no authentication')
+        set.status = 401
+        return { 
+          success: false, 
+          message: 'Authentication required' 
+        }
+      }
+      // Restrict to officer or admin roles only
+      const allowedRoles = ['officer', 'admin']
+      if (!allowedRoles.includes(user?.role)) {
+        console.log('❌ RequireOfficer: Blocking request - role not in allowed list:', allowedRoles)
+        set.status = 403
+        return { 
+          success: false, 
+          message: 'Access restricted to officer or admin roles only' 
+        }
+      }
+      console.log('✅ RequireOfficer: Role verified, proceeding...')
+    }
+  })
+
+// Restrict to: User, Officer, OR Admin roles (any authenticated user)
+export const requireUser = new Elysia()
+  .use(jwtMiddleware)
+  .guard({
+    beforeHandle({ user, set }) {
+      console.log('🔐 RequireUser: Checking user...', user ? 'User exists' : 'No user')
+      if (!user) {
+        console.log('❌ RequireUser: Blocking request - no authentication')
+        set.status = 401
+        return { 
+          success: false, 
+          message: 'Authentication required' 
+        }
+      }
+      // Restrict to any valid role
+      const allowedRoles = ['user', 'officer', 'admin']
+      if (!allowedRoles.includes(user?.role)) {
+        console.log('❌ RequireUser: Blocking request - invalid role')
+        set.status = 403
+        return { 
+          success: false, 
+          message: 'Access restricted to valid user roles only' 
+        }
+      }
+      console.log('✅ RequireUser: Valid role verified, proceeding...')
+    }
+  })
+
+// Flexible role restriction helper
 export const restrictTo = (...allowedRoles) => {
   return new Elysia()
     .use(jwtMiddleware)
     .guard({
       beforeHandle({ user, set }) {
+        console.log(`🔐 RestrictTo [${allowedRoles.join(', ')}]: Checking user...`, user ? 'User exists' : 'No user')
+        
         if (!user) {
+          console.log('❌ RestrictTo: Blocking request - no authentication')
           set.status = 401
           return { 
-            success: false,
-            error: 'กรุณาเข้าสู่ระบบ' 
+            success: false, 
+            message: 'Authentication required' 
           }
         }
         
-        if (!allowedRoles.includes(user.role_name)) {
+        // Check if user role is in allowed roles
+        if (!allowedRoles.includes(user?.role)) {
+          console.log(`❌ RestrictTo: Blocking request - role '${user?.role}' not in allowed list: [${allowedRoles.join(', ')}]`)
           set.status = 403
           return { 
-            success: false,
-            error: 'คุณไม่มีสิทธิ์เข้าใช้งานส่วนนี้' 
+            success: false, 
+            message: `Access restricted to roles: ${allowedRoles.join(', ')}` 
           }
         }
+        
+        console.log(`✅ RestrictTo: Role '${user?.role}' verified, proceeding...`)
       }
     })
 }
-
-// Middleware สำหรับ role เฉพาะ
-export const requireAuth = authenticate
-export const requireAdmin = new Elysia().use(authenticate).use(restrictTo('admin'))
-export const requireOfficer = new Elysia().use(authenticate).use(restrictTo('officer', 'admin'))
-export const requireUser = new Elysia().use(authenticate).use(restrictTo('user', 'officer', 'admin'))

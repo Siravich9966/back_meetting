@@ -13,15 +13,12 @@
 
 import { Elysia } from 'elysia'
 import { cors } from '@elysiajs/cors'
-import { PrismaClient } from '@prisma/client'
 import 'dotenv/config'
+import prisma from './lib/prisma.js'                    // Shared Prisma client
 
 // ===== Import API Routes =====
 import { authRoutes } from './routes/auth.js'        // สมัครสมาชิก/เข้าสู่ระบบ
-import { protectedRoutes } from './routes/protected.js' // APIs ที่ต้อง authentication
-
-// Global Database Connection (ครั้งเดียว ใช้ได้ทุก API)
-const prisma = new PrismaClient()
+import { protectedRoutes, officerRoutes, adminRoutes } from './routes/protected.js' // APIs ที่ต้อง authentication
 
 // สร้าง Elysia app
 const app = new Elysia()
@@ -80,6 +77,8 @@ app.group('/api', app => app
   .get('/test', () => ({ message: 'API ทำงานได้แล้ว!' }))
   .use(authRoutes) // Authentication APIs: /api/auth/register, /api/auth/login
   .use(protectedRoutes) // Protected APIs: /api/protected/*
+  .use(officerRoutes) // Officer APIs: /api/protected/officer/*
+  .use(adminRoutes) // Admin APIs: /api/protected/admin/*
 )
 
 // เริ่ม server
