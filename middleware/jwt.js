@@ -190,7 +190,7 @@ export const requireUser = new Elysia()
           message: 'Access restricted to valid user roles only' 
         }
       }
-      console.log('✅ RequireUser: Valid role verified, proceeding...')
+      console.log('✅ RequireUser: Valid role verified, proceeding....')
     }
   })
 
