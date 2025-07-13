@@ -2,43 +2,57 @@
 // Authentication APIs - ระบบสมัครสมาชิก และ เข้าสู่ระบบ
 // ===================================================================
 // ไฟล์นี้จัดการ:
-// - POST /api/auth/register - สมัครสมาชิกใหม่
+// - POST /api/auth/register - สมัครสมาชิกใหม่ (พร้อม Email & Password Validation)
 // - POST /api/auth/login    - เข้าสู่ระบบและรับ JWT token
 // ===================================================================
 
 import { Elysia } from 'elysia'
+import prisma from '../lib/prisma.js'
+import { validateRegisterData, formatValidationErrors } from '../utils/validation.js'
 
 export const authRoutes = new Elysia({ prefix: '/auth' })
   // API สมัครสมาชิก
-  .post('/register', async ({ request, db, success, error }) => {
+  .post('/register', async ({ body, set }) => {
     try {
-      console.log('📝 Register API called')
+      console.log('📝 เรียกใช้ API สมัครสมาชิก')
+      console.log('📋 ข้อมูลที่ได้รับ:', body)
       
-      // อ่านข้อมูลจาก request body
-      const body = await request.json()
-      console.log('📋 Request body:', body)
+      // ตรวจสอบข้อมูลด้วย validation
+      console.log('🔍 กำลังตรวจสอบข้อมูล...')
+      const validation = validateRegisterData(body)
       
-      // ตรวจสอบข้อมูลที่จำเป็น
-      if (!body.email || !body.password || !body.first_name || !body.last_name) {
-        console.log('❌ ข้อมูลไม่ครบถ้วน')
-        return error('กรุณากรอกข้อมูลให้ครบถ้วน')
+      if (!validation.isValid) {
+        console.log('❌ ตรวจสอบข้อมูลไม่ผ่าน:', validation.errors)
+        set.status = 400
+        return { 
+          success: false, 
+          message: formatValidationErrors(validation.errors) 
+        }
       }
       
+      console.log('✅ ตรวจสอบข้อมูลผ่าน')
+      
       // ตรวจสอบ email ซ้ำ
-      const existingUser = await db.users.findUnique({
+      const existingUser = await prisma.users.findUnique({
         where: { email: body.email }
       })
       
       if (existingUser) {
-        return error('อีเมลนี้ถูกใช้งานแล้ว')
+        console.log('❌ อีเมลนี้ถูกใช้งานแล้ว')
+        set.status = 409
+        return { 
+          success: false, 
+          message: 'อีเมลนี้ถูกใช้งานแล้ว' 
+        }
       }
       
       // เข้ารหัสรหัสผ่าน
       const bcrypt = await import('bcryptjs')
       const hashedPassword = await bcrypt.hash(body.password, 10)
+      console.log('🔐 เข้ารหัสรหัสผ่านเสร็จสิ้น')
       
       // สร้างผู้ใช้ใหม่
-      const newUser = await db.users.create({
+      const newUser = await prisma.users.create({
         data: {
           email: body.email,
           password: hashedPassword,
@@ -53,17 +67,20 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         }
       })
       
+      console.log('✅ สร้างผู้ใช้ใหม่สำเร็จ')
+      
       // ลบ password ออกจาก response
       const { password, ...userWithoutPassword } = newUser
       
-      return success({
+      return {
+        success: true,
         message: 'สมัครสมาชิกสำเร็จ!',
         user: userWithoutPassword
-      })
+      }
       
     } catch (err) {
-      console.error('Register error:', err)
-      console.error('Error details:', {
+      console.error('❌ เกิดข้อผิดพลาดในการสมัครสมาชิก:', err)
+      console.error('รายละเอียดข้อผิดพลาด:', {
         message: err.message,
         code: err.code,
         meta: err.meta
@@ -71,32 +88,47 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       
       // จัดการ error เฉพาะ
       if (err.code === 'P2002' && err.meta?.target?.includes('citizen_id')) {
-        return error('เลขบัตรประชาชนนี้ถูกใช้งานแล้ว11')
+        set.status = 409
+        return { 
+          success: false, 
+          message: 'เลขบัตรประชาชนนี้ถูกใช้งานแล้ว' 
+        }
       }
       
       if (err.code === 'P2002' && err.meta?.target?.includes('email')) {
-        return error('อีเมลนี้ถูกใช้งานแล้ว')
+        set.status = 409
+        return { 
+          success: false, 
+          message: 'อีเมลนี้ถูกใช้งานแล้ว' 
+        }
       }
       
-      return error('เกิดข้อผิดพลาดในการสมัครสมาชิก1')
+      set.status = 500
+      return { 
+        success: false, 
+        message: 'เกิดข้อผิดพลาดในการสมัครสมาชิก' 
+      }
     }
   })
   
-
-  
   // API เข้าสู่ระบบ
-  .post('/login', async ({ request, db, success, error }) => {
+  .post('/login', async ({ body, set }) => {
     try {
-      // อ่านข้อมูลจาก request body
-      const body = await request.json()
+      console.log('🔐 เรียกใช้ API เข้าสู่ระบบ')
       
       // ตรวจสอบข้อมูล
       if (!body.email || !body.password) {
-        return error('กรุณากรอก email และ password')
+        set.status = 400
+        return { 
+          success: false, 
+          message: 'กรุณากรอก email และ password' 
+        }
       }
       
+      console.log('🔍 กำลังหาผู้ใช้ในฐานข้อมูล...')
+      
       // หาผู้ใช้ในฐานข้อมูล
-      const user = await db.users.findUnique({
+      const user = await prisma.users.findUnique({
         where: { email: body.email },
         include: { 
           roles: {
@@ -109,12 +141,24 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       })
       
       if (!user) {
-        return error('ไม่พบผู้ใช้หรือรหัสผ่านไม่ถูกต้อง')
+        console.log('❌ ไม่พบผู้ใช้')
+        set.status = 401
+        return { 
+          success: false, 
+          message: 'ไม่พบผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' 
+        }
       }
+      
+      console.log('✅ พบผู้ใช้ในฐานข้อมูล')
       
       // ตรวจสอบสถานะ role
       if (user.roles?.role_status !== 'active') {
-        return error('บัญชีผู้ใช้ไม่ได้รับการอนุมัติ')
+        console.log('❌ บัญชีผู้ใช้ไม่ได้รับการอนุมัติ')
+        set.status = 403
+        return { 
+          success: false, 
+          message: 'บัญชีผู้ใช้ไม่ได้รับการอนุมัติ' 
+        }
       }
       
       // ตรวจสอบรหัสผ่าน
@@ -122,8 +166,15 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       const isValidPassword = await bcrypt.compare(body.password, user.password)
       
       if (!isValidPassword) {
-        return error('ไม่พบผู้ใช้หรือรหัสผ่านไม่ถูกต้อง')
+        console.log('❌ รหัสผ่านไม่ถูกต้อง')
+        set.status = 401
+        return { 
+          success: false, 
+          message: 'ไม่พบผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' 
+        }
       }
+      
+      console.log('✅ รหัสผ่านถูกต้อง')
       
       // สร้าง JWT Token
       const jwt = await import('jsonwebtoken')
@@ -137,17 +188,24 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         { expiresIn: '1h' }  // เปลี่ยนจาก 24h เป็น 1h
       )
       
+      console.log('✅ สร้าง JWT Token สำเร็จ')
+      
       // ลบ password ออกจาก response
       const { password, ...userWithoutPassword } = user
       
-      return success({
+      return {
+        success: true,
         message: 'เข้าสู่ระบบสำเร็จ',
         user: userWithoutPassword,
         token: token
-      })
+      }
       
-    } catch (error) {
-      console.error('Login error:', error)
-      return error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ')
+    } catch (err) {
+      console.error('❌ เกิดข้อผิดพลาดในการเข้าสู่ระบบ:', err)
+      set.status = 500
+      return { 
+        success: false, 
+        message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' 
+      }
     }
   })

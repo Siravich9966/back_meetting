@@ -18,7 +18,7 @@ const verifyToken = async (token) => {
   try {
     return jwt.verify(token, process.env.JWT_SECRET)
   } catch (error) {
-    throw new Error(`Invalid token: ${error.message}`)
+    throw new Error(`Token ไม่ถูกต้อง: ${error.message}`)
   }
 }
 
@@ -26,24 +26,24 @@ const verifyToken = async (token) => {
 // ฟังก์ชัน middleware หลักที่ inject user data เข้า context
 export const jwtMiddleware = new Elysia()
   .derive(async ({ headers }) => {
-    console.log('🔍 JWT Middleware: Checking headers...', headers.authorization ? 'Token found' : 'No token')
+    console.log('🔍 JWT Middleware: กำลังตรวจสอบ headers...', headers.authorization ? 'พบ Token' : 'ไม่พบ Token')
     
     // ตรวจสอบ Authorization header
     const authHeader = headers.authorization
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      console.log('❌ JWT Middleware: No valid Bearer token')
+      console.log('❌ JWT Middleware: ไม่พบ Bearer token ที่ถูกต้อง')
       return { user: null }
     }
 
     try {
       // แยกและตรวจสอบ token
       const token = authHeader.substring(7)
-      console.log('🔓 JWT Middleware: Verifying token...')
+      console.log('🔓 JWT Middleware: กำลังตรวจสอบ token...')
       const decoded = await verifyToken(token)
-      console.log('✅ JWT Middleware: Token decoded:', { userId: decoded.userId, email: decoded.email })
+      console.log('✅ JWT Middleware: ถอดรหัส token สำเร็จ:', { userId: decoded.userId, email: decoded.email })
 
       // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
-      console.log('🔍 JWT Middleware: Querying database for user ID:', decoded.userId)
+      console.log('🔍 JWT Middleware: กำลังค้นหาผู้ใช้ในฐานข้อมูล ID:', decoded.userId)
       const user = await prisma.users.findUnique({
         where: { user_id: decoded.userId },
         select: {
@@ -66,10 +66,10 @@ export const jwtMiddleware = new Elysia()
         }
       })
 
-      console.log('📋 JWT Middleware: Database result:', user ? 'User found' : 'User not found')
+      console.log('📋 JWT Middleware: ผลลัพธ์จากฐานข้อมูล:', user ? 'พบผู้ใช้' : 'ไม่พบผู้ใช้')
       
       if (!user) {
-        console.log('❌ JWT Middleware: User not found in database')
+        console.log('❌ JWT Middleware: ไม่พบผู้ใช้ในฐานข้อมูล')
         return { user: null }
       }
 
@@ -79,7 +79,7 @@ export const jwtMiddleware = new Elysia()
         role: user.roles?.role_name || null
       }
 
-      console.log('✅ JWT Middleware: User data ready:', userWithRole)
+      console.log('✅ JWT Middleware: ข้อมูลผู้ใช้พร้อมใช้งาน:', userWithRole)
       // Return user data สำหรับ Elysia context
       return { user: userWithRole }
 
@@ -98,16 +98,16 @@ export const requireAuth = new Elysia()
   .use(jwtMiddleware)
   .guard({
     beforeHandle({ user, set }) {
-      console.log('🔐 RequireAuth: Checking user...', user ? 'User exists' : 'No user')
+      console.log('🔐 RequireAuth: กำลังตรวจสอบผู้ใช้...', user ? 'พบผู้ใช้' : 'ไม่พบผู้ใช้')
       if (!user) {
-        console.log('❌ RequireAuth: Blocking request - no authentication')
+        console.log('❌ RequireAuth: ปฏิเสธการเข้าถึง - ไม่ได้ยืนยันตัวตน')
         set.status = 401
         return { 
           success: false, 
-          message: 'Authentication required' 
+          message: 'จำเป็นต้องเข้าสู่ระบบ' 
         }
       }
-      console.log('✅ RequireAuth: User authenticated, proceeding...')
+      console.log('✅ RequireAuth: ยืนยันตัวตนผู้ใช้แล้ว กำลังดำเนินการต่อ...')
     }
   })
 
@@ -116,25 +116,25 @@ export const requireAdmin = new Elysia()
   .use(jwtMiddleware)
   .guard({
     beforeHandle({ user, set }) {
-      console.log('🔐 RequireAdmin: Checking user...', user ? 'User exists' : 'No user')
+      console.log('🔐 RequireAdmin: กำลังตรวจสอบผู้ใช้...', user ? 'พบผู้ใช้' : 'ไม่พบผู้ใช้')
       if (!user) {
-        console.log('❌ RequireAdmin: Blocking request - no authentication')
+        console.log('❌ RequireAdmin: ปฏิเสธการเข้าถึง - ไม่ได้ยืนยันตัวตน')
         set.status = 401
         return { 
           success: false, 
-          message: 'Authentication required' 
+          message: 'จำเป็นต้องเข้าสู่ระบบ' 
         }
       }
-      // Restrict to admin role only
+      // จำกัดเฉพาะ admin role เท่านั้น
       if (user?.role !== 'admin') {
-        console.log('❌ RequireAdmin: Blocking request - not admin role')
+        console.log('❌ RequireAdmin: ปฏิเสธการเข้าถึง - ไม่ใช่ admin')
         set.status = 403
         return { 
           success: false, 
-          message: 'Access restricted to admin role only' 
+          message: 'การเข้าถึงจำกัดเฉพาะผู้ดูแลระบบเท่านั้น' 
         }
       }
-      console.log('✅ RequireAdmin: Admin role verified, proceeding...')
+      console.log('✅ RequireAdmin: ยืนยันสิทธิ์ admin แล้ว กำลังดำเนินการต่อ...')
     }
   })
 
@@ -143,26 +143,26 @@ export const requireOfficer = new Elysia()
   .use(jwtMiddleware)
   .guard({
     beforeHandle({ user, set }) {
-      console.log('🔐 RequireOfficer: Checking user...', user ? 'User exists' : 'No user')
+      console.log('🔐 RequireOfficer: กำลังตรวจสอบผู้ใช้...', user ? 'พบผู้ใช้' : 'ไม่พบผู้ใช้')
       if (!user) {
-        console.log('❌ RequireOfficer: Blocking request - no authentication')
+        console.log('❌ RequireOfficer: ปฏิเสธการเข้าถึง - ไม่ได้ยืนยันตัวตน')
         set.status = 401
         return { 
           success: false, 
-          message: 'Authentication required' 
+          message: 'จำเป็นต้องเข้าสู่ระบบ' 
         }
       }
-      // Restrict to officer or admin roles only
+      // จำกัดเฉพาะ officer หรือ admin เท่านั้น
       const allowedRoles = ['officer', 'admin']
       if (!allowedRoles.includes(user?.role)) {
-        console.log('❌ RequireOfficer: Blocking request - role not in allowed list:', allowedRoles)
+        console.log('❌ RequireOfficer: ปฏิเสธการเข้าถึง - role ไม่อยู่ในรายการที่อนุญาต:', allowedRoles)
         set.status = 403
         return { 
           success: false, 
-          message: 'Access restricted to officer or admin roles only' 
+          message: 'การเข้าถึงจำกัดเฉพาะเจ้าหน้าที่หรือผู้ดูแลระบบเท่านั้น' 
         }
       }
-      console.log('✅ RequireOfficer: Role verified, proceeding...')
+      console.log('✅ RequireOfficer: ยืนยันสิทธิ์แล้ว กำลังดำเนินการต่อ...')
     }
   })
 
@@ -171,26 +171,26 @@ export const requireUser = new Elysia()
   .use(jwtMiddleware)
   .guard({
     beforeHandle({ user, set }) {
-      console.log('🔐 RequireUser: Checking user...', user ? 'User exists' : 'No user')
+      console.log('🔐 RequireUser: กำลังตรวจสอบผู้ใช้...', user ? 'พบผู้ใช้' : 'ไม่พบผู้ใช้')
       if (!user) {
-        console.log('❌ RequireUser: Blocking request - no authentication')
+        console.log('❌ RequireUser: ปฏิเสธการเข้าถึง - ไม่ได้ยืนยันตัวตน')
         set.status = 401
         return { 
           success: false, 
-          message: 'Authentication required' 
+          message: 'จำเป็นต้องเข้าสู่ระบบ' 
         }
       }
-      // Restrict to any valid role
+      // จำกัดเฉพาะ role ที่ถูกต้อง
       const allowedRoles = ['user', 'officer', 'admin']
       if (!allowedRoles.includes(user?.role)) {
-        console.log('❌ RequireUser: Blocking request - invalid role')
+        console.log('❌ RequireUser: ปฏิเสธการเข้าถึง - role ไม่ถูกต้อง')
         set.status = 403
         return { 
           success: false, 
-          message: 'Access restricted to valid user roles only' 
+          message: 'การเข้าถึงจำกัดเฉพาะผู้ใช้ที่มีสิทธิ์ถูกต้องเท่านั้น' 
         }
       }
-      console.log('✅ RequireUser: Valid role verified, proceeding....')
+      console.log('✅ RequireUser: ยืนยันสิทธิ์ผู้ใช้แล้ว กำลังดำเนินการต่อ...')
     }
   })
 
@@ -200,28 +200,28 @@ export const restrictTo = (...allowedRoles) => {
     .use(jwtMiddleware)
     .guard({
       beforeHandle({ user, set }) {
-        console.log(`🔐 RestrictTo [${allowedRoles.join(', ')}]: Checking user...`, user ? 'User exists' : 'No user')
+        console.log(`🔐 RestrictTo [${allowedRoles.join(', ')}]: กำลังตรวจสอบผู้ใช้...`, user ? 'พบผู้ใช้' : 'ไม่พบผู้ใช้')
         
         if (!user) {
-          console.log('❌ RestrictTo: Blocking request - no authentication')
+          console.log('❌ RestrictTo: ปฏิเสธการเข้าถึง - ไม่ได้ยืนยันตัวตน')
           set.status = 401
           return { 
             success: false, 
-            message: 'Authentication required' 
+            message: 'จำเป็นต้องเข้าสู่ระบบ' 
           }
         }
         
-        // Check if user role is in allowed roles
+        // ตรวจสอบว่า user role อยู่ในรายการที่อนุญาตหรือไม่
         if (!allowedRoles.includes(user?.role)) {
-          console.log(`❌ RestrictTo: Blocking request - role '${user?.role}' not in allowed list: [${allowedRoles.join(', ')}]`)
+          console.log(`❌ RestrictTo: ปฏิเสธการเข้าถึง - role '${user?.role}' ไม่อยู่ในรายการที่อนุญาต: [${allowedRoles.join(', ')}]`)
           set.status = 403
           return { 
             success: false, 
-            message: `Access restricted to roles: ${allowedRoles.join(', ')}` 
+            message: `การเข้าถึงจำกัดเฉพาะสิทธิ์: ${allowedRoles.join(', ')}` 
           }
         }
         
-        console.log(`✅ RestrictTo: Role '${user?.role}' verified, proceeding...`)
+        console.log(`✅ RestrictTo: ยืนยันสิทธิ์ '${user?.role}' แล้ว กำลังดำเนินการต่อ...`)
       }
     })
 }
