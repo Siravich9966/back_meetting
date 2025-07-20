@@ -23,18 +23,6 @@ import { protectedRoutes, officerRoutes, adminRoutes } from './routes/protected.
 // สร้าง Elysia app
 const app = new Elysia()
 
-// Global Database Decorator (ใช้ db ได้ทุก endpoint)
-app.decorate('db', prisma)
-
-// Global Response Helpers
-app.decorate('success', (data) => {
-  return { success: true, ...data }
-})
-
-app.decorate('error', (message) => {
-  return { success: false, error: message }
-})
-
 // ตั้งค่า CORS
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -91,12 +79,11 @@ console.log('📋 Available Endpoints:')
 console.log('   GET  /              - หน้าแรก')
 console.log('   GET  /health        - ตรวจสอบสถานะ')
 console.log('   GET  /api/test      - ทดสอบ API')
-console.log('   POST /api/auth/register - สมัครสมาชิค')
+console.log('   POST /api/auth/register - สมัครสมาชิก')
 console.log('   POST /api/auth/login    - เข้าสู่ระบบ')
 console.log('🔐 Protected APIs (ต้องใส่ Token):')
-console.log('   GET  /api/protected/profile     - ดูโปรไฟล์ตัวเอง')
-console.log('   GET  /api/protected/user-area   - พื้นที่ผู้ใช้')
-console.log('   GET  /api/protected/officer-area - พื้นที่เจ้าหน้าที่')
-console.log('   GET  /api/protected/admin-area  - พื้นที่ผู้ดูแลระบบ')
-console.log('   GET  /api/protected/users       - ดูรายชื่อผู้ใช้ทั้งหมด')
+console.log('   GET  /api/protected/user/profile - ดูโปรไฟล์ตัวเอง')
+console.log('   GET  /api/protected/user/area    - พื้นที่ผู้ใช้')
+console.log('   GET  /api/protected/officer/area - พื้นที่เจ้าหน้าที่')
+console.log('   GET  /api/protected/admin/area   - พื้นที่ผู้ดูแลระบบ')
 console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')

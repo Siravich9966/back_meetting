@@ -125,7 +125,7 @@ export const validateRegisterData = (data) => {
   if (!citizen_id || citizen_id.trim().length === 0) {
     allErrors.push('กรุณาใส่เลขบัตรประชาชน')
   }
-  
+    
   // ตรวจสอบ citizen_id format (13 หลัก)
   if (citizen_id && !/^\d{13}$/.test(citizen_id)) {
     allErrors.push('เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก')
