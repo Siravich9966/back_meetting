@@ -9,6 +9,8 @@
 // - Helper Functions
 // ===================================================================
 
+import { isValidDepartment } from './departments.js'
+
 // Email Validation
 export const validateEmail = (email) => {
   const errors = []
@@ -129,6 +131,11 @@ export const validateRegisterData = (data) => {
   // ตรวจสอบ citizen_id format (13 หลัก)
   if (citizen_id && !/^\d{13}$/.test(citizen_id)) {
     allErrors.push('เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก')
+  }
+  
+  // ตรวจสอบ department (ถ้ามี)
+  if (data.department && !isValidDepartment(data.department)) {
+    allErrors.push('กรุณาเลือก department ที่ถูกต้อง')
   }
   
   return {

@@ -38,6 +38,7 @@ model meeting_room {
   room_name   String        @db.VarChar(255)
   capacity    Int
   location_m  String        @db.VarChar(255)
+  department  String        @db.VarChar(255)  // เพิ่ม department field
   status_m    String?       @db.VarChar(255)
   image       String?       @db.VarChar(255)
   details_m   String?       @db.VarChar(255)

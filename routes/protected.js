@@ -7,7 +7,7 @@
 // ===================================================================
 
 import { Elysia } from 'elysia'
-import { authMiddleware, isAdmin, isOfficer, isUser } from '../middleware/auth.js'
+import { authMiddleware, isAdmin, isOfficer, isUser } from '../middleware/index.js'
 
 export const protectedRoutes = new Elysia({ prefix: '/protected' })
   // API ทดสอบง่ายๆ (ไม่ต้อง auth)

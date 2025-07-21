@@ -51,6 +51,11 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       const hashedPassword = await bcrypt.hash(body.password, 10)
       console.log('🔐 เข้ารหัสรหัสผ่านเสร็จสิ้น')
       
+      // กำหนด role_id ตามที่ระบุ หรือ default = user
+      let roleId = 3 // default = user
+      if (body.role === 'officer') roleId = 2
+      if (body.role === 'admin') roleId = 1
+      
       // สร้างผู้ใช้ใหม่
       const newUser = await prisma.users.create({
         data: {
@@ -58,7 +63,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
           password: hashedPassword,
           first_name: body.first_name,
           last_name: body.last_name,
-          role_id: 3, // default = user (ตาม roles table: user = 3)
+          role_id: roleId,
           citizen_id: body.citizen_id || null,
           position: body.position || null,
           department: body.department || null,
