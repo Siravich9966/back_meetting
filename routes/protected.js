@@ -105,7 +105,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
   )
 
 // === Admin Routes (ต้องมี admin role เท่านั้น) ===
-export const adminRoutes = new Elysia({ prefix: '/protected' })
+export const adminAreaRoutes = new Elysia({ prefix: '/protected' })
   .group('/admin', app =>
     app
       .get('/area', async ({ request, set }) => {

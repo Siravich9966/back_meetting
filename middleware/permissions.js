@@ -8,7 +8,7 @@ import { isSameDepartment as compareDepartments } from '../utils/departments.js'
 
 // Room Management Permissions
 export const canManageRoom = (user, roomDepartment) => {
-  // Admin ไม่สามารถจัดการห้องได้ (ตามกฎหมาย)
+  // Admin ไม่สามารถจัดการห้องได้ (ตามกฎหมายที่อาจารย์กำหนด)
   if (user?.role === 'admin') return false
   
   // Officer สามารถจัดการได้เฉพาะห้องใน department ตัวเอง
@@ -23,6 +23,12 @@ export const canManageRoom = (user, roomDepartment) => {
 export const canViewRoomReviews = (user, roomDepartment) => {
   // Admin ดูรีวิวได้ทุกห้อง
   if (user?.role === 'admin') return true
+  
+  // Executive ดูรีวิวได้ตามระดับ
+  if (user?.role === 'executive') {
+    if (user?.position === 'university_executive') return true // ดูได้ทุกห้อง
+    if (user?.position === 'faculty_executive') return user?.department === roomDepartment // ดูได้เฉพาะคณะตัวเอง
+  }
   
   // Officer ดูรีวิวได้เฉพาะห้องใน department ตัวเอง
   if (user?.role === 'officer') {
@@ -59,6 +65,12 @@ export const isSameDepartment = (user, targetDepartment) => {
 export const canAccessDepartmentData = (user, targetDepartment) => {
   // Admin เข้าถึงข้อมูลทุก department ได้
   if (user?.role === 'admin') return true
+  
+  // Executive เข้าถึงข้อมูลตามระดับ
+  if (user?.role === 'executive') {
+    if (user?.position === 'university_executive') return true // เข้าถึงได้ทุก department
+    if (user?.position === 'faculty_executive') return user?.department === targetDepartment // เฉพาะคณะตัวเอง
+  }
   
   // Officer เข้าถึงข้อมูลใน department ตัวเองได้
   if (user?.role === 'officer') {

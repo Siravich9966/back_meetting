@@ -12,9 +12,10 @@ export {
   isAdmin, 
   isOfficer, 
   isUser, 
-  hasRole, 
-  hasAnyRole, 
-  isActiveUser 
+  isExecutive,
+  isUniversityExecutive,
+  isFacultyExecutive
+  // isActiveUser ลบออกแล้วใน 3-table system
 } from './roles.js'
 
 // Department-based Permissions

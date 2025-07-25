@@ -4,9 +4,9 @@
 // ไฟล์นี้จัดการ:
 // - GET /api/rooms - ดูรายการห้องประชุมทั้งหมด (ไม่ต้อง auth)
 // - GET /api/rooms/:id - ดูรายละเอียดห้องประชุม (ไม่ต้อง auth)
-// - POST /api/protected/admin/rooms - สร้างห้องใหม่ (admin เท่านั้น)
-// - PUT /api/protected/admin/rooms/:id - แก้ไขห้อง (admin เท่านั้น)
-// - DELETE /api/protected/admin/rooms/:id - ลบห้อง (admin เท่านั้น)
+// 
+// ⚠️ ADMIN ไม่มีสิทธิ์จัดการห้องประชุม - จัดการแค่สมาชิกเท่านั้น
+// ✅ OFFICER เท่านั้นที่จัดการห้องประชุมในคณะ/ตึกตัวเองได้
 // ===================================================================
 
 import { Elysia } from 'elysia'
@@ -187,7 +187,8 @@ export const roomRoutes = new Elysia({ prefix: '/rooms' })
     }
   })
 
-// Protected Room Management APIs (Officer เท่านั้น - จัดการห้องใน department ตัวเอง)
+// Protected Room Management APIs (เฉพาะ Officer เท่านั้น - จัดการห้องใน department ตัวเอง)
+// ⚠️ Admin ไม่มีสิทธิ์จัดการห้องประชุม - จัดการแค่สมาชิกเท่านั้น
 export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
   .group('/rooms', app =>
     app

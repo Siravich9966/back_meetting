@@ -14,21 +14,27 @@
 import { Elysia } from 'elysia'
 import { cors } from '@elysiajs/cors'
 import 'dotenv/config'
-import prisma from './lib/prisma.js'                    // Shared Prisma client
+import prisma from './lib/prisma.js'  // ใช้สำหรับ database connection test
 
 // ===== Import API Routes =====
 import { authRoutes } from './routes/auth.js'        // สมัครสมาชิก/เข้าสู่ระบบ
-import { protectedRoutes, officerRoutes, adminRoutes } from './routes/protected.js' // APIs ที่ต้อง authentication
+import { protectedRoutes, officerRoutes, adminAreaRoutes } from './routes/protected.js' // APIs ที่ต้อง authentication
 import { roomRoutes, officerRoomRoutes } from './routes/rooms.js' // APIs จัดการห้องประชุม
-import { adminUserRoutes } from './routes/admin.js' // Admin APIs
+import { adminRoutes } from './routes/admin.js' // Admin APIs (3-table system)
+import executiveRoutes from './routes/executive.js' // Executive APIs
+import { departmentRoutes } from './routes/departments.js' // Department APIs
+import positionRoutes from './routes/positions.js' // Position APIs
+import { reservationRoutes, userReservationRoutes, officerReservationRoutes } from './routes/reservations.js' // Reservation APIs
 
 // สร้าง Elysia app
 const app = new Elysia()
 
 // ตั้งค่า CORS
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  origin: '*', // อนุญาตทุก origin สำหรับการทดสอบ
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }))
 
 // Global Error Handler (จัดการ error ครั้งเดียว)
@@ -67,42 +73,42 @@ app.group('/api', app => app
   .get('/test', () => ({ message: 'API ทำงานได้แล้ว!' }))
   .use(authRoutes) // Authentication APIs: /api/auth/register, /api/auth/login
   .use(roomRoutes) // Room APIs: /api/rooms/*
+  .use(positionRoutes) // Position APIs: /api/positions/*
+  .use(departmentRoutes) // Department APIs: /api/departments/*
+  .use(reservationRoutes) // Reservation APIs: /api/reservations/*
   .use(protectedRoutes) // Protected APIs: /api/protected/*
+  .use(userReservationRoutes) // User Reservation APIs: /api/protected/reservations/*
   .use(officerRoutes) // Officer APIs: /api/protected/officer/*
-  .use(adminRoutes) // Admin APIs: /api/protected/admin/*
+  .use(officerReservationRoutes) // Officer Reservation APIs: /api/protected/officer/reservations/*
+  .use(adminAreaRoutes) // Admin Area API: /api/protected/admin/area
   .use(officerRoomRoutes) // Officer Room Management APIs: /api/protected/officer/rooms/*
-  .use(adminUserRoutes) // Admin User Management APIs: /api/protected/admin/users/*
+  .use(adminRoutes) // Admin Role Management APIs (3-table): /api/protected/admin/*
+  .use(executiveRoutes) // Executive APIs: /api/protected/executive/*
 )
 
 // เริ่ม server
 const PORT = process.env.PORT || 8000
 app.listen(PORT)
 
-console.log('\n🚀 ระบบจองห้องประชุม - Backend Server')
-console.log(`📡 Server: http://localhost:${PORT}`)
-console.log('📋 Available Endpoints:')
-console.log('   GET  /              - หน้าแรก')
-console.log('   GET  /health        - ตรวจสอบสถานะ')
-console.log('   GET  /api/test      - ทดสอบ API')
-console.log('   POST /api/auth/register - สมัครสมาชิก')
-console.log('   POST /api/auth/login    - เข้าสู่ระบบ')
-console.log('🏢 Meeting Room APIs:')
-console.log('   GET  /api/rooms           - ดูรายการห้องประชุม')
-console.log('   GET  /api/rooms/:id       - ดูรายละเอียดห้อง')
-console.log('🔐 Protected APIs (ต้องใส่ Token):')
-console.log('   GET  /api/protected/user/profile - ดูโปรไฟล์ตัวเอง')
-console.log('   GET  /api/protected/user/area    - พื้นที่ผู้ใช้')
-console.log('   GET  /api/protected/officer/area - พื้นที่เจ้าหน้าที่')
-console.log('   GET  /api/protected/admin/area   - พื้นที่ผู้ดูแลระบบ')
-console.log('🏗️ Officer Room Management (Officer เท่านั้น):')
-console.log('   GET  /api/protected/officer/rooms     - ดูห้องใน department')
-console.log('   POST /api/protected/officer/rooms     - สร้างห้องใหม่')
-console.log('   PUT  /api/protected/officer/rooms/:id - แก้ไขห้อง')
-console.log('   DEL  /api/protected/officer/rooms/:id - ลบห้อง')
-console.log('👑 Admin Management (Admin เท่านั้น):')
-console.log('   GET  /api/protected/admin/users       - ดูรายการสมาชิก')
-console.log('   PUT  /api/protected/admin/users/:id/role - เปลี่ยน role')
-console.log('   DEL  /api/protected/admin/users/:id   - ลบสมาชิก')
-console.log('   GET  /api/protected/admin/stats       - ดูสถิติระบบ')
-console.log('   GET  /api/protected/admin/reviews     - ดูรีวิวทั้งระบบ')
-console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+console.log(`🚀 Server เริ่มทำงานที่ port ${PORT}`)
+console.log(`📚 API Docs: http://localhost:${PORT}`)
+console.log(`🔍 Health Check: http://localhost:${PORT}/health`)
+
+// ทดสอบการเชื่อมต่อฐานข้อมูล
+try {
+  await prisma.$connect()
+  console.log('✅ เชื่อมต่อฐานข้อมูลสำเร็จ')
+} catch (error) {
+  console.error('❌ ไม่สามารถเชื่อมต่อฐานข้อมูล:', error)
+  process.exit(1)
+}
+
+// จัดการการปิดระบบอย่างสะอาด
+process.on('SIGINT', async () => {
+  console.log('🛑 กำลังปิดระบบ...')
+  await prisma.$disconnect()
+  console.log('✅ ปิดระบบเรียบร้อย')
+  process.exit(0)
+})
+
+export default app

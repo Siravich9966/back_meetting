@@ -1,19 +1,28 @@
 // ===================================================================
-// Role Checking Functions
+// Role Checking Functions - Updated Hierarchy
 // ===================================================================
 // ฟังก์ชันสำหรับตรวจสอบ Role ของผู้ใช้
+// ADMIN = ระดับสูงสุด เห็นทุกอย่าง แต่จัดการได้เฉพาะสมาชิก ไม่สามารถจัดการห้องประชุมได้
+// OFFICER = จัดการห้องประชุมในคณะ/ตึกตัวเองเท่านั้น
+// EXECUTIVE = ผู้บริหาร ดูได้อย่างเดียว แก้ไขไม่ได้
 // ===================================================================
 
 // Basic Role Checking Functions
 export const isAdmin = (user) => user?.role === 'admin'
 
-export const isOfficer = (user) => user?.role === 'officer' || user?.role === 'admin'
+// Officer เท่านั้น - Admin ไม่สามารถทำงานระดับ officer ได้ (ไม่สามารถจัดการห้องประชุมได้)
+export const isOfficer = (user) => user?.role === 'officer'
 
-export const isUser = (user) => ['user', 'officer', 'admin'].includes(user?.role)
+// ทุกคนเข้าได้ (basic user access)
+export const isUser = (user) => ['user', 'officer', 'admin', 'executive'].includes(user?.role)
 
-// Advanced Role Checking
-export const hasRole = (user, role) => user?.role === role
+// Executive - สำหรับดู report เท่านั้น (READ ONLY)
+export const isExecutive = (user) => user?.role === 'executive' 
 
-export const hasAnyRole = (user, roles) => roles.includes(user?.role)
+export const isUniversityExecutive = (user) => 
+  user?.role === 'executive' && user?.position === 'university_executive'
 
-export const isActiveUser = (user) => user?.roles?.role_status === 'active'
+export const isFacultyExecutive = (user) => 
+  user?.role === 'executive' && user?.position === 'faculty_executive'
+
+// ใน 3-table system ไม่ใช้ role_status แล้ว - ลบออก
