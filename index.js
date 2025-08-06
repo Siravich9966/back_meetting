@@ -67,11 +67,29 @@ app.get('/', () => {
 })
 
 // Health check endpoint
-app.get('/health', () => {
+app.get('/health', async () => {
+  let databaseStatus = 'disconnected'
+  let databaseInfo = null
+  
+  try {
+    // ทดสอบ query เบาๆ
+    await prisma.$queryRaw`SELECT 1`
+    databaseStatus = 'connected'
+    
+    // ลองนับข้อมูลเบาๆ
+    const roomCount = await prisma.meeting_room.count()
+    databaseInfo = { tables_accessible: true, room_count: roomCount }
+  } catch (error) {
+    databaseStatus = 'error'
+    databaseInfo = { error: error.message }
+  }
+  
   return { 
     status: 'healthy',
-    database: 'connected',
-    timestamp: new Date().toISOString()
+    database: databaseStatus,
+    database_info: databaseInfo,
+    server_time: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
   }
 })
 
@@ -118,29 +136,48 @@ app.group('/api', app => app
   .use(executiveRoutes) // Executive APIs: /api/protected/executive/*
 )
 
-// เริ่ม server
-const PORT = process.env.PORT || 8000
-app.listen(PORT)
-
-console.log(`🚀 Server เริ่มทำงานที่ port ${PORT}`)
-console.log(`� API Docs: http://localhost:${PORT}`)
-console.log(`🔍 Health Check: http://localhost:${PORT}/health`)
-
-// ทดสอบการเชื่อมต่อฐานข้อมูล
-try {
-  await prisma.$connect()
-  console.log('✅ เชื่อมต่อฐานข้อมูลสำเร็จ')
-} catch (error) {
-  console.error('❌ ไม่สามารถเชื่อมต่อฐานข้อมูล:', error)
-  process.exit(1)
+// ฟังก์ชันเริ่มต้นเซิร์ฟเวอร์
+async function startServer() {
+  const PORT = process.env.PORT || 8000
+  
+  try {
+    // ทดสอบการเชื่อมต่อฐานข้อมูลก่อน
+    console.log('🔍 กำลังทดสอบการเชื่อมต่อฐานข้อมูล...')
+    await prisma.$connect()
+    console.log('✅ เชื่อมต่อฐานข้อมูลสำเร็จ')
+    
+    // เริ่ม server หลังจากฐานข้อมูลพร้อม
+    app.listen(PORT)
+    console.log(`🚀 Server เริ่มทำงานที่ port ${PORT}`)
+    console.log(`📚 API Docs: http://localhost:${PORT}`)
+    console.log(`🔍 Health Check: http://localhost:${PORT}/health`)
+    
+  } catch (error) {
+    console.error('❌ ไม่สามารถเชื่อมต่อฐานข้อมูล:', error.message)
+    console.log('📝 กำลังเริ่มเซิร์ฟเวอร์โดยไม่มีฐานข้อมูล (สำหรับ debug)')
+    
+    // เริ่ม server แม้ database ไม่ทำงาน
+    app.listen(PORT)
+    console.log(`🚀 Server เริ่มทำงานที่ port ${PORT} (Database ไม่พร้อม)`)
+    console.log(`📚 API Docs: http://localhost:${PORT}`)
+    console.log(`🔍 Health Check: http://localhost:${PORT}/health`)
+  }
 }
 
 // จัดการการปิดระบบอย่างสะอาด
 process.on('SIGINT', async () => {
   console.log('🛑 กำลังปิดระบบ...')
-  await prisma.$disconnect()
+  try {
+    await prisma.$disconnect()
+    console.log('✅ ปิดการเชื่อมต่อฐานข้อมูลเรียบร้อย')
+  } catch (error) {
+    console.log('⚠️ ปิดการเชื่อมต่อฐานข้อมูลไม่สำเร็จ')
+  }
   console.log('✅ ปิดระบบเรียบร้อย')
   process.exit(0)
 })
+
+// เริ่มเซิร์ฟเวอร์
+startServer()
 
 export default app

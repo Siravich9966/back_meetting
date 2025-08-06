@@ -1,0 +1,40 @@
+{
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.next/**": true,
+    "**/coverage/**": true,
+    "**/tmp/**": true,
+    "**/uploads/**": true,
+    "**/generated/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/uploads": true,
+    "**/generated": true
+  },
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/uploads": true,
+    "**/generated": true
+  },
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "typescript.suggest.autoImports": false,
+  "javascript.suggest.autoImports": false,
+  "files.autoSave": "off",
+  "git.autorefresh": false,
+  "git.autofetch": false,
+  "explorer.autoReveal": false,
+  "extensions.autoUpdate": false,
+  "telemetry.enableTelemetry": false
+}

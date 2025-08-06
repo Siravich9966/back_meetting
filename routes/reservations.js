@@ -47,7 +47,7 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
       
       const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0)
       
-      // ดึงการจองที่ approved และ pending ในช่วงเวลานั้น
+      // ดึงการจองที่ approved และ pending ในช่วงเวลานั้น พร้อมข้อมูลผู้จอง
       const reservations = await prisma.reservation.findMany({
         where: {
           room_id: parseInt(roomId),
@@ -57,6 +57,17 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
             lte: endDate
           }
         },
+        include: {
+          users: {
+            select: {
+              user_id: true,
+              first_name: true,
+              last_name: true,
+              department: true,
+              position: true
+            }
+          }
+        },
         select: {
           reservation_id: true,
           start_at: true,
@@ -64,7 +75,8 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
           start_time: true,
           end_time: true,
           details_r: true,
-          status_r: true
+          status_r: true,
+          users: true
         },
         orderBy: { start_at: 'asc' }
       })
@@ -132,7 +144,10 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
                     reservation_id: reservation.reservation_id,
                     status: reservation.status_r,
                     details: reservation.details_r,
-                    time_range: `${startTime.toTimeString().slice(0,5)}-${endTime.toTimeString().slice(0,5)}`
+                    time_range: `${startTime.toTimeString().slice(0,5)}-${endTime.toTimeString().slice(0,5)}`,
+                    reserved_by: reservation.users ? `${reservation.users.first_name} ${reservation.users.last_name}` : 'Unknown',
+                    user_department: reservation.users?.department || '',
+                    user_position: reservation.users?.position || ''
                   })
                 }
               })

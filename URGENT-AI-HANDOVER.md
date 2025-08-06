@@ -43,7 +43,8 @@
 
 ### Environment Configuration
 ```env
-DATABASE_URL="postgresql://neondb_owner:npg_jJGdp7lry5QH@ep-billowing-wildflower-a1daih8t-pooler.ap-southeast-1.aws.neon.tech/meetingroom?sslmode=require&channel_binding=require"
+# Database URL - Get from Neon Console (Security: Hidden from GitHub)
+DATABASE_URL="[GET_FROM_NEON_CONSOLE]"
 JWT_SECRET="meetingroom-neon-jwt-secret-2025-sirav-msu-project-secure-key-a1b2c3d4"
 PORT=8000
 FRONTEND_URL="http://localhost:3000"
