@@ -43,6 +43,7 @@ export const authMiddleware = async (request, set) => {
           position: true,
           department: true,
           zip_code: true,
+          profile_image: true,
           created_at: true,
           updated_at: true,
           roles: {
@@ -64,6 +65,7 @@ export const authMiddleware = async (request, set) => {
           position: true,
           department: true,
           zip_code: true,
+          profile_image: true,
           created_at: true,
           updated_at: true,
           roles: {
@@ -91,6 +93,7 @@ export const authMiddleware = async (request, set) => {
           position: true,
           department: true,
           zip_code: true,
+          profile_image: true,
           created_at: true,
           updated_at: true,
           roles: {
@@ -118,6 +121,7 @@ export const authMiddleware = async (request, set) => {
           position: true,
           department: true,
           zip_code: true,
+          profile_image: true,
           created_at: true,
           updated_at: true,
           roles: {

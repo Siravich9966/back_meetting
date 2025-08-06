@@ -13,6 +13,7 @@
 
 import { Elysia } from 'elysia'
 import { cors } from '@elysiajs/cors'
+import { staticPlugin } from '@elysiajs/static'
 import 'dotenv/config'
 import prisma from './lib/prisma.js'  // ใช้สำหรับ database connection test
 
@@ -35,6 +36,12 @@ app.use(cors({
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}))
+
+// ตั้งค่า static file serving สำหรับรูปภาพ
+app.use(staticPlugin({
+  assets: 'uploads',
+  prefix: '/uploads'
 }))
 
 // Global Error Handler (จัดการ error ครั้งเดียว)
@@ -71,6 +78,31 @@ app.get('/health', () => {
 // API Routes
 app.group('/api', app => app
   .get('/test', () => ({ message: 'API ทำงานได้แล้ว!' }))
+  // Simple database test (ไม่ต้อง authentication)
+  .get('/test-db', async () => {
+    try {
+      const roomCount = await prisma.meeting_room.count()
+      const reservationCount = await prisma.reservation.count()
+      const userCount = await prisma.users.count()
+      
+      return {
+        success: true,
+        message: 'Database ทำงานได้แล้ว!',
+        data: {
+          rooms: roomCount,
+          reservations: reservationCount,
+          users: userCount
+        }
+      }
+    } catch (error) {
+      console.error('Database test error:', error)
+      return {
+        success: false,
+        message: 'Database ไม่ทำงาน',
+        error: error.message
+      }
+    }
+  })
   .use(authRoutes) // Authentication APIs: /api/auth/register, /api/auth/login
   .use(roomRoutes) // Room APIs: /api/rooms/*
   .use(positionRoutes) // Position APIs: /api/positions/*
@@ -91,7 +123,7 @@ const PORT = process.env.PORT || 8000
 app.listen(PORT)
 
 console.log(`🚀 Server เริ่มทำงานที่ port ${PORT}`)
-console.log(`📚 API Docs: http://localhost:${PORT}`)
+console.log(`� API Docs: http://localhost:${PORT}`)
 console.log(`🔍 Health Check: http://localhost:${PORT}/health`)
 
 // ทดสอบการเชื่อมต่อฐานข้อมูล

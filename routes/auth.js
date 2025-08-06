@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ===================================================================
 // Authentication APIs - ระบบสมัครสมาชิก และ เข้าสู่ระบบ
 // ===================================================================
@@ -17,6 +18,7 @@ import {
   getDepartmentFromPosition,
   getExecutivePositionType 
 } from '../utils/positions.js'
+import { authMiddleware } from '../middleware/index.js'
 
 export const authRoutes = new Elysia({ prefix: '/auth' })
   // API สมัครสมาชิก (Position-based)
@@ -330,7 +332,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
           userTable: userTable
         },
         process.env.JWT_SECRET,
-        { expiresIn: '24h' }
+        { expiresIn: '1h' } // เปลี่ยนกลับเป็น 1 ชั่วโมงสำหรับ production
       )
       
       console.log('✅ สร้าง JWT Token สำเร็จ')
@@ -355,17 +357,180 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         message: 'เข้าสู่ระบบสำเร็จ',
         user: {
           ...userWithoutPassword,
+          role: user.roles?.role_name || 'user', // เพิ่ม role field
           userTable: userTable
         },
         token: token
       }
       
-    } catch (err) {
+      } catch (err) {
       console.error('❌ เกิดข้อผิดพลาดในการเข้าสู่ระบบ:', err)
       set.status = 500
       return { 
         success: false, 
         message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ' 
+      }
+    }
+  })
+  
+  // API สำหรับอัปเดตโปรไฟล์ตนเอง
+  .put('/profile', async ({ request, set, body }) => {
+    try {
+      console.log('📝 เรียกใช้ API อัปเดตโปรไฟล์')
+      
+      // ตรวจสอบ authentication
+      const user = await authMiddleware(request, set)
+      if (user.success === false) {
+        return user
+      }
+      
+      console.log('🔍 ผู้ใช้:', user.email, 'Role:', user.role)
+      
+      // ข้อมูลที่อนุญาตให้แก้ไข
+      const allowedFields = ['first_name', 'last_name', 'email', 'citizen_id', 'position', 'department', 'zip_code']
+      const updateData = {}
+      
+      // กรองเฉพาะข้อมูลที่อนุญาต
+      for (const field of allowedFields) {
+        if (body[field] !== undefined) {
+          updateData[field] = body[field]
+        }
+      }
+
+      console.log('📋 ข้อมูลที่จะอัปเดต:', updateData)
+
+      // ตรวจสอบว่ามีข้อมูลที่จะอัปเดตหรือไม่
+      if (Object.keys(updateData).length === 0) {
+        set.status = 400
+        return {
+          success: false,
+          message: 'ไม่มีข้อมูลที่จะอัปเดต'
+        }
+      }
+
+      // กำหนด table ที่จะอัปเดตตาม role
+      let tableName, idField, userId
+
+      switch (user.role) {
+        case 'user':
+          tableName = 'users'
+          idField = 'user_id'
+          userId = user.user_id
+          break
+        case 'officer':
+          tableName = 'officer'
+          idField = 'officer_id'
+          userId = user.officer_id
+          break
+        case 'admin':
+          tableName = 'admin'
+          idField = 'admin_id'
+          userId = user.admin_id
+          break
+        case 'executive':
+          tableName = 'executive'
+          idField = 'executive_id'
+          userId = user.executive_id
+          break
+        default:
+          set.status = 400
+          return {
+            success: false,
+            message: 'ไม่สามารถระบุ role ได้'
+          }
+      }
+
+      console.log('🎯 อัปเดต table:', tableName, 'ID:', userId)
+
+      // อัปเดตข้อมูลในฐานข้อมูล
+      const updatedUser = await prisma[tableName].update({
+        where: {
+          [idField]: userId
+        },
+        data: {
+          ...updateData,
+          updated_at: new Date()
+        },
+        select: {
+          [idField]: true,
+          email: true,
+          first_name: true,
+          last_name: true,
+          citizen_id: true,
+          position: true,
+          department: true,
+          zip_code: true,
+          profile_image: true,
+          created_at: true,
+          updated_at: true,
+          roles: {
+            select: {
+              role_name: true
+            }
+          }
+        }
+      })
+
+      console.log('✅ อัปเดตโปรไฟล์สำเร็จ')
+
+      // ปรับ field ให้เหมือนกันทุก table (เหมือนใน login API)
+      let responseUser = { ...updatedUser }
+      
+      if (tableName === 'officer') {
+        responseUser.user_id = responseUser.officer_id
+        delete responseUser.officer_id
+      } else if (tableName === 'admin') {
+        responseUser.user_id = responseUser.admin_id
+        delete responseUser.admin_id
+      } else if (tableName === 'executive') {
+        responseUser.user_id = responseUser.executive_id
+        delete responseUser.executive_id
+      }
+
+      return {
+        success: true,
+        message: 'อัปเดตโปรไฟล์สำเร็จ',
+        updated_fields: Object.keys(updateData),
+        user: {
+          ...responseUser,
+          role: responseUser.roles?.role_name || user.role,
+          userTable: tableName
+        }
+      }
+
+    } catch (error) {
+      console.error('❌ Error updating profile:', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการอัปเดตโปรไฟล์: ' + error.message
+      }
+    }
+  })
+  
+  // API สำหรับดูโปรไฟล์ตนเอง
+  .get('/profile', async ({ request, set }) => {
+    try {
+      console.log('📋 เรียกใช้ API ดูโปรไฟล์')
+      
+      // ตรวจสอบ authentication
+      const user = await authMiddleware(request, set)
+      if (user.success === false) {
+        return user
+      }
+      
+      return {
+        success: true,
+        message: 'ข้อมูลโปรไฟล์ของคุณ',
+        profile: user
+      }
+      
+    } catch (error) {
+      console.error('❌ Error getting profile:', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการดึงข้อมูลโปรไฟล์'
       }
     }
   })

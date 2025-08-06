@@ -85,11 +85,13 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
           const currentDate = new Date(startDate.getFullYear(), startDate.getMonth(), day)
           const dateKey = currentDate.toISOString().split('T')[0]
           
-          // สร้าง hourly slots (8:00-18:00)
+          // สร้าง hourly slots (6:00-18:00) - รองรับทุกวัน รวมเสาร์-อาทิตย์
           const slots = []
           for (let hour = workingHours.start; hour < workingHours.end; hour++) {
             slots.push({
               time: `${hour.toString().padStart(2, '0')}:00`,
+              start_time: `${hour.toString().padStart(2, '0')}:00:00`,
+              end_time: `${(hour + 1).toString().padStart(2, '0')}:00:00`,
               available: true,
               reservations: []
             })
@@ -878,6 +880,218 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
     }
   })
 
+  // สถิติการใช้งานห้องประชุม (สำหรับ User Dashboard)
+  .get('/statistics/room-usage', async ({ request, query, set }) => {
+    // ตรวจสอบสิทธิ์ user
+    const user = await authMiddleware(request, set)
+    if (user.success === false) return user
+    
+    if (!isUser(user)) {
+      set.status = 403
+      return {
+        success: false,
+        message: 'ไม่มีสิทธิ์เข้าถึงข้อมูลสถิติ'
+      }
+    }
+    
+    try {
+      console.log('📊 เรียกใช้ API สถิติการใช้งานห้องประชุม (User)')
+      
+      const { year, month } = query
+      
+      // สร้าง date filter
+      let dateFilter = {}
+      if (year || month) {
+        const startDate = new Date(
+          parseInt(year || new Date().getFullYear()),
+          parseInt(month || 1) - 1,
+          1
+        )
+        const endDate = new Date(
+          parseInt(year || new Date().getFullYear()),
+          parseInt(month || 12),
+          0
+        )
+        
+        dateFilter = {
+          start_at: {
+            gte: startDate,
+            lte: endDate
+          }
+        }
+      }
+      
+      // ดึงข้อมูลการจองแยกตามห้อง (เฉพาะที่ approved)
+      const roomUsage = await prisma.reservation.groupBy({
+        by: ['room_id'],
+        where: {
+          status_r: 'approved',
+          ...dateFilter
+        },
+        _count: {
+          reservation_id: true
+        }
+      })
+      
+      // ดึงข้อมูลห้องประชุมทั้งหมด
+      const rooms = await prisma.meeting_room.findMany({
+        select: {
+          room_id: true,
+          room_name: true,
+          capacity: true,
+          department: true
+        }
+      })
+      
+      // รวมข้อมูลและเรียงลำดับ
+      const roomUsageStats = rooms.map(room => {
+        const usage = roomUsage.find(usage => usage.room_id === room.room_id)
+        return {
+          room_id: room.room_id,
+          room_name: room.room_name,
+          capacity: room.capacity,
+          department: room.department,
+          bookings: usage ? usage._count.reservation_id : 0
+        }
+      })
+      
+      // เรียงลำดับตามจำนวนการใช้งาน (มากไปน้อย)
+      roomUsageStats.sort((a, b) => b.bookings - a.bookings)
+      
+      console.log(`✅ ดึงสถิติการใช้งานห้อง: ${roomUsageStats.length} ห้อง (User)`)
+      
+      return {
+        success: true,
+        message: 'ข้อมูลสถิติการใช้งานห้องประชุม',
+        data: roomUsageStats,
+        total_rooms: roomUsageStats.length,
+        filter: {
+          year: year || 'ทั้งหมด',
+          month: month || 'ทั้งหมด'
+        }
+      }
+      
+    } catch (error) {
+      console.error('❌ Error getting room usage statistics (User):', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการดึงสถิติการใช้งานห้อง',
+        error: error.message
+      }
+    }
+  })
+
+  // สถิติการจองตามคณะ (สำหรับ User Dashboard) 
+  .get('/statistics/department-stats', async ({ request, query, set }) => {
+    // ตรวจสอบสิทธิ์ user
+    const user = await authMiddleware(request, set)
+    if (user.success === false) return user
+    
+    if (!isUser(user)) {
+      set.status = 403
+      return {
+        success: false,
+        message: 'ไม่มีสิทธิ์เข้าถึงข้อมูลสถิติ'
+      }
+    }
+    
+    try {
+      console.log('📊 เรียกใช้ API สถิติการจองตามคณะ (User)')
+      
+      const { year, month } = query
+      
+      // สร้าง date filter
+      let dateFilter = {}
+      if (year || month) {
+        const startDate = new Date(
+          parseInt(year || new Date().getFullYear()),
+          parseInt(month || 1) - 1,
+          1
+        )
+        const endDate = new Date(
+          parseInt(year || new Date().getFullYear()),
+          parseInt(month || 12),
+          0
+        )
+        
+        dateFilter = {
+          start_at: {
+            gte: startDate,
+            lte: endDate
+          }
+        }
+      }
+      
+      // ดึงข้อมูลการจองตามคณะ (เฉพาะที่ approved)
+      const departmentStats = await prisma.reservation.groupBy({
+        by: ['user_id'],
+        where: {
+          status_r: 'approved',
+          ...dateFilter
+        },
+        _count: {
+          reservation_id: true
+        }
+      })
+      
+      // ดึงข้อมูล users เพื่อเอา department
+      const userIds = departmentStats.map(stat => stat.user_id)
+      const users = await prisma.users.findMany({
+        where: {
+          user_id: { in: userIds }
+        },
+        select: {
+          user_id: true,
+          department: true
+        }
+      })
+      
+      // รวมข้อมูลตามคณะ
+      const departmentMap = {}
+      departmentStats.forEach(stat => {
+        const userFound = users.find(u => u.user_id === stat.user_id)
+        const department = userFound?.department || 'ไม่ระบุคณะ'
+        
+        if (departmentMap[department]) {
+          departmentMap[department] += stat._count.reservation_id
+        } else {
+          departmentMap[department] = stat._count.reservation_id
+        }
+      })
+      
+      // แปลงเป็น array และเรียงลำดับ
+      const departmentStatsArray = Object.entries(departmentMap).map(([department, bookings]) => ({
+        department,
+        bookings
+      }))
+      
+      departmentStatsArray.sort((a, b) => b.bookings - a.bookings)
+      
+      console.log(`✅ ดึงสถิติการจองตามคณะ: ${departmentStatsArray.length} คณะ (User)`)
+      
+      return {
+        success: true,
+        message: 'ข้อมูลสถิติการจองตามคณะ',
+        data: departmentStatsArray,
+        total_departments: departmentStatsArray.length,
+        filter: {
+          year: year || 'ทั้งหมด',
+          month: month || 'ทั้งหมด'
+        }
+      }
+      
+    } catch (error) {
+      console.error('❌ Error getting department statistics (User):', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการดึงสถิติตามคณะ',
+        error: error.message
+      }
+    }
+  })
+
 // ===================================================================
 // Officer Reservation Management APIs (เฉพาะเจ้าหน้าที่)
 // ===================================================================
@@ -1219,6 +1433,234 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       return {
         success: false,
         message: 'เกิดข้อผิดพลาดในการปฏิเสธการจอง'
+      }
+    }
+  })
+
+  // 📊 API สำหรับสถิติการใช้ห้องประชุม (แสดงทุกห้องเรียงจากมากไปน้อย)
+  .get('/statistics/room-usage', async ({ request, query, set }) => {
+    // ตรวจสอบสิทธิ์ officer
+    const user = await authMiddleware(request, set)
+    if (user.success === false) return user
+    
+    if (!isOfficer(user)) {
+      set.status = 403
+      return {
+        success: false,
+        message: 'ไม่มีสิทธิ์เข้าถึงข้อมูลสถิติ'
+      }
+    }
+    
+    try {
+      console.log('📊 เรียกใช้ API สถิติการใช้ห้องประชุม')
+      
+      const { year, month, department } = query
+      
+      // สร้าง date filter ถ้ามีการระบุ
+      let dateFilter = {}
+      if (year || month) {
+        const startDate = new Date(
+          parseInt(year || new Date().getFullYear()),
+          parseInt(month || 1) - 1,
+          1
+        )
+        const endDate = new Date(
+          parseInt(year || new Date().getFullYear()),
+          parseInt(month || 12),
+          0
+        )
+        
+        dateFilter = {
+          start_at: {
+            gte: startDate,
+            lte: endDate
+          }
+        }
+      }
+      
+      // สร้าง department filter ถ้ามี
+      let departmentFilter = {}
+      if (department) {
+        departmentFilter = {
+          users: {
+            department: department
+          }
+        }
+      }
+      
+      // ดึงข้อมูลการจองที่ approved
+      const reservations = await prisma.reservation.groupBy({
+        by: ['room_id'],
+        where: {
+          status_r: 'approved',
+          ...dateFilter,
+          ...departmentFilter
+        },
+        _count: {
+          reservation_id: true
+        }
+      })
+      
+      // ดึงข้อมูลห้องประชุมทั้งหมด
+      const rooms = await prisma.meeting_room.findMany({
+        select: {
+          room_id: true,
+          room_name: true,
+          location_m: true,
+          capacity: true
+        }
+      })
+      
+      // รวมข้อมูลและเรียงลำดับ
+      const roomUsageStats = rooms.map(room => {
+        const reservationCount = reservations.find(r => r.room_id === room.room_id)
+        return {
+          room_id: room.room_id,
+          room_name: room.room_name,
+          location: room.location_m,
+          capacity: room.capacity,
+          bookings: reservationCount ? reservationCount._count.reservation_id : 0
+        }
+      })
+      
+      // เรียงจากมากไปน้อย
+      roomUsageStats.sort((a, b) => b.bookings - a.bookings)
+      
+      console.log(`✅ ดึงสถิติการใช้ห้องประชุม: ${roomUsageStats.length} ห้อง`)
+      
+      return {
+        success: true,
+        message: 'ข้อมูลสถิติการใช้ห้องประชุม',
+        data: roomUsageStats,
+        total_rooms: roomUsageStats.length,
+        filter: {
+          year: year || 'ทั้งหมด',
+          month: month || 'ทั้งหมด',
+          department: department || 'ทั้งหมด'
+        }
+      }
+      
+    } catch (error) {
+      console.error('❌ Error getting room usage statistics:', error)
+      console.error('Error details:', error.message)
+      console.error('Error stack:', error.stack)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการดึงสถิติการใช้ห้องประชุม',
+        error: error.message
+      }
+    }
+  })
+
+  // 📊 API สำหรับสถิติการจองตามคณะ
+  .get('/statistics/department-stats', async ({ request, query, set }) => {
+    // ตรวจสอบสิทธิ์ officer
+    const user = await authMiddleware(request, set)
+    if (user.success === false) return user
+    
+    if (!isOfficer(user)) {
+      set.status = 403
+      return {
+        success: false,
+        message: 'ไม่มีสิทธิ์เข้าถึงข้อมูลสถิติ'
+      }
+    }
+    
+    try {
+      console.log('📊 เรียกใช้ API สถิติการจองตามคณะ')
+      
+      const { year, month } = query
+      
+      // สร้าง date filter
+      let dateFilter = {}
+      if (year || month) {
+        const startDate = new Date(
+          parseInt(year || new Date().getFullYear()),
+          parseInt(month || 1) - 1,
+          1
+        )
+        const endDate = new Date(
+          parseInt(year || new Date().getFullYear()),
+          parseInt(month || 12),
+          0
+        )
+        
+        dateFilter = {
+          start_at: {
+            gte: startDate,
+            lte: endDate
+          }
+        }
+      }
+      
+      // ดึงข้อมูลการจองตามคณะ
+      const departmentStats = await prisma.reservation.groupBy({
+        by: ['user_id'],
+        where: {
+          status_r: 'approved',
+          ...dateFilter
+        },
+        _count: {
+          reservation_id: true
+        }
+      })
+      
+      // ดึงข้อมูล users เพื่อเอา department
+      const userIds = departmentStats.map(stat => stat.user_id)
+      const users = await prisma.users.findMany({
+        where: {
+          user_id: { in: userIds }
+        },
+        select: {
+          user_id: true,
+          department: true
+        }
+      })
+      
+      // รวมข้อมูลตามคณะ
+      const departmentMap = {}
+      departmentStats.forEach(stat => {
+        const user = users.find(u => u.user_id === stat.user_id)
+        const department = user?.department || 'ไม่ระบุ'
+        
+        if (departmentMap[department]) {
+          departmentMap[department] += stat._count.reservation_id
+        } else {
+          departmentMap[department] = stat._count.reservation_id
+        }
+      })
+      
+      // แปลงเป็น array และเรียงลำดับ
+      const departmentStatsArray = Object.entries(departmentMap).map(([department, bookings]) => ({
+        department,
+        bookings
+      }))
+      
+      departmentStatsArray.sort((a, b) => b.bookings - a.bookings)
+      
+      console.log(`✅ ดึงสถิติการจองตามคณะ: ${departmentStatsArray.length} คณะ`)
+      
+      return {
+        success: true,
+        message: 'ข้อมูลสถิติการจองตามคณะ',
+        data: departmentStatsArray,
+        total_departments: departmentStatsArray.length,
+        filter: {
+          year: year || 'ทั้งหมด',
+          month: month || 'ทั้งหมด'
+        }
+      }
+      
+    } catch (error) {
+      console.error('❌ Error getting department statistics:', error)
+      console.error('Error details:', error.message)
+      console.error('Error stack:', error.stack)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการดึงสถิติตามคณะ',
+        error: error.message
       }
     }
   })
