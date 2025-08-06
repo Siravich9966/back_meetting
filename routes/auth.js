@@ -9,7 +9,7 @@
 
 import { Elysia } from 'elysia'
 import prisma from '../lib/prisma.js'
-import { validateRegisterData, formatValidationErrors } from '../utils/validation.js'
+import { validateRegisterData, formatValidationErrors } from '../validation.js'
 import { isValidDepartment, getAllDepartments } from '../utils/departments.js'
 import { 
   isValidPosition, 
