@@ -27,6 +27,9 @@ import { departmentRoutes } from './routes/departments.js' // Department APIs
 import positionRoutes from './routes/positions.js' // Position APIs
 import { reservationRoutes, userReservationRoutes, officerReservationRoutes } from './routes/reservations.js' // Reservation APIs
 
+// Configuration
+const PORT = process.env.PORT || 8000
+
 // สร้าง Elysia app
 const app = new Elysia()
 
@@ -138,30 +141,20 @@ app.group('/api', app => app
 
 // ฟังก์ชันเริ่มต้นเซิร์ฟเวอร์
 async function startServer() {
-  const PORT = process.env.PORT || 8000
-  
   try {
     // ทดสอบการเชื่อมต่อฐานข้อมูลก่อน
     console.log('🔍 กำลังทดสอบการเชื่อมต่อฐานข้อมูล...')
     await prisma.$connect()
     console.log('✅ เชื่อมต่อฐานข้อมูลสำเร็จ')
     
-    // เริ่ม server หลังจากฐานข้อมูลพร้อม
-    app.listen(PORT)
-    console.log(`🚀 Server เริ่มทำงานที่ port ${PORT}`)
-    console.log(`📚 API Docs: http://localhost:${PORT}`)
-    console.log(`🔍 Health Check: http://localhost:${PORT}/health`)
-    
   } catch (error) {
     console.error('❌ ไม่สามารถเชื่อมต่อฐานข้อมูล:', error.message)
-    console.log('📝 กำลังเริ่มเซิร์ฟเวอร์โดยไม่มีฐานข้อมูล (สำหรับ debug)')
-    
-    // เริ่ม server แม้ database ไม่ทำงาน
-    app.listen(PORT)
-    console.log(`🚀 Server เริ่มทำงานที่ port ${PORT} (Database ไม่พร้อม)`)
-    console.log(`📚 API Docs: http://localhost:${PORT}`)
-    console.log(`🔍 Health Check: http://localhost:${PORT}/health`)
+    console.log('📝 จะเริ่มเซิร์ฟเวอร์โดยไม่มีฐานข้อมูล (สำหรับ debug)')
   }
+  
+  console.log(`🚀 Server เริ่มทำงานที่ port ${PORT}`)
+  console.log(`📚 API Docs: http://localhost:${PORT}`)
+  console.log(`🔍 Health Check: http://localhost:${PORT}/health`)
 }
 
 // จัดการการปิดระบบอย่างสะอาด
@@ -179,5 +172,8 @@ process.on('SIGINT', async () => {
 
 // เริ่มเซิร์ฟเวอร์
 startServer()
+
+// เริ่ม Elysia server ปกติ
+app.listen(PORT)
 
 export default app

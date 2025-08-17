@@ -3,6 +3,11 @@
   "module": "index.js",
   "type": "module",
   "private": true,
+  "scripts": {
+    "start": "bun index.js",
+    "dev": "bun --watch index.js",
+    "prod": "NODE_ENV=production bun index.js"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^24.0.10"

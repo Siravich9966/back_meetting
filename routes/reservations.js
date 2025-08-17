@@ -57,7 +57,14 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
             lte: endDate
           }
         },
-        include: {
+        select: {
+          reservation_id: true,
+          start_at: true,
+          end_at: true,
+          start_time: true,
+          end_time: true,
+          details_r: true,
+          status_r: true,
           users: {
             select: {
               user_id: true,
@@ -68,16 +75,6 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
             }
           }
         },
-        select: {
-          reservation_id: true,
-          start_at: true,
-          end_at: true,
-          start_time: true,
-          end_time: true,
-          details_r: true,
-          status_r: true,
-          users: true
-        },
         orderBy: { start_at: 'asc' }
       })
 
@@ -86,7 +83,7 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
         // สร้าง daily availability map
         const dailyAvailability = {}
         const workingHours = { 
-          start: 6, end: 18,           // 6:00-18:00
+          start: 8, end: 22,           // 8:00-22:00
           morningEnd: 12,              // ช่วงเช้าสิ้นสุด 12:00
           afternoonStart: 13,          // ช่วงบ่ายเริ่ม 13:00
           lunchBreak: { start: 12, end: 13 } // พักเที่ยง 12:00-13:00
@@ -97,19 +94,17 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
           const currentDate = new Date(startDate.getFullYear(), startDate.getMonth(), day)
           const dateKey = currentDate.toISOString().split('T')[0]
           
-          // สร้าง hourly slots (6:00-18:00) - รองรับทุกวัน รวมเสาร์-อาทิตย์
-          const slots = []
-          for (let hour = workingHours.start; hour < workingHours.end; hour++) {
-            slots.push({
-              time: `${hour.toString().padStart(2, '0')}:00`,
-              start_time: `${hour.toString().padStart(2, '0')}:00:00`,
-              end_time: `${(hour + 1).toString().padStart(2, '0')}:00:00`,
-              available: true,
-              reservations: []
-            })
-          }
-          
-          dailyAvailability[dateKey] = {
+        // สร้าง hourly slots (8:00-22:00) - เวลาทำการใหม่
+        const slots = []
+        for (let hour = 8; hour <= 22; hour++) {
+          slots.push({
+            time: `${hour.toString().padStart(2, '0')}:00`,
+            start_time: `${hour.toString().padStart(2, '0')}:00:00`,
+            end_time: `${(hour + 1).toString().padStart(2, '0')}:00:00`,
+            available: true,
+            reservations: []
+          })
+        }          dailyAvailability[dateKey] = {
             date: dateKey,
             day_of_week: currentDate.getDay(),
             slots: slots,
@@ -205,6 +200,80 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
 // ===================================================================
 export const userReservationRoutes = new Elysia({ prefix: '/protected/reservations' })
   
+  // ดูการจองของตัวเอง
+  .get('/my', async ({ request, set }) => {
+    try {
+      // เรียกใช้ auth middleware
+      const user = await authMiddleware(request, set)
+      
+      // ถ้า middleware return error response
+      if (user.success === false) {
+        return user
+      }
+      
+      // ดึงการจองของผู้ใช้นี้เท่านั้น
+      const reservations = await prisma.reservation.findMany({
+        where: {
+          user_id: user.user_id
+        },
+        include: {
+          meeting_room: {
+            select: {
+              room_name: true,
+              location_m: true,
+              capacity: true
+            }
+          },
+          users: {
+            select: {
+              first_name: true,
+              last_name: true,
+              department: true
+            }
+          }
+        },
+        orderBy: {
+          created_at: 'desc'
+        }
+      })
+
+      // จัดรูปแบบข้อมูล
+      const formattedReservations = reservations.map(reservation => ({
+        reservation_id: reservation.reservation_id,
+        room_name: reservation.meeting_room.room_name,
+        location: reservation.meeting_room.location_m,
+        capacity: reservation.meeting_room.capacity,
+        department: reservation.users.department,
+        start_date: reservation.start_at,
+        end_date: reservation.end_at,
+        start_time: reservation.start_time,
+        end_time: reservation.end_time,
+        status: reservation.status_r,
+        details: reservation.details_r,
+        approved_by: reservation.approved_by,
+        rejected_reason: reservation.rejected_reason,
+        created_at: reservation.created_at,
+        updated_at: reservation.updated_at
+      }))
+
+      return {
+        success: true,
+        message: 'ข้อมูลการจองของคุณ',
+        data: formattedReservations,
+        total: formattedReservations.length
+      }
+      
+    } catch (error) {
+      console.error('❌ Error getting user reservations:', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการดึงข้อมูลการจอง',
+        error: error.message
+      }
+    }
+  })
+  
   // จองห้องประชุม (4.2.5)
   .post('/', async ({ request, body, set }) => {
     // ตรวจสอบสิทธิ์ user
@@ -246,7 +315,18 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
 
       // แปลงวันที่และเวลา
       const startDate = new Date(start_at)
-      const endDate = new Date(end_at)
+      let endDate = new Date(end_at)
+      
+      console.log(`🔍 Before fix - startDate: ${startDate.toISOString()}, endDate: ${endDate.toISOString()}`)
+      
+      // สำหรับการจองในวันเดียวกัน ตั้งค่า end_at ให้เป็นวันเดียวกัน แต่เวลา 22:00:00
+      if (startDate.toDateString() === endDate.toDateString()) {
+        // สร้าง endDate ใหม่โดยใช้วันที่เดียวกันกับ startDate แต่เป็นเวลา 22:00
+        endDate = new Date(startDate)
+        endDate.setHours(22, 0, 0, 0) // ตั้งเป็น 22:00:00
+        console.log(`🔧 Fixed endDate for same day to 22:00: ${endDate.toISOString()}`)
+      }
+      
       const startTime = new Date(start_time)
       const endTime = new Date(end_time)
 
@@ -267,133 +347,77 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         }
       }
 
-      // ตรวจสอบช่วงเวลาทำงาน (หลีกเลี่ยงช่วงพักเที่ยง)
+      // ✅ ตรวจสอบช่วงเวลาทำการใหม่ 08:00-22:00 (รวมช่วงพักเที่ยง 12:00-13:00)
       const startHour = startTime.getHours()
       const endHour = endTime.getHours()
+      const startMinutes = startTime.getMinutes()
+      const endMinutes = endTime.getMinutes()
       
-      if (startHour < 6 || endHour > 18) {
+      // ตรวจสอบเวลาทำการ 08:00-22:00
+      if (startHour < 8 || startHour > 22 || endHour < 8 || endHour > 22) {
         set.status = 400
         return {
           success: false,
-          message: 'เวลาทำการ: 06:00-18:00 เท่านั้น'
+          message: 'เวลาทำการ: 08:00-22:00 เท่านั้น'
         }
       }
 
-      // เช็คว่าไม่จองข้ามช่วงพักเที่ยง (12:00-13:00)
-      if (startHour < 12 && endHour > 13) {
+      // ตรวจสอบว่าเวลาสิ้นสุดไม่เกิน 22:00
+      if (endHour > 22 || (endHour === 22 && endMinutes > 0)) {
         set.status = 400
         return {
           success: false,
-          message: 'ไม่สามารถจองข้ามช่วงพักเที่ยง (12:00-13:00) กรุณาแยกจองเป็นช่วงเช้าและบ่าย'
+          message: 'เวลาสิ้นสุดต้องไม่เกิน 22:00 น.'
         }
       }
 
-      // เช็คว่าไม่จองในช่วงพักเที่ยง
-      if ((startHour >= 12 && startHour < 13) || (endHour > 12 && endHour <= 13)) {
-        set.status = 400
-        return {
-          success: false,
-          message: 'ช่วงเวลา 12:00-13:00 เป็นเวลาพักเที่ยง ไม่สามารถจองได้'
-        }
-      }
+      // ✅ อนุญาตให้จองช่วง 12:00-13:00 ได้ (ตามที่อาจารย์บอก)
 
-      // ตรวจสอบการจองที่ซ้อนทับ (Fixed Logic)
-      // การซ้อนทับจะเกิดขึ้นเมื่อ: (start1 < end2) AND (start2 < end1)
+      // ตรวจสอบการจองที่ซ้อนทับ (Simplified Logic)
+      console.log(`🔍 ตรวจสอบ conflict: room ${room_id}, วันที่ ${start_at} เวลา ${start_time}-${end_time}`)
+      
       const conflictReservations = await prisma.reservation.findMany({
         where: {
           room_id: parseInt(room_id),
           status_r: {
             in: ['pending', 'approved'] // ไม่นับ rejected
           },
-          AND: [
-            // ช่วงวันที่ต้องซ้อนทับกัน: (startNew < endExisting) AND (startExisting < endNew)
-            { start_at: { lt: endDate } },   // startExisting < endNew
-            { end_at: { gt: startDate } }    // endExisting > startNew
-          ]
+          // สำหรับการจองในวันเดียวกัน (single day booking)
+          start_at: startDate, // ใช้ DateTime object แทน string
+          end_at: endDate     // ใช้ DateTime object แทน string
         }
       })
 
-      // ตรวจสอบ time conflict ละเอียดสำหรับการจองที่มีวันซ้อนทับ (Fixed Advanced Logic)
+      console.log(`📊 พบการจองในวันเดียวกัน: ${conflictReservations.length} รายการ`)
+      
+      // ตรวจสอบเวลาทับซ้อน
       const hasTimeConflict = conflictReservations.some(existing => {
-        const existingStartDate = new Date(existing.start_at)
-        const existingEndDate = new Date(existing.end_at)
         const existingStartTime = new Date(existing.start_time)
         const existingEndTime = new Date(existing.end_time)
+        
+        // แปลงเป็น minutes สำหรับการเปรียบเทียบ
+        const newStartMinutes = startTime.getHours() * 60 + startTime.getMinutes()
+        const newEndMinutes = endTime.getHours() * 60 + endTime.getMinutes()
+        const existingStartMinutes = existingStartTime.getHours() * 60 + existingStartTime.getMinutes()
+        const existingEndMinutes = existingEndTime.getHours() * 60 + existingEndTime.getMinutes()
 
-        // หาช่วงวันที่ที่ทับซ้อนกัน
-        const overlapStart = new Date(Math.max(startDate.getTime(), existingStartDate.getTime()))
-        const overlapEnd = new Date(Math.min(endDate.getTime(), existingEndDate.getTime()))
-
-        // วนเช็คทุกวันที่ทับซ้อนกัน
-        let currentDate = new Date(overlapStart)
-        while (currentDate <= overlapEnd) {
-          // เวลาที่ใช้สำหรับการจองเก่าในวันนี้
-          let dayExistingStartTime, dayExistingEndTime
-          
-          if (currentDate.getTime() === existingStartDate.getTime() && currentDate.getTime() === existingEndDate.getTime()) {
-            // Single day booking - ใช้เวลาตามที่ระบุ
-            dayExistingStartTime = existingStartTime
-            dayExistingEndTime = existingEndTime
-          } else if (currentDate.getTime() === existingEndDate.getTime()) {
-            // วันสุดท้ายของ multi-day booking - ใช้ start_time ถึง end_time
-            // ตามที่คุณอธิบาย: วันสุดท้ายใช้เวลาจาก start_time ถึง end_time เท่านั้น
-            dayExistingStartTime = existingStartTime
-            dayExistingEndTime = existingEndTime
-          } else {
-            // วันแรกและวันกลางของ multi-day booking - ใช้เต็มวัน
-            // ตามที่คุณอธิบาย: วันแรกและวันกลางใช้ start_time ตลอดวัน (สมมติถึง 18:00)
-            dayExistingStartTime = existingStartTime
-            dayExistingEndTime = new Date(existingStartTime.getTime())
-            dayExistingEndTime.setHours(18, 0, 0, 0) // สิ้นสุดวันทำงาน 18:00
-          }
-
-          // เวลาที่ใช้สำหรับการจองใหม่ในวันนี้
-          let dayNewStartTime, dayNewEndTime
-          
-          if (currentDate.getTime() === startDate.getTime() && currentDate.getTime() === endDate.getTime()) {
-            // Single day booking ใหม่
-            dayNewStartTime = startTime
-            dayNewEndTime = endTime
-          } else if (currentDate.getTime() === endDate.getTime()) {
-            // วันสุดท้ายของการจองใหม่ - ใช้ start_time ถึง end_time
-            dayNewStartTime = startTime
-            dayNewEndTime = endTime
-          } else {
-            // วันแรกและวันกลางของการจองใหม่ - ใช้เต็มวัน
-            dayNewStartTime = startTime
-            dayNewEndTime = new Date(startTime.getTime())
-            dayNewEndTime.setHours(18, 0, 0, 0) // สิ้นสุดวันทำงาน 18:00
-          }
-
-          // เช็ค time overlap ในวันนี้
-          const newStartMinutes = dayNewStartTime.getHours() * 60 + dayNewStartTime.getMinutes()
-          const newEndMinutes = dayNewEndTime.getHours() * 60 + dayNewEndTime.getMinutes()
-          const existingStartMinutes = dayExistingStartTime.getHours() * 60 + dayExistingStartTime.getMinutes()
-          const existingEndMinutes = dayExistingEndTime.getHours() * 60 + dayExistingEndTime.getMinutes()
-
-          // Time slots overlap if: (start1 < end2) AND (start2 < end1)
-          const hasTimeOverlapToday = (newStartMinutes < existingEndMinutes) && (existingStartMinutes < newEndMinutes)
-          
-          if (hasTimeOverlapToday) {
-            console.log(`⚠️  Time conflict detected on ${currentDate.toDateString()}:`)
-            console.log(`   Existing: ${dayExistingStartTime.toTimeString().slice(0,5)}-${dayExistingEndTime.toTimeString().slice(0,5)}`)
-            console.log(`   New: ${dayNewStartTime.toTimeString().slice(0,5)}-${dayNewEndTime.toTimeString().slice(0,5)}`)
-            return true
-          }
-
-          // ไปวันถัดไป
-          currentDate.setDate(currentDate.getDate() + 1)
+        // Time overlap: (start1 < end2) AND (start2 < end1)
+        const overlap = (newStartMinutes < existingEndMinutes) && (existingStartMinutes < newEndMinutes)
+        
+        if (overlap) {
+          console.log(`⚠️  Time conflict detected:`)
+          console.log(`   Existing ID ${existing.reservation_id}: ${existingStartTime.toTimeString().slice(0,5)}-${existingEndTime.toTimeString().slice(0,5)}`)
+          console.log(`   New request: ${startTime.toTimeString().slice(0,5)}-${endTime.toTimeString().slice(0,5)}`)
         }
-
-        // ไม่มี conflict ในทุกวันที่เช็ค
-        return false
+        
+        return overlap
       })
 
       if (hasTimeConflict) {
         set.status = 409
         return {
           success: false,
-          message: 'ช่วงเวลาที่เลือกมีการจองอยู่แล้ว กรุณาเลือกเวลาอื่น',
+          message: 'ช่วงเวลาที่เลือกมีการจองอยู่แล้ว กรุณาเลือกเวลาอื่น (รวมถึงการจองที่รออนุมัติ)',
           conflicts: conflictReservations.map(r => ({
             reservation_id: r.reservation_id,
             start_at: r.start_at,

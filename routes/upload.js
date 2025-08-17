@@ -1,5 +1,5 @@
 import { Elysia } from 'elysia'
-import { authMiddleware } from '../middleware/jwt.js'
+import { authMiddleware } from '../middleware/index.js'
 import prisma from '../lib/prisma.js'
 import fs from 'fs'
 import path from 'path'

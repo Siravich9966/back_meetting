@@ -57,7 +57,7 @@ async function createTestReservations() {
         room_id: 7,
         start_at: new Date('2025-08-06'),
         end_at: new Date('2025-08-06'),
-        start_time: new Date('2025-08-06T06:00:00'),
+        start_time: new Date('2025-08-06T08:00:00'),
         end_time: new Date('2025-08-06T12:00:00'),
         details_r: 'อบรมพนักงาน เช้า (ทดสอบ)',
         status_r: 'approved'
