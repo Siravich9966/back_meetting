@@ -96,7 +96,7 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
           
         // สร้าง hourly slots (8:00-22:00) - เวลาทำการใหม่
         const slots = []
-        for (let hour = 8; hour <= 22; hour++) {
+        for (let hour = 8; hour < 22; hour++) {
           slots.push({
             time: `${hour.toString().padStart(2, '0')}:00`,
             start_time: `${hour.toString().padStart(2, '0')}:00:00`,
