@@ -290,7 +290,7 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
 
     try {
       // ตรวจสอบข้อมูลที่จำเป็น
-      const { room_id, start_at, end_at, start_time, end_time, details_r } = body
+      const { room_id, start_at, end_at, start_time, end_time, details_r, booking_dates, is_multi_day } = body
 
       if (!room_id || !start_at || !end_at || !start_time || !end_time || !details_r) {
         set.status = 400
@@ -316,8 +316,111 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
       // แปลงวันที่และเวลา
       const startDate = new Date(start_at)
       let endDate = new Date(end_at)
-      
-      console.log(`🔍 Before fix - startDate: ${startDate.toISOString()}, endDate: ${endDate.toISOString()}`)
+      const startTime = new Date(start_time)
+      const endTime = new Date(end_time)
+
+      console.log(`🔍 Multi-day booking check:`, {
+        is_multi_day,
+        booking_dates: booking_dates?.length || 'N/A',
+        start_at, 
+        end_at,
+        dates: booking_dates
+      })
+
+      // 🚀 Multi-day booking logic
+      if (is_multi_day && booking_dates && booking_dates.length > 1) {
+        console.log(`📅 Processing multi-day booking: ${booking_dates.length} days`)
+
+        // ตรวจสอบ conflict สำหรับทุกวัน
+        for (const dateStr of booking_dates) {
+          const checkDate = new Date(dateStr)
+          
+          console.log(`🔍 Checking conflict for date: ${dateStr}`)
+          
+          const conflictReservations = await prisma.reservation.findMany({
+            where: {
+              room_id: parseInt(room_id),
+              status_r: {
+                in: ['pending', 'approved']
+              },
+              start_at: checkDate,
+              end_at: checkDate
+            }
+          })
+
+          // ตรวจสอบเวลาทับซ้อน
+          const hasTimeConflict = conflictReservations.some(existing => {
+            const existingStartTime = new Date(existing.start_time)
+            const existingEndTime = new Date(existing.end_time)
+            
+            const newStartMinutes = startTime.getHours() * 60 + startTime.getMinutes()
+            const newEndMinutes = endTime.getHours() * 60 + endTime.getMinutes()
+            const existingStartMinutes = existingStartTime.getHours() * 60 + existingStartTime.getMinutes()
+            const existingEndMinutes = existingEndTime.getHours() * 60 + existingEndTime.getMinutes()
+
+            return (newStartMinutes < existingEndMinutes) && (existingStartMinutes < newEndMinutes)
+          })
+
+          if (hasTimeConflict) {
+            set.status = 409
+            return {
+              success: false,
+              message: `วันที่ ${new Date(dateStr).toLocaleDateString('th-TH')} มีการจองซ้อนทับ กรุณาเลือกเวลาอื่น`,
+              conflict_date: dateStr
+            }
+          }
+        }
+
+        // สร้างการจองเดียวสำหรับ multi-day
+        const newReservation = await prisma.reservation.create({
+          data: {
+            user_id: user.user_id,
+            room_id: parseInt(room_id),
+            start_at: startDate,      // วันแรก
+            end_at: endDate,          // วันสุดท้าย
+            start_time: startTime,    // เวลาเริ่ม
+            end_time: endTime,        // เวลาสิ้นสุด
+            details_r: details_r.trim(),
+            status_r: 'pending',
+            // เพิ่ม metadata สำหรับ multi-day
+            booking_dates: booking_dates.join(','), // เก็บเป็น CSV string
+            is_multi_day: true
+          },
+          include: {
+            meeting_room: {
+              select: {
+                room_name: true,
+                department: true
+              }
+            }
+          }
+        })
+
+        console.log(`✅ สร้าง multi-day reservation: ${user.first_name} จอง ${room.room_name} (${booking_dates.length} วัน)`)
+
+        return {
+          success: true,
+          message: `จองห้องประชุมสำเร็จ ${booking_dates.length} วัน รอการอนุมัติจากเจ้าหน้าที่`,
+          reservation: {
+            reservation_id: newReservation.reservation_id,
+            room_name: newReservation.meeting_room.room_name,
+            department: newReservation.meeting_room.department,
+            start_at: newReservation.start_at,
+            end_at: newReservation.end_at,
+            start_time: newReservation.start_time,
+            end_time: newReservation.end_time,
+            details: newReservation.details_r,
+            status: newReservation.status_r,
+            booking_dates: booking_dates,
+            is_multi_day: true,
+            total_days: booking_dates.length,
+            created_at: newReservation.created_at
+          }
+        }
+      }
+
+      // 🔄 Single day booking logic (existing code)
+      console.log(`🔍 Single day booking: ${start_at}`)
       
       // สำหรับการจองในวันเดียวกัน ตั้งค่า end_at ให้เป็นวันเดียวกัน แต่เวลา 22:00:00
       if (startDate.toDateString() === endDate.toDateString()) {
@@ -326,9 +429,6 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         endDate.setHours(22, 0, 0, 0) // ตั้งเป็น 22:00:00
         console.log(`🔧 Fixed endDate for same day to 22:00: ${endDate.toISOString()}`)
       }
-      
-      const startTime = new Date(start_time)
-      const endTime = new Date(end_time)
 
       // ตรวจสอบ logic วันที่และเวลา
       if (startDate > endDate) {
@@ -430,7 +530,7 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         }
       }
 
-      // สร้างการจองใหม่
+      // สร้างการจองใหม่ (single day)
       const newReservation = await prisma.reservation.create({
         data: {
           user_id: user.user_id,
@@ -440,7 +540,8 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
           start_time: startTime,
           end_time: endTime,
           details_r: details_r.trim(),
-          status_r: 'pending' // รอการอนุมัติ
+          status_r: 'pending', // รอการอนุมัติ
+          is_multi_day: false  // single day booking
         },
         include: {
           meeting_room: {

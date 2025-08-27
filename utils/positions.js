@@ -81,11 +81,11 @@ export const getRoleIdFromPosition = (position) => {
   const table = getTableFromPosition(position)
   
   switch(table) {
-    case 'users': return 3 // user role
+    case 'users': return 1 // user role
     case 'officer': return 2 // officer role  
-    case 'admin': return 1 // admin role
+    case 'admin': return 3 // admin role
     case 'executive': return 4 // executive role
-    default: return 3 // default เป็น user
+    default: return 1 // default เป็น user
   }
 }
 

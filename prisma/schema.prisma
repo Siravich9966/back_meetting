@@ -79,6 +79,8 @@ model reservation {
   status_r       String?       @default("pending") @db.VarChar(255)
   officer_id     Int?
   details_r      String?       @db.VarChar(255)
+  booking_dates  String?       @db.Text        // CSV string ของวันที่ทั้งหมดที่จอง เช่น "2025-08-29,2025-08-30,2025-08-31"
+  is_multi_day   Boolean?      @default(false) // flag บอกว่าเป็น multi-day booking หรือไม่
   created_at     DateTime?     @default(now()) @db.Timestamp(6)
   updated_at     DateTime?     @default(now()) @db.Timestamp(6)
   officer        officer?      @relation(fields: [officer_id], references: [officer_id], onDelete: NoAction, onUpdate: NoAction)

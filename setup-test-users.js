@@ -33,7 +33,6 @@ async function createTestUser() {
         email: 'user@test.com',
         password: hashedPassword,
         citizen_id: '1234567890123',
-        phone: '0812345678',
         department: 'คณะเทคโนโลยีสารสนเทศ',
         position: 'นักศึกษา',
         profile_image: null
