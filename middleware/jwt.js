@@ -25,6 +25,21 @@ export const authMiddleware = async (request, set) => {
     
     // ตรวจสอบ token
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    
+    // Log token verification details
+    const timeLeft = decoded.exp * 1000 - Date.now()
+    const minutesLeft = Math.round(timeLeft / (1000 * 60))
+    console.log(`🔍 Token Verification - Role: ${decoded.role}, Time left: ${minutesLeft} minutes`)
+    
+    if (timeLeft <= 0) {
+      console.log('⏰ Token หมดอายุแล้ว')
+      set.status = 401
+      return { 
+        success: false, 
+        message: 'Token หมดอายุแล้ว', 
+        expired: true 
+      }
+    }
 
     // ดึงข้อมูลผู้ใช้จาก table ที่ระบุใน token
     let user = null
@@ -155,7 +170,34 @@ export const authMiddleware = async (request, set) => {
     return userWithRole
 
   } catch (error) {
+    console.log('❌ JWT Error:', error.name, error.message)
+    
+    // ตรวจสอบประเภท error เฉพาะเจาะจง
+    if (error.name === 'TokenExpiredError') {
+      set.status = 401
+      return { 
+        success: false, 
+        message: 'Token หมดอายุแล้ว', 
+        expired: true 
+      }
+    } else if (error.name === 'JsonWebTokenError') {
+      set.status = 401
+      return { 
+        success: false, 
+        message: 'Token ไม่ถูกต้อง', 
+        invalid: true 
+      }
+    } else if (error.name === 'NotBeforeError') {
+      set.status = 401
+      return { 
+        success: false, 
+        message: 'Token ยังไม่สามารถใช้งานได้', 
+        notActive: true 
+      }
+    }
+    
+    // กรณี error อื่นๆ
     set.status = 401
-    return { success: false, message: 'Token ไม่ถูกต้อง' }
+    return { success: false, message: 'การยืนยันตัวตนล้มเหลว' }
   }
 }

@@ -332,10 +332,14 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
           userTable: userTable
         },
         process.env.JWT_SECRET,
-        { expiresIn: '1h' } // เปลี่ยนกลับเป็น 1 ชั่วโมงสำหรับ production
+        { expiresIn: '1h' } // ทุก role หมดอายุ 1 ชั่วโมง
       )
       
-      console.log('✅ สร้าง JWT Token สำเร็จ')
+      // ตรวจสอบ token payload
+      const decoded = jwt.decode(token)
+      const expiryTime = new Date(decoded.exp * 1000)
+      console.log(`✅ สร้าง JWT Token สำเร็จ - Role: ${decoded.role}, Expires: ${expiryTime.toLocaleString('th-TH')}`)
+      console.log(`📅 Token จะหมดอายุใน ${Math.round((decoded.exp * 1000 - Date.now()) / (1000 * 60))} นาที`)
       
       // ลบ password ออกจาก response และปรับ user_id ให้ consistent
       const { password, ...userWithoutPassword } = user
