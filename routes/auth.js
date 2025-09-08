@@ -324,6 +324,11 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       
       // สร้าง JWT Token
       const jwt = await import('jsonwebtoken')
+      
+      // ตรวจสอบถ้าเป็น test mode (สำหรับทดสอบ expiry)
+      const isTestMode = body.testExpiry === true
+      const expiryTime = isTestMode ? '30s' : '1h' // Test: 30 วินาที, Production: 1 ชั่วโมง
+      
       const token = jwt.sign(
         { 
           userId: userId,
@@ -332,14 +337,20 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
           userTable: userTable
         },
         process.env.JWT_SECRET,
-        { expiresIn: '1h' } // ทุก role หมดอายุ 1 ชั่วโมง
+        { expiresIn: expiryTime }
       )
       
       // ตรวจสอบ token payload
       const decoded = jwt.decode(token)
-      const expiryTime = new Date(decoded.exp * 1000)
-      console.log(`✅ สร้าง JWT Token สำเร็จ - Role: ${decoded.role}, Expires: ${expiryTime.toLocaleString('th-TH')}`)
-      console.log(`📅 Token จะหมดอายุใน ${Math.round((decoded.exp * 1000 - Date.now()) / (1000 * 60))} นาที`)
+      const expiryTimeReadable = new Date(decoded.exp * 1000)
+      const minutesLeft = Math.round((decoded.exp * 1000 - Date.now()) / (1000 * 60))
+      
+      console.log(`✅ สร้าง JWT Token สำเร็จ - Role: ${decoded.role}, Expires: ${expiryTimeReadable.toLocaleString('th-TH')}`)
+      console.log(`📅 Token จะหมดอายุใน ${minutesLeft} นาที ${isTestMode ? '(TEST MODE)' : ''}`)
+      
+      if (isTestMode) {
+        console.log('🧪 TEST MODE: Token จะหมดอายุใน 30 วินาทีเพื่อทดสอบ')
+      }
       
       // ลบ password ออกจาก response และปรับ user_id ให้ consistent
       const { password, ...userWithoutPassword } = user
