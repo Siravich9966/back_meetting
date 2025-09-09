@@ -13,7 +13,7 @@
 
 import { Elysia } from 'elysia'
 import { cors } from '@elysiajs/cors'
-import { staticPlugin } from '@elysiajs/static'
+// import { staticPlugin } from '@elysiajs/static' // ไม่ใช้แล้ว
 import 'dotenv/config'
 import prisma from './lib/prisma.js'  // ใช้สำหรับ database connection test
 
@@ -41,11 +41,11 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }))
 
-// ตั้งค่า static file serving สำหรับรูปภาพ
-app.use(staticPlugin({
-  assets: 'uploads',
-  prefix: '/uploads'
-}))
+// Static file serving ไม่ใช้แล้ว - รูปเก็บใน database
+// app.use(staticPlugin({
+//   assets: 'uploads',
+//   prefix: '/uploads'
+// }))
 
 // Global Error Handler (จัดการ error ครั้งเดียว)
 app.onError(({ code, error, set }) => {

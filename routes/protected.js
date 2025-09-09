@@ -18,6 +18,41 @@ export const protectedRoutes = new Elysia({ prefix: '/protected' })
     timestamp: new Date().toISOString()
   }))
 
+  // API สำหรับเสิร์ฟรูปโปรไฟล์จาก database
+  .get('/profile/image/:role/:id', async ({ params, set }) => {
+    try {
+      const { role, id } = params
+      const userId = parseInt(id)
+      
+      let user
+      if (role === 'admin') {
+        user = await prisma.admin.findUnique({
+          where: { admin_id: userId },
+          select: { profile_image: true }
+        })
+      } else if (role === 'user') {
+        user = await prisma.user.findUnique({
+          where: { user_id: userId },
+          select: { profile_image: true }
+        })
+      }
+      
+      if (!user || !user.profile_image) {
+        set.status = 404
+        return { success: false, message: 'Profile image not found' }
+      }
+      
+      // ส่งรูปเป็น response
+      set.headers['Content-Type'] = 'image/jpeg'
+      return new Response(user.profile_image)
+      
+    } catch (error) {
+      console.error('❌ Error serving profile image:', error)
+      set.status = 500
+      return { success: false, message: 'Error serving profile image' }
+    }
+  })
+
   // === User Routes (ต้องมี user, officer, หรือ admin role) ===
   .group('/user', app =>
     app
@@ -194,13 +229,7 @@ export const protectedRoutes = new Elysia({ prefix: '/protected' })
             }
           }
 
-          // สร้าง uploads/profiles folder ถ้าไม่มี
-          const fs = await import('fs')
-          const path = await import('path')
-          const uploadsDir = path.join(process.cwd(), 'uploads/profiles')
-          if (!fs.existsSync(uploadsDir)) {
-            fs.mkdirSync(uploadsDir, { recursive: true })
-          }
+          // เก็บรูปใน database แล้ว ไม่ใช้ filesystem
 
           // กำหนด table และ field ตาม role
           let tableName, idField, userId
@@ -226,43 +255,26 @@ export const protectedRoutes = new Elysia({ prefix: '/protected' })
               userId = user.user_id
           }
 
-          // สร้างชื่อไฟล์
-          const fileName = `${userId}_${Date.now()}${ext}`
-          const filePath = path.join(uploadsDir, fileName)
-          const imagePath = `/uploads/profiles/${fileName}`
-
-          // หารูปเก่าเพื่อลบ
-          const currentUser = await prisma[tableName].findUnique({
-            where: { [idField]: userId },
-            select: { profile_image: true }
-          })
-
-          // บันทึกไฟล์
+          // แปลงไฟล์เป็น Buffer เพื่อเก็บใน database
           const arrayBuffer = await file.arrayBuffer()
-          const buffer = Buffer.from(arrayBuffer)
-          fs.writeFileSync(filePath, buffer)
+          const imageBuffer = Buffer.from(arrayBuffer)
 
-          // อัปเดตรูปโปรไฟล์ในฐานข้อมูล
+          console.log('📷 Profile image converted to buffer, size:', imageBuffer.length, 'bytes')
+
+          // อัปเดตรูปโปรไฟล์ในฐานข้อมูล (เก็บเป็น binary data)
           const updatedUser = await prisma[tableName].update({
             where: { [idField]: userId },
             data: { 
-              profile_image: imagePath,
+              profile_image: imageBuffer,
               updated_at: new Date()
             }
           })
 
-          // ลบรูปเก่า (ถ้ามี)
-          if (currentUser.profile_image && currentUser.profile_image !== imagePath) {
-            const oldImagePath = path.join(process.cwd(), currentUser.profile_image.substring(1))
-            if (fs.existsSync(oldImagePath)) {
-              fs.unlinkSync(oldImagePath)
-            }
-          }
-
+          // รูปเก่าจะถูกเขียนทับใน database โดยอัตโนมัติ
           return {
             success: true,
             message: 'อัปโหลดรูปโปรไฟล์สำเร็จ',
-            profile_image: imagePath
+            hasProfileImage: true
           }
 
         } catch (error) {

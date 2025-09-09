@@ -1,14 +1,8 @@
 import { Elysia } from 'elysia'
 import { authMiddleware } from '../middleware/index.js'
 import prisma from '../lib/prisma.js'
-import fs from 'fs'
-import path from 'path'
 
-// สร้างโฟลเดอร์ uploads หากไม่มี
-const uploadsDir = path.join(process.cwd(), 'uploads/profiles')
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true })
-}
+// ไม่ใช้ filesystem แล้ว - เก็บใน database
 
 // ฟังก์ชันสำหรับตรวจสอบประเภทไฟล์
 const isValidImageFile = (filename) => {
@@ -83,27 +77,17 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
           userId = user.user_id
       }
 
-      const fileExtension = path.extname(file.name)
-      const fileName = `${userId}_${Date.now()}${fileExtension}`
-      const filePath = path.join(uploadsDir, fileName)
-      const imagePath = `/uploads/profiles/${fileName}`
-
-      // หารูปเก่าเพื่อลบ
-      const currentUser = await prisma[tableName].findUnique({
-        where: { [idField]: userId },
-        select: { profile_image: true }
-      })
-
-      // บันทึกไฟล์
+      // แปลงไฟล์เป็น Buffer เพื่อเก็บใน database
       const arrayBuffer = await file.arrayBuffer()
-      const buffer = Buffer.from(arrayBuffer)
-      fs.writeFileSync(filePath, buffer)
+      const imageBuffer = Buffer.from(arrayBuffer)
 
-      // อัปเดตรูปโปรไฟล์ในฐานข้อมูล
+      console.log('📷 Profile image converted to buffer, size:', imageBuffer.length, 'bytes')
+
+      // อัปเดตรูปโปรไฟล์ในฐานข้อมูล (เก็บเป็น binary data)
       const updatedUser = await prisma[tableName].update({
         where: { [idField]: userId },
         data: { 
-          profile_image: imagePath,
+          profile_image: imageBuffer,
           updated_at: new Date()
         },
         select: {
@@ -118,13 +102,7 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
         }
       })
 
-      // ลบรูปเก่า (ถ้ามี)
-      if (currentUser.profile_image) {
-        const oldImagePath = path.join(process.cwd(), currentUser.profile_image.substring(1))
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath)
-        }
-      }
+      // รูปเก่าจะถูกเขียนทับใน database โดยอัตโนมัติ
 
       return {
         success: true,

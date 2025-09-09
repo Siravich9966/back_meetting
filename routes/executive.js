@@ -15,12 +15,12 @@ import prisma from '../lib/prisma.js'
 import { authMiddleware, isExecutive, isUniversityExecutive, isFacultyExecutive } from '../middleware/index.js'
 
 export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
-  
+
   // ===== Executive Dashboard =====
   .get('/dashboard', async ({ request, set }) => {
     const user = await authMiddleware(request, set)
     if (user.success === false) return user
-    
+
     if (!isExecutive(user)) {
       set.status = 403
       return {
@@ -31,11 +31,11 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
 
     try {
       let stats = {}
-      
+
       if (isUniversityExecutive(user)) {
         // University Executive - ดูได้ทุกคณะ
         console.log('📊 University Executive: Dashboard')
-        
+
         stats = {
           total_users: await prisma.users.count(),
           total_officers: await prisma.officer.count(),
@@ -46,27 +46,27 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
             _count: { room_id: true }
           })
         }
-        
+
       } else if (isFacultyExecutive(user)) {
         // Faculty Executive - ดูได้เฉพาะคณะตัวเอง
         console.log('📊 Faculty Executive: Dashboard for', user.department)
-        
+
         stats = {
           my_department: user.department,
           department_rooms: await prisma.meeting_room.count({
             where: { department: user.department }
           }),
           department_reservations: await prisma.reservation.count({
-            where: { 
-              meeting_room: { 
-                department: user.department 
+            where: {
+              meeting_room: {
+                department: user.department
               }
             }
           }),
           recent_reservations: await prisma.reservation.findMany({
-            where: { 
-              meeting_room: { 
-                department: user.department 
+            where: {
+              meeting_room: {
+                department: user.department
               }
             },
             include: {
@@ -105,7 +105,7 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
   .get('/reports', async ({ request, query, set }) => {
     const user = await authMiddleware(request, set)
     if (user.success === false) return user
-    
+
     if (!isExecutive(user)) {
       set.status = 403
       return {
@@ -141,7 +141,7 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
           where: whereCondition,
           _count: { reservation_id: true }
         }),
-        
+
         room_utilization: await prisma.reservation.groupBy({
           by: ['room_id'],
           where: whereCondition,
@@ -155,8 +155,8 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
             mr.department
           FROM reservation r
           JOIN meeting_room mr ON r.room_id = mr.room_id
-          ${isFacultyExecutive(user) ? 
-            Prisma.sql`WHERE mr.department = ${user.department}` : 
+          ${isFacultyExecutive(user) ?
+            Prisma.sql`WHERE mr.department = ${user.department}` :
             (department ? Prisma.sql`WHERE mr.department = ${department}` : Prisma.sql``)
           }
           GROUP BY DATE_TRUNC('month', r.created_at), mr.department
@@ -172,7 +172,7 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
           where: { room_id: { in: roomIds } },
           select: { room_id: true, room_name: true, department: true }
         })
-        
+
         reports.room_utilization = reports.room_utilization.map(util => ({
           ...util,
           meeting_room: rooms.find(room => room.room_id === util.room_id)
@@ -201,7 +201,7 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
   .get('/rooms', async ({ request, query, set }) => {
     const user = await authMiddleware(request, set)
     if (user.success === false) return user
-    
+
     if (!isExecutive(user)) {
       set.status = 403
       return {

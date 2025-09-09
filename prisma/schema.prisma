@@ -18,7 +18,7 @@ model admin {
   position     String?   @db.VarChar(255)
   department   String?   @db.VarChar(255)
   zip_code     Int?
-  profile_image String?  @db.VarChar(500)  // เพิ่มฟิลด์สำหรับเก็บ path รูปโปรไฟล์
+  profile_image Bytes?   // เก็บรูปโปรไฟล์ใน database เป็น binary data
   created_at   DateTime? @default(now()) @db.Timestamptz(6)
   updated_at   DateTime? @default(now()) @db.Timestamptz(6)
   roles        roles     @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)
@@ -41,7 +41,7 @@ model meeting_room {
   location_m  String        @db.VarChar(255)
   department  String        @db.VarChar(255)  // เพิ่ม department field
   status_m    String?       @db.VarChar(255)
-  image       String?       @db.VarChar(255)
+  image       Bytes?        // เก็บรูปใน database เป็น binary data
   details_m   String?       @db.VarChar(255)
   created_at  DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at  DateTime?     @default(now()) @db.Timestamptz(6)
@@ -61,7 +61,7 @@ model officer {
   position      String?       @db.VarChar(255)
   department    String?       @db.VarChar(255)
   zip_code      Int?
-  profile_image String?       @db.VarChar(500)  // เพิ่มฟิลด์สำหรับเก็บ path รูปโปรไฟล์
+  profile_image Bytes?        // เก็บรูปโปรไฟล์ใน database เป็น binary data
   created_at    DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at    DateTime?     @default(now()) @db.Timestamptz(6)
   roles         roles         @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)
@@ -121,7 +121,7 @@ model executive {
   position        String    @db.VarChar(255)  // "university_executive" หรือ "faculty_executive"
   department      String    @db.VarChar(255)  // สำนักงานอธิการบดี หรือ ชื่อคณะ
   zip_code        Int?
-  profile_image   String?   @db.VarChar(500)  // เพิ่มฟิลด์สำหรับเก็บ path รูปโปรไฟล์
+  profile_image   Bytes?    // เก็บรูปโปรไฟล์ใน database เป็น binary data
   created_at      DateTime? @default(now()) @db.Timestamptz(6)
   updated_at      DateTime? @default(now()) @db.Timestamptz(6)
   roles           roles     @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)
@@ -138,7 +138,7 @@ model users {
   position     String?       @db.VarChar(255)
   department   String?       @db.VarChar(255)
   zip_code     Int?
-  profile_image String?      @db.VarChar(500)  // เพิ่มฟิลด์สำหรับเก็บ path รูปโปรไฟล์
+  profile_image Bytes?       // เก็บรูปโปรไฟล์ใน database เป็น binary data
   created_at   DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at   DateTime?     @default(now()) @db.Timestamptz(6)
   reservation  reservation[]
