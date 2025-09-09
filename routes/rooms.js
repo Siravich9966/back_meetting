@@ -82,7 +82,7 @@ export const roomRoutes = new Elysia({ prefix: '/rooms' })
           location_m: true,
           department: true,  // เพิ่ม department
           status_m: true,
-          // ไม่ดึง image binary data ใน list เพื่อประสิทธิภาพ
+          image: true, // 🖼️ เพิ่ม image เพื่อตรวจสอบว่ามีรูปหรือไม่
           details_m: true,
           created_at: true,
           updated_at: true,
@@ -103,11 +103,18 @@ export const roomRoutes = new Elysia({ prefix: '/rooms' })
         orderBy: { room_name: 'asc' }
       })
 
+      // 🖼️ แปลง image binary เป็น hasImage boolean และลบ binary data ออก
+      const roomsWithImageFlag = rooms.map(room => ({
+        ...room,
+        hasImage: !!room.image, // แปลงเป็น boolean
+        image: undefined // ลบ binary data ออกเพื่อประสิทธิภาพ
+      }))
+
       return {
         success: true,
         message: 'รายการห้องประชุม',
-        rooms: rooms,
-        total: rooms.length
+        rooms: roomsWithImageFlag,
+        total: roomsWithImageFlag.length
       }
 
     } catch (error) {
@@ -377,7 +384,7 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
 
-          const { room_name, capacity, location_m, status_m, image, details_m } = body
+          const { room_name, capacity, location_m, status_m, details_m } = body
 
           // จัดการอุปกรณ์ (เหมือนกับ POST)
           let equipment = []
@@ -393,29 +400,15 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
 
-          // จัดการรูปภาพ - เก็บใน database
-          let imageBuffer = existingRoom.image // ใช้รูปเดิมก่อน
-          if (image && typeof image === 'object' && image.name) {
-            try {
-              // แปลงไฟล์เป็น Buffer เพื่อเก็บใน database
-              const arrayBuffer = await image.arrayBuffer()
-              imageBuffer = Buffer.from(arrayBuffer)
-              
-              console.log('📷 Image updated, size:', imageBuffer.length, 'bytes')
-            } catch (error) {
-              console.error('❌ Error converting image to buffer:', error)
-              // ถ้าแปลงรูปไม่ได้ ใช้รูปเดิม
-            }
-          }
+          // ⚡ ไม่จัดการรูปภาพใน PUT API แล้ว (ใช้ PUT /:id/image แทน)
 
           console.log('🔄 Updating room with data:', {
             room_name,
             capacity: capacity ? parseInt(capacity) : undefined,
             location_m,
             status_m,
-            hasImage: imageBuffer ? true : false,
-            imageSize: imageBuffer ? imageBuffer.length : 0,
-            details_m
+            details_m,
+            note: 'Image handled separately via PUT /:id/image'
           })
 
           // อัปเดตข้อมูลห้อง (ไม่อนุญาตให้เปลี่ยน department)
@@ -426,9 +419,8 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
               ...(capacity && { capacity: parseInt(capacity) }),
               ...(location_m && { location_m }),
               ...(status_m && { status_m }),
-              ...(imageBuffer !== null && { image: imageBuffer }),
               ...(details_m !== undefined && { details_m }),
-              updated_at: new Date()
+              updated_at: new Date()  // ⚡ ไม่อัพเดทรูป ทำให้เร็วขึ้น
             }
           })
 
@@ -463,6 +455,163 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
           return {
             success: false,
             message: 'เกิดข้อผิดพลาดในการแก้ไขห้องประชุม'
+          }
+        }
+      })
+
+      // 🚀 อัพโหลดรูปภาพแยกต่างหาก (Fast Image Upload)
+      .put('/:id/image', async ({ request, params, body, set }) => {
+        // ตรวจสอบสิทธิ์ officer
+        const user = await authMiddleware(request, set)
+        if (user.success === false) return user
+        
+        if (!isOfficer(user)) {
+          set.status = 403
+          return {
+            success: false,
+            message: 'การเข้าถึงจำกัดเฉพาะเจ้าหน้าที่เท่านั้น'
+          }
+        }
+
+        try {
+          const roomId = parseInt(params.id)
+          
+          if (isNaN(roomId)) {
+            set.status = 400
+            return {
+              success: false,
+              message: 'ID ห้องประชุมไม่ถูกต้อง'
+            }
+          }
+
+          // ตรวจสอบว่าห้องมีอยู่จริงและอยู่ใน department ของ officer
+          const existingRoom = await prisma.meeting_room.findUnique({
+            where: { room_id: roomId }
+          })
+
+          if (!existingRoom) {
+            set.status = 404
+            return {
+              success: false,
+              message: 'ไม่พบห้องประชุมที่ระบุ'
+            }
+          }
+
+          if (existingRoom.department !== user.department) {
+            set.status = 403
+            return {
+              success: false,
+              message: 'คุณไม่มีสิทธิ์แก้ไขห้องประชุมนี้'
+            }
+          }
+
+          // จัดการรูปภาพ
+          const image = body.image
+          if (!image || !image.name) {
+            set.status = 400
+            return {
+              success: false,
+              message: 'กรุณาเลือกไฟล์รูปภาพ'
+            }
+          }
+
+          console.log('📷 Processing image upload for room:', roomId)
+
+          // แปลงไฟล์เป็น Buffer เพื่อเก็บใน database
+          const arrayBuffer = await image.arrayBuffer()
+          const imageBuffer = Buffer.from(arrayBuffer)
+
+          console.log('💾 Saving image to database, size:', imageBuffer.length, 'bytes')
+
+          // อัพเดทเฉพาะรูปภาพ
+          const updatedRoom = await prisma.meeting_room.update({
+            where: { room_id: roomId },
+            data: {
+              image: imageBuffer,
+              updated_at: new Date()
+            },
+            select: {
+              room_id: true,
+              image: true,
+              updated_at: true
+            }
+          })
+
+          console.log('✅ Image updated successfully for room:', roomId)
+          console.log('📊 Updated room image size:', updatedRoom.image ? updatedRoom.image.length : 0, 'bytes')
+          console.log('🕒 Updated at:', updatedRoom.updated_at)
+
+          return {
+            success: true,
+            message: 'อัพโหลดรูปภาพสำเร็จ'
+          }
+
+        } catch (error) {
+          console.error('❌ Error uploading image:', error)
+          set.status = 500
+          return {
+            success: false,
+            message: 'เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ'
+          }
+        }
+      })
+
+      // 🗑️ ลบรูปภาพของห้องประชุม
+      .delete('/:id/image', async ({ request, params, set }) => {
+        try {
+          // ตรวจสอบสิทธิ์ officer
+          const user = await authMiddleware(request, set)
+          if (user.success === false) return user
+
+          const roomId = parseInt(params.id)
+          if (!roomId) {
+            set.status = 400
+            return {
+              success: false,
+              message: 'ID ห้องประชุมไม่ถูกต้อง'
+            }
+          }
+
+          console.log('🗑️ Deleting image for room:', roomId)
+
+          // ตรวจสอบว่าห้องประชุมมีอยู่และอยู่ใน department เดียวกัน
+          const room = await prisma.meeting_room.findFirst({
+            where: {
+              room_id: roomId,
+              department: user.department
+            }
+          })
+
+          if (!room) {
+            set.status = 404
+            return {
+              success: false,
+              message: 'ไม่พบห้องประชุมหรือไม่มีสิทธิ์เข้าถึง'
+            }
+          }
+
+          // ลบรูปภาพ (set เป็น null)
+          await prisma.meeting_room.update({
+            where: { room_id: roomId },
+            data: {
+              image: null,
+              updated_at: new Date()
+            }
+          })
+
+          console.log('✅ Image deleted successfully for room:', roomId)
+
+          return {
+            success: true,
+            message: 'ลบรูปภาพสำเร็จ'
+          }
+
+        } catch (error) {
+          console.error('❌ Error deleting image:', error)
+          set.status = 500
+          return {
+            success: false,
+            message: 'เกิดข้อผิดพลาดในการลบรูปภาพ'
           }
         }
       })
@@ -606,7 +755,7 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
               location_m: true,
               department: true,
               status_m: true,
-              // ไม่ดึง image binary data ใน list เพื่อประสิทธิภาพ
+              image: true, // 🖼️ เพิ่ม image เพื่อตรวจสอบว่ามีรูปหรือไม่
               details_m: true,
               created_at: true,
               updated_at: true,
@@ -627,11 +776,18 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             orderBy: { room_name: 'asc' }
           })
 
+          // 🖼️ แปลง image binary เป็น hasImage boolean และลบ binary data ออก
+          const roomsWithImageFlag = rooms.map(room => ({
+            ...room,
+            hasImage: !!room.image, // แปลงเป็น boolean
+            image: undefined // ลบ binary data ออกเพื่อประสิทธิภาพ
+          }))
+
           return {
             success: true,
             message: `ห้องประชุมใน ${user.department}`,
-            rooms: rooms,
-            total: rooms.length,
+            rooms: roomsWithImageFlag,
+            total: roomsWithImageFlag.length,
             department: user.department
           }
 
