@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model admin {
+  admin_id   Int       @id @default(autoincrement())
+  role_id    Int
+  first_name String    @db.VarChar(255)
+  last_name  String    @db.VarChar(255)
+  email      String    @unique @db.VarChar(255)
+  password   String    @db.VarChar(255)
+  citizen_id String?   @unique @db.Char(13)
+  position   String?   @db.VarChar(255)
+  department String?   @db.VarChar(255)
+  zip_code   Int?
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at DateTime? @default(now()) @db.Timestamptz(6)
+  roles      roles     @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model equipment {
+  equipment_id Int          @id @default(autoincrement())
+  room_id      Int
+  equipment_n  String       @db.VarChar(255)
+  quantity     Int
+  created_at   DateTime?    @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime?    @default(now()) @db.Timestamptz(6)
+  meeting_room meeting_room @relation(fields: [room_id], references: [room_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model meeting_room {
+  room_id     Int           @id @default(autoincrement())
+  room_name   String        @db.VarChar(255)
+  capacity    Int
+  location_m  String        @db.VarChar(255)
+  status_m    String?       @db.VarChar(255)
+  image       String?       @db.VarChar(255)
+  details_m   String?       @db.VarChar(255)
+  created_at  DateTime?     @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime?     @default(now()) @db.Timestamptz(6)
+  equipment   equipment[]
+  reservation reservation[]
+  review      review[]
+}
+
+model officer {
+  officer_id  Int           @id @default(autoincrement())
+  role_id     Int
+  first_name  String        @db.VarChar(255)
+  last_name   String        @db.VarChar(255)
+  email       String        @unique @db.VarChar(255)
+  password    String        @db.VarChar(255)
+  citizen_id  String?       @unique @db.Char(13)
+  position    String?       @db.VarChar(255)
+  department  String?       @db.VarChar(255)
+  zip_code    Int?
+  created_at  DateTime?     @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime?     @default(now()) @db.Timestamptz(6)
+  roles       roles         @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)
+  reservation reservation[]
+}
+
+model reservation {
+  reservation_id Int           @id @default(autoincrement())
+  user_id        Int?
+  room_id        Int?
+  start_at       DateTime      @db.Date
+  end_at         DateTime      @db.Date
+  start_time     DateTime?     @db.Timestamp(6)
+  end_time       DateTime?     @db.Timestamp(6)
+  status_r       String?       @default("pending") @db.VarChar(255)
+  officer_id     Int?
+  details_r      String?       @db.VarChar(255)
+  created_at     DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?     @default(now()) @db.Timestamp(6)
+  officer        officer?      @relation(fields: [officer_id], references: [officer_id], onDelete: NoAction, onUpdate: NoAction)
+  meeting_room   meeting_room? @relation(fields: [room_id], references: [room_id], onDelete: NoAction, onUpdate: NoAction)
+  users          users?        @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model review {
+  review_id    Int           @id @default(autoincrement())
+  user_id      Int?
+  room_id      Int?
+  comment      String?
+  rating       Int?
+  created_at   DateTime?     @default(now()) @db.Timestamp(6)
+  meeting_room meeting_room? @relation(fields: [room_id], references: [room_id], onDelete: NoAction, onUpdate: NoAction)
+  users        users?        @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model roles {
+  role_id     Int       @id @default(autoincrement())
+  role_name   String    @db.VarChar(50)
+  role_status String?   @default("active") @db.VarChar(50)
+  admin       admin[]
+  officer     officer[]
+  users       users[]
+}
+
+model users {
+  user_id     Int           @id(map: "user_pkey") @default(autoincrement())
+  role_id     Int
+  first_name  String        @db.VarChar(255)
+  last_name   String        @db.VarChar(255)
+  email       String        @unique(map: "user_email_key") @db.VarChar(255)
+  password    String        @db.VarChar(255)
+  citizen_id  String?       @unique(map: "user_citizen_id_key") @db.Char(13)
+  position    String?       @db.VarChar(255)
+  department  String?       @db.VarChar(255)
+  zip_code    Int?
+  created_at  DateTime?     @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime?     @default(now()) @db.Timestamptz(6)
+  reservation reservation[]
+  review      review[]
+  roles       roles         @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id_fkey")
+}

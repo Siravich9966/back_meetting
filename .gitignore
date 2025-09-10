@@ -36,4 +36,5 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # Finder (MacOS) folder config
 .DS_Store
 
-/generated/prisma
+# Note: เก็บ generated/prisma ใน Git เพื่อให้ clone แล้วใช้ได้เลย
+# /generated/prisma
