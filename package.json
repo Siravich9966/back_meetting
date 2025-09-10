@@ -7,7 +7,7 @@
     "start": "bun index.js",
     "dev": "bun --watch index.js",
     "prod": "NODE_ENV=production bun index.js",
-    "postinstall": "bunx prisma generate || npx prisma generate"
+    "postinstall": "npx prisma generate || bunx prisma generate"
   },
   "devDependencies": {
     "@types/bun": "latest",
