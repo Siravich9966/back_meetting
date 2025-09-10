@@ -10,7 +10,7 @@
 // ===================================================================
 
 import { Elysia } from 'elysia'
-import { Prisma } from '@prisma/client'
+import { Prisma } from '../generated/prisma/index.js'
 import prisma from '../lib/prisma.js'
 import { authMiddleware, isExecutive, isUniversityExecutive, isFacultyExecutive } from '../middleware/index.js'
 

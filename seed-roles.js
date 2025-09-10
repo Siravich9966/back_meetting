@@ -2,7 +2,7 @@
 // สร้าง Roles พื้นฐานสำหรับระบบ
 // ===================================================================
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from './generated/prisma/index.js'
 
 const prisma = new PrismaClient()
 
