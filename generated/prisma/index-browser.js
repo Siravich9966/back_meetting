@@ -131,6 +131,7 @@ exports.Prisma.AdminScalarFieldEnum = {
   position: 'position',
   department: 'department',
   zip_code: 'zip_code',
+  profile_image: 'profile_image',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -149,6 +150,7 @@ exports.Prisma.Meeting_roomScalarFieldEnum = {
   room_name: 'room_name',
   capacity: 'capacity',
   location_m: 'location_m',
+  department: 'department',
   status_m: 'status_m',
   image: 'image',
   details_m: 'details_m',
@@ -167,6 +169,7 @@ exports.Prisma.OfficerScalarFieldEnum = {
   position: 'position',
   department: 'department',
   zip_code: 'zip_code',
+  profile_image: 'profile_image',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -182,6 +185,8 @@ exports.Prisma.ReservationScalarFieldEnum = {
   status_r: 'status_r',
   officer_id: 'officer_id',
   details_r: 'details_r',
+  booking_dates: 'booking_dates',
+  is_multi_day: 'is_multi_day',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -201,6 +206,22 @@ exports.Prisma.RolesScalarFieldEnum = {
   role_status: 'role_status'
 };
 
+exports.Prisma.ExecutiveScalarFieldEnum = {
+  executive_id: 'executive_id',
+  role_id: 'role_id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  email: 'email',
+  password: 'password',
+  citizen_id: 'citizen_id',
+  position: 'position',
+  department: 'department',
+  zip_code: 'zip_code',
+  profile_image: 'profile_image',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.UsersScalarFieldEnum = {
   user_id: 'user_id',
   role_id: 'role_id',
@@ -212,6 +233,7 @@ exports.Prisma.UsersScalarFieldEnum = {
   position: 'position',
   department: 'department',
   zip_code: 'zip_code',
+  profile_image: 'profile_image',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -240,6 +262,7 @@ exports.Prisma.ModelName = {
   reservation: 'reservation',
   review: 'review',
   roles: 'roles',
+  executive: 'executive',
   users: 'users'
 };
 
