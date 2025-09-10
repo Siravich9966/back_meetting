@@ -6,8 +6,7 @@
   "scripts": {
     "start": "bun index.js",
     "dev": "bun --watch index.js",
-    "prod": "NODE_ENV=production bun index.js",
-    "postinstall": "bunx prisma generate"
+    "prod": "NODE_ENV=production bun index.js"
   },
   "devDependencies": {
     "@types/bun": "latest",
