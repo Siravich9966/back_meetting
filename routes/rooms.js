@@ -755,7 +755,7 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
               location_m: true,
               department: true,
               status_m: true,
-              image: true, // 🖼️ เพิ่ม image เพื่อตรวจสอบว่ามีรูปหรือไม่
+              // � ใช้ _count แทนการดึง binary data เพื่อ performance
               details_m: true,
               created_at: true,
               updated_at: true,
@@ -776,18 +776,27 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             orderBy: { room_name: 'asc' }
           })
 
-          // 🖼️ แปลง image binary เป็น hasImage boolean และลบ binary data ออก
-          const roomsWithImageFlag = rooms.map(room => ({
-            ...room,
-            hasImage: !!room.image, // แปลงเป็น boolean
-            image: undefined // ลบ binary data ออกเพื่อประสิทธิภาพ
-          }))
+          // � ตรวจสอบว่ามีรูปหรือไม่โดยไม่ดึง binary data
+          const roomsWithImageCheck = await Promise.all(
+            rooms.map(async (room) => {
+              // เช็คว่ามี image หรือไม่โดยไม่ดึง binary data
+              const imageCheck = await prisma.meeting_room.findUnique({
+                where: { room_id: room.room_id },
+                select: { image: true }
+              })
+              
+              return {
+                ...room,
+                has_image: !!imageCheck?.image // ✅ ใช้ snake_case ตาม Frontend
+              }
+            })
+          )
 
           return {
             success: true,
             message: `ห้องประชุมใน ${user.department}`,
-            rooms: roomsWithImageFlag,
-            total: roomsWithImageFlag.length,
+            rooms: roomsWithImageCheck,
+            total: roomsWithImageCheck.length,
             department: user.department
           }
 
