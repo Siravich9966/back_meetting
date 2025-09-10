@@ -400,7 +400,7 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
 
-          // ⚡ ไม่จัดการรูปภาพใน PUT API แล้ว (ใช้ PUT /:id/image แทนก)
+          // ⚡ ไม่จัดการรูปภาพใน PUT API แล้ว (ใช้ PUT /:id/image แทน)
 
           console.log('🔄 Updating room with data:', {
             room_name,
