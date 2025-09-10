@@ -49,6 +49,11 @@ export type review = $Result.DefaultSelection<Prisma.$reviewPayload>
  */
 export type roles = $Result.DefaultSelection<Prisma.$rolesPayload>
 /**
+ * Model executive
+ * 
+ */
+export type executive = $Result.DefaultSelection<Prisma.$executivePayload>
+/**
  * Model users
  * 
  */
@@ -248,6 +253,16 @@ export class PrismaClient<
     * ```
     */
   get roles(): Prisma.rolesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.executive`: Exposes CRUD operations for the **executive** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Executives
+    * const executives = await prisma.executive.findMany()
+    * ```
+    */
+  get executive(): Prisma.executiveDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.users`: Exposes CRUD operations for the **users** model.
@@ -705,6 +720,7 @@ export namespace Prisma {
     reservation: 'reservation',
     review: 'review',
     roles: 'roles',
+    executive: 'executive',
     users: 'users'
   };
 
@@ -724,7 +740,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "equipment" | "meeting_room" | "officer" | "reservation" | "review" | "roles" | "users"
+      modelProps: "admin" | "equipment" | "meeting_room" | "officer" | "reservation" | "review" | "roles" | "executive" | "users"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1246,6 +1262,80 @@ export namespace Prisma {
           }
         }
       }
+      executive: {
+        payload: Prisma.$executivePayload<ExtArgs>
+        fields: Prisma.executiveFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.executiveFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.executiveFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload>
+          }
+          findFirst: {
+            args: Prisma.executiveFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.executiveFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload>
+          }
+          findMany: {
+            args: Prisma.executiveFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload>[]
+          }
+          create: {
+            args: Prisma.executiveCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload>
+          }
+          createMany: {
+            args: Prisma.executiveCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.executiveCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload>[]
+          }
+          delete: {
+            args: Prisma.executiveDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload>
+          }
+          update: {
+            args: Prisma.executiveUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload>
+          }
+          deleteMany: {
+            args: Prisma.executiveDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.executiveUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.executiveUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload>[]
+          }
+          upsert: {
+            args: Prisma.executiveUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$executivePayload>
+          }
+          aggregate: {
+            args: Prisma.ExecutiveAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateExecutive>
+          }
+          groupBy: {
+            args: Prisma.executiveGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ExecutiveGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.executiveCountArgs<ExtArgs>
+            result: $Utils.Optional<ExecutiveCountAggregateOutputType> | number
+          }
+        }
+      }
       users: {
         payload: Prisma.$usersPayload<ExtArgs>
         fields: Prisma.usersFieldRefs
@@ -1411,6 +1501,7 @@ export namespace Prisma {
     reservation?: reservationOmit
     review?: reviewOmit
     roles?: rolesOmit
+    executive?: executiveOmit
     users?: usersOmit
   }
 
@@ -1589,12 +1680,14 @@ export namespace Prisma {
     admin: number
     officer: number
     users: number
+    executive: number
   }
 
   export type RolesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | RolesCountOutputTypeCountAdminArgs
     officer?: boolean | RolesCountOutputTypeCountOfficerArgs
     users?: boolean | RolesCountOutputTypeCountUsersArgs
+    executive?: boolean | RolesCountOutputTypeCountExecutiveArgs
   }
 
   // Custom InputTypes
@@ -1627,6 +1720,13 @@ export namespace Prisma {
    */
   export type RolesCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: usersWhereInput
+  }
+
+  /**
+   * RolesCountOutputType without action
+   */
+  export type RolesCountOutputTypeCountExecutiveArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: executiveWhereInput
   }
 
 
@@ -1709,6 +1809,7 @@ export namespace Prisma {
     position: string | null
     department: string | null
     zip_code: number | null
+    profile_image: Uint8Array | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -1724,6 +1825,7 @@ export namespace Prisma {
     position: string | null
     department: string | null
     zip_code: number | null
+    profile_image: Uint8Array | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -1739,6 +1841,7 @@ export namespace Prisma {
     position: number
     department: number
     zip_code: number
+    profile_image: number
     created_at: number
     updated_at: number
     _all: number
@@ -1768,6 +1871,7 @@ export namespace Prisma {
     position?: true
     department?: true
     zip_code?: true
+    profile_image?: true
     created_at?: true
     updated_at?: true
   }
@@ -1783,6 +1887,7 @@ export namespace Prisma {
     position?: true
     department?: true
     zip_code?: true
+    profile_image?: true
     created_at?: true
     updated_at?: true
   }
@@ -1798,6 +1903,7 @@ export namespace Prisma {
     position?: true
     department?: true
     zip_code?: true
+    profile_image?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -1900,6 +2006,7 @@ export namespace Prisma {
     position: string | null
     department: string | null
     zip_code: number | null
+    profile_image: Uint8Array | null
     created_at: Date | null
     updated_at: Date | null
     _count: AdminCountAggregateOutputType | null
@@ -1934,6 +2041,7 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
@@ -1950,6 +2058,7 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
@@ -1966,6 +2075,7 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
@@ -1982,11 +2092,12 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type adminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"admin_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "created_at" | "updated_at", ExtArgs["result"]["admin"]>
+  export type adminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"admin_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["admin"]>
   export type adminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
   }
@@ -2013,6 +2124,7 @@ export namespace Prisma {
       position: string | null
       department: string | null
       zip_code: number | null
+      profile_image: Uint8Array | null
       created_at: Date | null
       updated_at: Date | null
     }, ExtArgs["result"]["admin"]>
@@ -2449,6 +2561,7 @@ export namespace Prisma {
     readonly position: FieldRef<"admin", 'String'>
     readonly department: FieldRef<"admin", 'String'>
     readonly zip_code: FieldRef<"admin", 'Int'>
+    readonly profile_image: FieldRef<"admin", 'Bytes'>
     readonly created_at: FieldRef<"admin", 'DateTime'>
     readonly updated_at: FieldRef<"admin", 'DateTime'>
   }
@@ -4005,8 +4118,9 @@ export namespace Prisma {
     room_name: string | null
     capacity: number | null
     location_m: string | null
+    department: string | null
     status_m: string | null
-    image: string | null
+    image: Uint8Array | null
     details_m: string | null
     created_at: Date | null
     updated_at: Date | null
@@ -4017,8 +4131,9 @@ export namespace Prisma {
     room_name: string | null
     capacity: number | null
     location_m: string | null
+    department: string | null
     status_m: string | null
-    image: string | null
+    image: Uint8Array | null
     details_m: string | null
     created_at: Date | null
     updated_at: Date | null
@@ -4029,6 +4144,7 @@ export namespace Prisma {
     room_name: number
     capacity: number
     location_m: number
+    department: number
     status_m: number
     image: number
     details_m: number
@@ -4053,6 +4169,7 @@ export namespace Prisma {
     room_name?: true
     capacity?: true
     location_m?: true
+    department?: true
     status_m?: true
     image?: true
     details_m?: true
@@ -4065,6 +4182,7 @@ export namespace Prisma {
     room_name?: true
     capacity?: true
     location_m?: true
+    department?: true
     status_m?: true
     image?: true
     details_m?: true
@@ -4077,6 +4195,7 @@ export namespace Prisma {
     room_name?: true
     capacity?: true
     location_m?: true
+    department?: true
     status_m?: true
     image?: true
     details_m?: true
@@ -4176,8 +4295,9 @@ export namespace Prisma {
     room_name: string
     capacity: number
     location_m: string
+    department: string
     status_m: string | null
-    image: string | null
+    image: Uint8Array | null
     details_m: string | null
     created_at: Date | null
     updated_at: Date | null
@@ -4207,6 +4327,7 @@ export namespace Prisma {
     room_name?: boolean
     capacity?: boolean
     location_m?: boolean
+    department?: boolean
     status_m?: boolean
     image?: boolean
     details_m?: boolean
@@ -4223,6 +4344,7 @@ export namespace Prisma {
     room_name?: boolean
     capacity?: boolean
     location_m?: boolean
+    department?: boolean
     status_m?: boolean
     image?: boolean
     details_m?: boolean
@@ -4235,6 +4357,7 @@ export namespace Prisma {
     room_name?: boolean
     capacity?: boolean
     location_m?: boolean
+    department?: boolean
     status_m?: boolean
     image?: boolean
     details_m?: boolean
@@ -4247,6 +4370,7 @@ export namespace Prisma {
     room_name?: boolean
     capacity?: boolean
     location_m?: boolean
+    department?: boolean
     status_m?: boolean
     image?: boolean
     details_m?: boolean
@@ -4254,7 +4378,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type meeting_roomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"room_id" | "room_name" | "capacity" | "location_m" | "status_m" | "image" | "details_m" | "created_at" | "updated_at", ExtArgs["result"]["meeting_room"]>
+  export type meeting_roomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"room_id" | "room_name" | "capacity" | "location_m" | "department" | "status_m" | "image" | "details_m" | "created_at" | "updated_at", ExtArgs["result"]["meeting_room"]>
   export type meeting_roomInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     equipment?: boolean | meeting_room$equipmentArgs<ExtArgs>
     reservation?: boolean | meeting_room$reservationArgs<ExtArgs>
@@ -4276,8 +4400,9 @@ export namespace Prisma {
       room_name: string
       capacity: number
       location_m: string
+      department: string
       status_m: string | null
-      image: string | null
+      image: Uint8Array | null
       details_m: string | null
       created_at: Date | null
       updated_at: Date | null
@@ -4711,8 +4836,9 @@ export namespace Prisma {
     readonly room_name: FieldRef<"meeting_room", 'String'>
     readonly capacity: FieldRef<"meeting_room", 'Int'>
     readonly location_m: FieldRef<"meeting_room", 'String'>
+    readonly department: FieldRef<"meeting_room", 'String'>
     readonly status_m: FieldRef<"meeting_room", 'String'>
-    readonly image: FieldRef<"meeting_room", 'String'>
+    readonly image: FieldRef<"meeting_room", 'Bytes'>
     readonly details_m: FieldRef<"meeting_room", 'String'>
     readonly created_at: FieldRef<"meeting_room", 'DateTime'>
     readonly updated_at: FieldRef<"meeting_room", 'DateTime'>
@@ -5229,6 +5355,7 @@ export namespace Prisma {
     position: string | null
     department: string | null
     zip_code: number | null
+    profile_image: Uint8Array | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -5244,6 +5371,7 @@ export namespace Prisma {
     position: string | null
     department: string | null
     zip_code: number | null
+    profile_image: Uint8Array | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -5259,6 +5387,7 @@ export namespace Prisma {
     position: number
     department: number
     zip_code: number
+    profile_image: number
     created_at: number
     updated_at: number
     _all: number
@@ -5288,6 +5417,7 @@ export namespace Prisma {
     position?: true
     department?: true
     zip_code?: true
+    profile_image?: true
     created_at?: true
     updated_at?: true
   }
@@ -5303,6 +5433,7 @@ export namespace Prisma {
     position?: true
     department?: true
     zip_code?: true
+    profile_image?: true
     created_at?: true
     updated_at?: true
   }
@@ -5318,6 +5449,7 @@ export namespace Prisma {
     position?: true
     department?: true
     zip_code?: true
+    profile_image?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -5420,6 +5552,7 @@ export namespace Prisma {
     position: string | null
     department: string | null
     zip_code: number | null
+    profile_image: Uint8Array | null
     created_at: Date | null
     updated_at: Date | null
     _count: OfficerCountAggregateOutputType | null
@@ -5454,6 +5587,7 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
@@ -5472,6 +5606,7 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
@@ -5488,6 +5623,7 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
@@ -5504,11 +5640,12 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type officerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"officer_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "created_at" | "updated_at", ExtArgs["result"]["officer"]>
+  export type officerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"officer_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["officer"]>
   export type officerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
     reservation?: boolean | officer$reservationArgs<ExtArgs>
@@ -5538,6 +5675,7 @@ export namespace Prisma {
       position: string | null
       department: string | null
       zip_code: number | null
+      profile_image: Uint8Array | null
       created_at: Date | null
       updated_at: Date | null
     }, ExtArgs["result"]["officer"]>
@@ -5975,6 +6113,7 @@ export namespace Prisma {
     readonly position: FieldRef<"officer", 'String'>
     readonly department: FieldRef<"officer", 'String'>
     readonly zip_code: FieldRef<"officer", 'Int'>
+    readonly profile_image: FieldRef<"officer", 'Bytes'>
     readonly created_at: FieldRef<"officer", 'DateTime'>
     readonly updated_at: FieldRef<"officer", 'DateTime'>
   }
@@ -6452,6 +6591,8 @@ export namespace Prisma {
     status_r: string | null
     officer_id: number | null
     details_r: string | null
+    booking_dates: string | null
+    is_multi_day: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -6467,6 +6608,8 @@ export namespace Prisma {
     status_r: string | null
     officer_id: number | null
     details_r: string | null
+    booking_dates: string | null
+    is_multi_day: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -6482,6 +6625,8 @@ export namespace Prisma {
     status_r: number
     officer_id: number
     details_r: number
+    booking_dates: number
+    is_multi_day: number
     created_at: number
     updated_at: number
     _all: number
@@ -6513,6 +6658,8 @@ export namespace Prisma {
     status_r?: true
     officer_id?: true
     details_r?: true
+    booking_dates?: true
+    is_multi_day?: true
     created_at?: true
     updated_at?: true
   }
@@ -6528,6 +6675,8 @@ export namespace Prisma {
     status_r?: true
     officer_id?: true
     details_r?: true
+    booking_dates?: true
+    is_multi_day?: true
     created_at?: true
     updated_at?: true
   }
@@ -6543,6 +6692,8 @@ export namespace Prisma {
     status_r?: true
     officer_id?: true
     details_r?: true
+    booking_dates?: true
+    is_multi_day?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -6645,6 +6796,8 @@ export namespace Prisma {
     status_r: string | null
     officer_id: number | null
     details_r: string | null
+    booking_dates: string | null
+    is_multi_day: boolean | null
     created_at: Date | null
     updated_at: Date | null
     _count: ReservationCountAggregateOutputType | null
@@ -6679,6 +6832,8 @@ export namespace Prisma {
     status_r?: boolean
     officer_id?: boolean
     details_r?: boolean
+    booking_dates?: boolean
+    is_multi_day?: boolean
     created_at?: boolean
     updated_at?: boolean
     officer?: boolean | reservation$officerArgs<ExtArgs>
@@ -6697,6 +6852,8 @@ export namespace Prisma {
     status_r?: boolean
     officer_id?: boolean
     details_r?: boolean
+    booking_dates?: boolean
+    is_multi_day?: boolean
     created_at?: boolean
     updated_at?: boolean
     officer?: boolean | reservation$officerArgs<ExtArgs>
@@ -6715,6 +6872,8 @@ export namespace Prisma {
     status_r?: boolean
     officer_id?: boolean
     details_r?: boolean
+    booking_dates?: boolean
+    is_multi_day?: boolean
     created_at?: boolean
     updated_at?: boolean
     officer?: boolean | reservation$officerArgs<ExtArgs>
@@ -6733,11 +6892,13 @@ export namespace Prisma {
     status_r?: boolean
     officer_id?: boolean
     details_r?: boolean
+    booking_dates?: boolean
+    is_multi_day?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type reservationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"reservation_id" | "user_id" | "room_id" | "start_at" | "end_at" | "start_time" | "end_time" | "status_r" | "officer_id" | "details_r" | "created_at" | "updated_at", ExtArgs["result"]["reservation"]>
+  export type reservationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"reservation_id" | "user_id" | "room_id" | "start_at" | "end_at" | "start_time" | "end_time" | "status_r" | "officer_id" | "details_r" | "booking_dates" | "is_multi_day" | "created_at" | "updated_at", ExtArgs["result"]["reservation"]>
   export type reservationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     officer?: boolean | reservation$officerArgs<ExtArgs>
     meeting_room?: boolean | reservation$meeting_roomArgs<ExtArgs>
@@ -6772,6 +6933,8 @@ export namespace Prisma {
       status_r: string | null
       officer_id: number | null
       details_r: string | null
+      booking_dates: string | null
+      is_multi_day: boolean | null
       created_at: Date | null
       updated_at: Date | null
     }, ExtArgs["result"]["reservation"]>
@@ -7210,6 +7373,8 @@ export namespace Prisma {
     readonly status_r: FieldRef<"reservation", 'String'>
     readonly officer_id: FieldRef<"reservation", 'Int'>
     readonly details_r: FieldRef<"reservation", 'String'>
+    readonly booking_dates: FieldRef<"reservation", 'String'>
+    readonly is_multi_day: FieldRef<"reservation", 'Boolean'>
     readonly created_at: FieldRef<"reservation", 'DateTime'>
     readonly updated_at: FieldRef<"reservation", 'DateTime'>
   }
@@ -9031,6 +9196,7 @@ export namespace Prisma {
     admin?: boolean | roles$adminArgs<ExtArgs>
     officer?: boolean | roles$officerArgs<ExtArgs>
     users?: boolean | roles$usersArgs<ExtArgs>
+    executive?: boolean | roles$executiveArgs<ExtArgs>
     _count?: boolean | RolesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["roles"]>
 
@@ -9057,6 +9223,7 @@ export namespace Prisma {
     admin?: boolean | roles$adminArgs<ExtArgs>
     officer?: boolean | roles$officerArgs<ExtArgs>
     users?: boolean | roles$usersArgs<ExtArgs>
+    executive?: boolean | roles$executiveArgs<ExtArgs>
     _count?: boolean | RolesCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type rolesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -9068,6 +9235,7 @@ export namespace Prisma {
       admin: Prisma.$adminPayload<ExtArgs>[]
       officer: Prisma.$officerPayload<ExtArgs>[]
       users: Prisma.$usersPayload<ExtArgs>[]
+      executive: Prisma.$executivePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       role_id: number
@@ -9470,6 +9638,7 @@ export namespace Prisma {
     admin<T extends roles$adminArgs<ExtArgs> = {}>(args?: Subset<T, roles$adminArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     officer<T extends roles$officerArgs<ExtArgs> = {}>(args?: Subset<T, roles$officerArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$officerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends roles$usersArgs<ExtArgs> = {}>(args?: Subset<T, roles$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    executive<T extends roles$executiveArgs<ExtArgs> = {}>(args?: Subset<T, roles$executiveArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9962,6 +10131,30 @@ export namespace Prisma {
   }
 
   /**
+   * roles.executive
+   */
+  export type roles$executiveArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    where?: executiveWhereInput
+    orderBy?: executiveOrderByWithRelationInput | executiveOrderByWithRelationInput[]
+    cursor?: executiveWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExecutiveScalarFieldEnum | ExecutiveScalarFieldEnum[]
+  }
+
+  /**
    * roles without action
    */
   export type rolesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9977,6 +10170,1210 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: rolesInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model executive
+   */
+
+  export type AggregateExecutive = {
+    _count: ExecutiveCountAggregateOutputType | null
+    _avg: ExecutiveAvgAggregateOutputType | null
+    _sum: ExecutiveSumAggregateOutputType | null
+    _min: ExecutiveMinAggregateOutputType | null
+    _max: ExecutiveMaxAggregateOutputType | null
+  }
+
+  export type ExecutiveAvgAggregateOutputType = {
+    executive_id: number | null
+    role_id: number | null
+    zip_code: number | null
+  }
+
+  export type ExecutiveSumAggregateOutputType = {
+    executive_id: number | null
+    role_id: number | null
+    zip_code: number | null
+  }
+
+  export type ExecutiveMinAggregateOutputType = {
+    executive_id: number | null
+    role_id: number | null
+    first_name: string | null
+    last_name: string | null
+    email: string | null
+    password: string | null
+    citizen_id: string | null
+    position: string | null
+    department: string | null
+    zip_code: number | null
+    profile_image: Uint8Array | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ExecutiveMaxAggregateOutputType = {
+    executive_id: number | null
+    role_id: number | null
+    first_name: string | null
+    last_name: string | null
+    email: string | null
+    password: string | null
+    citizen_id: string | null
+    position: string | null
+    department: string | null
+    zip_code: number | null
+    profile_image: Uint8Array | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ExecutiveCountAggregateOutputType = {
+    executive_id: number
+    role_id: number
+    first_name: number
+    last_name: number
+    email: number
+    password: number
+    citizen_id: number
+    position: number
+    department: number
+    zip_code: number
+    profile_image: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type ExecutiveAvgAggregateInputType = {
+    executive_id?: true
+    role_id?: true
+    zip_code?: true
+  }
+
+  export type ExecutiveSumAggregateInputType = {
+    executive_id?: true
+    role_id?: true
+    zip_code?: true
+  }
+
+  export type ExecutiveMinAggregateInputType = {
+    executive_id?: true
+    role_id?: true
+    first_name?: true
+    last_name?: true
+    email?: true
+    password?: true
+    citizen_id?: true
+    position?: true
+    department?: true
+    zip_code?: true
+    profile_image?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ExecutiveMaxAggregateInputType = {
+    executive_id?: true
+    role_id?: true
+    first_name?: true
+    last_name?: true
+    email?: true
+    password?: true
+    citizen_id?: true
+    position?: true
+    department?: true
+    zip_code?: true
+    profile_image?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ExecutiveCountAggregateInputType = {
+    executive_id?: true
+    role_id?: true
+    first_name?: true
+    last_name?: true
+    email?: true
+    password?: true
+    citizen_id?: true
+    position?: true
+    department?: true
+    zip_code?: true
+    profile_image?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type ExecutiveAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which executive to aggregate.
+     */
+    where?: executiveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of executives to fetch.
+     */
+    orderBy?: executiveOrderByWithRelationInput | executiveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: executiveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` executives from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` executives.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned executives
+    **/
+    _count?: true | ExecutiveCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ExecutiveAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ExecutiveSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ExecutiveMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ExecutiveMaxAggregateInputType
+  }
+
+  export type GetExecutiveAggregateType<T extends ExecutiveAggregateArgs> = {
+        [P in keyof T & keyof AggregateExecutive]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateExecutive[P]>
+      : GetScalarType<T[P], AggregateExecutive[P]>
+  }
+
+
+
+
+  export type executiveGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: executiveWhereInput
+    orderBy?: executiveOrderByWithAggregationInput | executiveOrderByWithAggregationInput[]
+    by: ExecutiveScalarFieldEnum[] | ExecutiveScalarFieldEnum
+    having?: executiveScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ExecutiveCountAggregateInputType | true
+    _avg?: ExecutiveAvgAggregateInputType
+    _sum?: ExecutiveSumAggregateInputType
+    _min?: ExecutiveMinAggregateInputType
+    _max?: ExecutiveMaxAggregateInputType
+  }
+
+  export type ExecutiveGroupByOutputType = {
+    executive_id: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id: string | null
+    position: string
+    department: string
+    zip_code: number | null
+    profile_image: Uint8Array | null
+    created_at: Date | null
+    updated_at: Date | null
+    _count: ExecutiveCountAggregateOutputType | null
+    _avg: ExecutiveAvgAggregateOutputType | null
+    _sum: ExecutiveSumAggregateOutputType | null
+    _min: ExecutiveMinAggregateOutputType | null
+    _max: ExecutiveMaxAggregateOutputType | null
+  }
+
+  type GetExecutiveGroupByPayload<T extends executiveGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ExecutiveGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ExecutiveGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ExecutiveGroupByOutputType[P]>
+            : GetScalarType<T[P], ExecutiveGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type executiveSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    executive_id?: boolean
+    role_id?: boolean
+    first_name?: boolean
+    last_name?: boolean
+    email?: boolean
+    password?: boolean
+    citizen_id?: boolean
+    position?: boolean
+    department?: boolean
+    zip_code?: boolean
+    profile_image?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    roles?: boolean | rolesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["executive"]>
+
+  export type executiveSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    executive_id?: boolean
+    role_id?: boolean
+    first_name?: boolean
+    last_name?: boolean
+    email?: boolean
+    password?: boolean
+    citizen_id?: boolean
+    position?: boolean
+    department?: boolean
+    zip_code?: boolean
+    profile_image?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    roles?: boolean | rolesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["executive"]>
+
+  export type executiveSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    executive_id?: boolean
+    role_id?: boolean
+    first_name?: boolean
+    last_name?: boolean
+    email?: boolean
+    password?: boolean
+    citizen_id?: boolean
+    position?: boolean
+    department?: boolean
+    zip_code?: boolean
+    profile_image?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    roles?: boolean | rolesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["executive"]>
+
+  export type executiveSelectScalar = {
+    executive_id?: boolean
+    role_id?: boolean
+    first_name?: boolean
+    last_name?: boolean
+    email?: boolean
+    password?: boolean
+    citizen_id?: boolean
+    position?: boolean
+    department?: boolean
+    zip_code?: boolean
+    profile_image?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type executiveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"executive_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["executive"]>
+  export type executiveInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    roles?: boolean | rolesDefaultArgs<ExtArgs>
+  }
+  export type executiveIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    roles?: boolean | rolesDefaultArgs<ExtArgs>
+  }
+  export type executiveIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    roles?: boolean | rolesDefaultArgs<ExtArgs>
+  }
+
+  export type $executivePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "executive"
+    objects: {
+      roles: Prisma.$rolesPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      executive_id: number
+      role_id: number
+      first_name: string
+      last_name: string
+      email: string
+      password: string
+      citizen_id: string | null
+      position: string
+      department: string
+      zip_code: number | null
+      profile_image: Uint8Array | null
+      created_at: Date | null
+      updated_at: Date | null
+    }, ExtArgs["result"]["executive"]>
+    composites: {}
+  }
+
+  type executiveGetPayload<S extends boolean | null | undefined | executiveDefaultArgs> = $Result.GetResult<Prisma.$executivePayload, S>
+
+  type executiveCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<executiveFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ExecutiveCountAggregateInputType | true
+    }
+
+  export interface executiveDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['executive'], meta: { name: 'executive' } }
+    /**
+     * Find zero or one Executive that matches the filter.
+     * @param {executiveFindUniqueArgs} args - Arguments to find a Executive
+     * @example
+     * // Get one Executive
+     * const executive = await prisma.executive.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends executiveFindUniqueArgs>(args: SelectSubset<T, executiveFindUniqueArgs<ExtArgs>>): Prisma__executiveClient<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Executive that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {executiveFindUniqueOrThrowArgs} args - Arguments to find a Executive
+     * @example
+     * // Get one Executive
+     * const executive = await prisma.executive.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends executiveFindUniqueOrThrowArgs>(args: SelectSubset<T, executiveFindUniqueOrThrowArgs<ExtArgs>>): Prisma__executiveClient<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Executive that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {executiveFindFirstArgs} args - Arguments to find a Executive
+     * @example
+     * // Get one Executive
+     * const executive = await prisma.executive.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends executiveFindFirstArgs>(args?: SelectSubset<T, executiveFindFirstArgs<ExtArgs>>): Prisma__executiveClient<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Executive that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {executiveFindFirstOrThrowArgs} args - Arguments to find a Executive
+     * @example
+     * // Get one Executive
+     * const executive = await prisma.executive.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends executiveFindFirstOrThrowArgs>(args?: SelectSubset<T, executiveFindFirstOrThrowArgs<ExtArgs>>): Prisma__executiveClient<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Executives that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {executiveFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Executives
+     * const executives = await prisma.executive.findMany()
+     * 
+     * // Get first 10 Executives
+     * const executives = await prisma.executive.findMany({ take: 10 })
+     * 
+     * // Only select the `executive_id`
+     * const executiveWithExecutive_idOnly = await prisma.executive.findMany({ select: { executive_id: true } })
+     * 
+     */
+    findMany<T extends executiveFindManyArgs>(args?: SelectSubset<T, executiveFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Executive.
+     * @param {executiveCreateArgs} args - Arguments to create a Executive.
+     * @example
+     * // Create one Executive
+     * const Executive = await prisma.executive.create({
+     *   data: {
+     *     // ... data to create a Executive
+     *   }
+     * })
+     * 
+     */
+    create<T extends executiveCreateArgs>(args: SelectSubset<T, executiveCreateArgs<ExtArgs>>): Prisma__executiveClient<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Executives.
+     * @param {executiveCreateManyArgs} args - Arguments to create many Executives.
+     * @example
+     * // Create many Executives
+     * const executive = await prisma.executive.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends executiveCreateManyArgs>(args?: SelectSubset<T, executiveCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Executives and returns the data saved in the database.
+     * @param {executiveCreateManyAndReturnArgs} args - Arguments to create many Executives.
+     * @example
+     * // Create many Executives
+     * const executive = await prisma.executive.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Executives and only return the `executive_id`
+     * const executiveWithExecutive_idOnly = await prisma.executive.createManyAndReturn({
+     *   select: { executive_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends executiveCreateManyAndReturnArgs>(args?: SelectSubset<T, executiveCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Executive.
+     * @param {executiveDeleteArgs} args - Arguments to delete one Executive.
+     * @example
+     * // Delete one Executive
+     * const Executive = await prisma.executive.delete({
+     *   where: {
+     *     // ... filter to delete one Executive
+     *   }
+     * })
+     * 
+     */
+    delete<T extends executiveDeleteArgs>(args: SelectSubset<T, executiveDeleteArgs<ExtArgs>>): Prisma__executiveClient<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Executive.
+     * @param {executiveUpdateArgs} args - Arguments to update one Executive.
+     * @example
+     * // Update one Executive
+     * const executive = await prisma.executive.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends executiveUpdateArgs>(args: SelectSubset<T, executiveUpdateArgs<ExtArgs>>): Prisma__executiveClient<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Executives.
+     * @param {executiveDeleteManyArgs} args - Arguments to filter Executives to delete.
+     * @example
+     * // Delete a few Executives
+     * const { count } = await prisma.executive.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends executiveDeleteManyArgs>(args?: SelectSubset<T, executiveDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Executives.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {executiveUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Executives
+     * const executive = await prisma.executive.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends executiveUpdateManyArgs>(args: SelectSubset<T, executiveUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Executives and returns the data updated in the database.
+     * @param {executiveUpdateManyAndReturnArgs} args - Arguments to update many Executives.
+     * @example
+     * // Update many Executives
+     * const executive = await prisma.executive.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Executives and only return the `executive_id`
+     * const executiveWithExecutive_idOnly = await prisma.executive.updateManyAndReturn({
+     *   select: { executive_id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends executiveUpdateManyAndReturnArgs>(args: SelectSubset<T, executiveUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Executive.
+     * @param {executiveUpsertArgs} args - Arguments to update or create a Executive.
+     * @example
+     * // Update or create a Executive
+     * const executive = await prisma.executive.upsert({
+     *   create: {
+     *     // ... data to create a Executive
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Executive we want to update
+     *   }
+     * })
+     */
+    upsert<T extends executiveUpsertArgs>(args: SelectSubset<T, executiveUpsertArgs<ExtArgs>>): Prisma__executiveClient<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Executives.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {executiveCountArgs} args - Arguments to filter Executives to count.
+     * @example
+     * // Count the number of Executives
+     * const count = await prisma.executive.count({
+     *   where: {
+     *     // ... the filter for the Executives we want to count
+     *   }
+     * })
+    **/
+    count<T extends executiveCountArgs>(
+      args?: Subset<T, executiveCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ExecutiveCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Executive.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExecutiveAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ExecutiveAggregateArgs>(args: Subset<T, ExecutiveAggregateArgs>): Prisma.PrismaPromise<GetExecutiveAggregateType<T>>
+
+    /**
+     * Group by Executive.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {executiveGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends executiveGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: executiveGroupByArgs['orderBy'] }
+        : { orderBy?: executiveGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, executiveGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExecutiveGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the executive model
+   */
+  readonly fields: executiveFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for executive.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__executiveClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    roles<T extends rolesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, rolesDefaultArgs<ExtArgs>>): Prisma__rolesClient<$Result.GetResult<Prisma.$rolesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the executive model
+   */
+  interface executiveFieldRefs {
+    readonly executive_id: FieldRef<"executive", 'Int'>
+    readonly role_id: FieldRef<"executive", 'Int'>
+    readonly first_name: FieldRef<"executive", 'String'>
+    readonly last_name: FieldRef<"executive", 'String'>
+    readonly email: FieldRef<"executive", 'String'>
+    readonly password: FieldRef<"executive", 'String'>
+    readonly citizen_id: FieldRef<"executive", 'String'>
+    readonly position: FieldRef<"executive", 'String'>
+    readonly department: FieldRef<"executive", 'String'>
+    readonly zip_code: FieldRef<"executive", 'Int'>
+    readonly profile_image: FieldRef<"executive", 'Bytes'>
+    readonly created_at: FieldRef<"executive", 'DateTime'>
+    readonly updated_at: FieldRef<"executive", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * executive findUnique
+   */
+  export type executiveFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    /**
+     * Filter, which executive to fetch.
+     */
+    where: executiveWhereUniqueInput
+  }
+
+  /**
+   * executive findUniqueOrThrow
+   */
+  export type executiveFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    /**
+     * Filter, which executive to fetch.
+     */
+    where: executiveWhereUniqueInput
+  }
+
+  /**
+   * executive findFirst
+   */
+  export type executiveFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    /**
+     * Filter, which executive to fetch.
+     */
+    where?: executiveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of executives to fetch.
+     */
+    orderBy?: executiveOrderByWithRelationInput | executiveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for executives.
+     */
+    cursor?: executiveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` executives from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` executives.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of executives.
+     */
+    distinct?: ExecutiveScalarFieldEnum | ExecutiveScalarFieldEnum[]
+  }
+
+  /**
+   * executive findFirstOrThrow
+   */
+  export type executiveFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    /**
+     * Filter, which executive to fetch.
+     */
+    where?: executiveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of executives to fetch.
+     */
+    orderBy?: executiveOrderByWithRelationInput | executiveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for executives.
+     */
+    cursor?: executiveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` executives from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` executives.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of executives.
+     */
+    distinct?: ExecutiveScalarFieldEnum | ExecutiveScalarFieldEnum[]
+  }
+
+  /**
+   * executive findMany
+   */
+  export type executiveFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    /**
+     * Filter, which executives to fetch.
+     */
+    where?: executiveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of executives to fetch.
+     */
+    orderBy?: executiveOrderByWithRelationInput | executiveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing executives.
+     */
+    cursor?: executiveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` executives from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` executives.
+     */
+    skip?: number
+    distinct?: ExecutiveScalarFieldEnum | ExecutiveScalarFieldEnum[]
+  }
+
+  /**
+   * executive create
+   */
+  export type executiveCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    /**
+     * The data needed to create a executive.
+     */
+    data: XOR<executiveCreateInput, executiveUncheckedCreateInput>
+  }
+
+  /**
+   * executive createMany
+   */
+  export type executiveCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many executives.
+     */
+    data: executiveCreateManyInput | executiveCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * executive createManyAndReturn
+   */
+  export type executiveCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * The data used to create many executives.
+     */
+    data: executiveCreateManyInput | executiveCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * executive update
+   */
+  export type executiveUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    /**
+     * The data needed to update a executive.
+     */
+    data: XOR<executiveUpdateInput, executiveUncheckedUpdateInput>
+    /**
+     * Choose, which executive to update.
+     */
+    where: executiveWhereUniqueInput
+  }
+
+  /**
+   * executive updateMany
+   */
+  export type executiveUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update executives.
+     */
+    data: XOR<executiveUpdateManyMutationInput, executiveUncheckedUpdateManyInput>
+    /**
+     * Filter which executives to update
+     */
+    where?: executiveWhereInput
+    /**
+     * Limit how many executives to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * executive updateManyAndReturn
+   */
+  export type executiveUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * The data used to update executives.
+     */
+    data: XOR<executiveUpdateManyMutationInput, executiveUncheckedUpdateManyInput>
+    /**
+     * Filter which executives to update
+     */
+    where?: executiveWhereInput
+    /**
+     * Limit how many executives to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * executive upsert
+   */
+  export type executiveUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    /**
+     * The filter to search for the executive to update in case it exists.
+     */
+    where: executiveWhereUniqueInput
+    /**
+     * In case the executive found by the `where` argument doesn't exist, create a new executive with this data.
+     */
+    create: XOR<executiveCreateInput, executiveUncheckedCreateInput>
+    /**
+     * In case the executive was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<executiveUpdateInput, executiveUncheckedUpdateInput>
+  }
+
+  /**
+   * executive delete
+   */
+  export type executiveDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    /**
+     * Filter which executive to delete.
+     */
+    where: executiveWhereUniqueInput
+  }
+
+  /**
+   * executive deleteMany
+   */
+  export type executiveDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which executives to delete
+     */
+    where?: executiveWhereInput
+    /**
+     * Limit how many executives to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * executive without action
+   */
+  export type executiveDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
   }
 
 
@@ -10015,6 +11412,7 @@ export namespace Prisma {
     position: string | null
     department: string | null
     zip_code: number | null
+    profile_image: Uint8Array | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -10030,6 +11428,7 @@ export namespace Prisma {
     position: string | null
     department: string | null
     zip_code: number | null
+    profile_image: Uint8Array | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -10045,6 +11444,7 @@ export namespace Prisma {
     position: number
     department: number
     zip_code: number
+    profile_image: number
     created_at: number
     updated_at: number
     _all: number
@@ -10074,6 +11474,7 @@ export namespace Prisma {
     position?: true
     department?: true
     zip_code?: true
+    profile_image?: true
     created_at?: true
     updated_at?: true
   }
@@ -10089,6 +11490,7 @@ export namespace Prisma {
     position?: true
     department?: true
     zip_code?: true
+    profile_image?: true
     created_at?: true
     updated_at?: true
   }
@@ -10104,6 +11506,7 @@ export namespace Prisma {
     position?: true
     department?: true
     zip_code?: true
+    profile_image?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -10206,6 +11609,7 @@ export namespace Prisma {
     position: string | null
     department: string | null
     zip_code: number | null
+    profile_image: Uint8Array | null
     created_at: Date | null
     updated_at: Date | null
     _count: UsersCountAggregateOutputType | null
@@ -10240,6 +11644,7 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     reservation?: boolean | users$reservationArgs<ExtArgs>
@@ -10259,6 +11664,7 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
@@ -10275,6 +11681,7 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
@@ -10291,11 +11698,12 @@ export namespace Prisma {
     position?: boolean
     department?: boolean
     zip_code?: boolean
+    profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
+  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
   export type usersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     reservation?: boolean | users$reservationArgs<ExtArgs>
     review?: boolean | users$reviewArgs<ExtArgs>
@@ -10327,6 +11735,7 @@ export namespace Prisma {
       position: string | null
       department: string | null
       zip_code: number | null
+      profile_image: Uint8Array | null
       created_at: Date | null
       updated_at: Date | null
     }, ExtArgs["result"]["users"]>
@@ -10765,6 +12174,7 @@ export namespace Prisma {
     readonly position: FieldRef<"users", 'String'>
     readonly department: FieldRef<"users", 'String'>
     readonly zip_code: FieldRef<"users", 'Int'>
+    readonly profile_image: FieldRef<"users", 'Bytes'>
     readonly created_at: FieldRef<"users", 'DateTime'>
     readonly updated_at: FieldRef<"users", 'DateTime'>
   }
@@ -11254,6 +12664,7 @@ export namespace Prisma {
     position: 'position',
     department: 'department',
     zip_code: 'zip_code',
+    profile_image: 'profile_image',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -11278,6 +12689,7 @@ export namespace Prisma {
     room_name: 'room_name',
     capacity: 'capacity',
     location_m: 'location_m',
+    department: 'department',
     status_m: 'status_m',
     image: 'image',
     details_m: 'details_m',
@@ -11299,6 +12711,7 @@ export namespace Prisma {
     position: 'position',
     department: 'department',
     zip_code: 'zip_code',
+    profile_image: 'profile_image',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -11317,6 +12730,8 @@ export namespace Prisma {
     status_r: 'status_r',
     officer_id: 'officer_id',
     details_r: 'details_r',
+    booking_dates: 'booking_dates',
+    is_multi_day: 'is_multi_day',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -11345,6 +12760,25 @@ export namespace Prisma {
   export type RolesScalarFieldEnum = (typeof RolesScalarFieldEnum)[keyof typeof RolesScalarFieldEnum]
 
 
+  export const ExecutiveScalarFieldEnum: {
+    executive_id: 'executive_id',
+    role_id: 'role_id',
+    first_name: 'first_name',
+    last_name: 'last_name',
+    email: 'email',
+    password: 'password',
+    citizen_id: 'citizen_id',
+    position: 'position',
+    department: 'department',
+    zip_code: 'zip_code',
+    profile_image: 'profile_image',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type ExecutiveScalarFieldEnum = (typeof ExecutiveScalarFieldEnum)[keyof typeof ExecutiveScalarFieldEnum]
+
+
   export const UsersScalarFieldEnum: {
     user_id: 'user_id',
     role_id: 'role_id',
@@ -11356,6 +12790,7 @@ export namespace Prisma {
     position: 'position',
     department: 'department',
     zip_code: 'zip_code',
+    profile_image: 'profile_image',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -11421,6 +12856,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Bytes'
+   */
+  export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+    
+
+
+  /**
+   * Reference to a field of type 'Bytes[]'
+   */
+  export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -11431,6 +12880,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -11465,6 +12921,7 @@ export namespace Prisma {
     position?: StringNullableFilter<"admin"> | string | null
     department?: StringNullableFilter<"admin"> | string | null
     zip_code?: IntNullableFilter<"admin"> | number | null
+    profile_image?: BytesNullableFilter<"admin"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"admin"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"admin"> | Date | string | null
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
@@ -11481,6 +12938,7 @@ export namespace Prisma {
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
+    profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     roles?: rolesOrderByWithRelationInput
@@ -11500,6 +12958,7 @@ export namespace Prisma {
     position?: StringNullableFilter<"admin"> | string | null
     department?: StringNullableFilter<"admin"> | string | null
     zip_code?: IntNullableFilter<"admin"> | number | null
+    profile_image?: BytesNullableFilter<"admin"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"admin"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"admin"> | Date | string | null
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
@@ -11516,6 +12975,7 @@ export namespace Prisma {
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
+    profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     _count?: adminCountOrderByAggregateInput
@@ -11539,6 +12999,7 @@ export namespace Prisma {
     position?: StringNullableWithAggregatesFilter<"admin"> | string | null
     department?: StringNullableWithAggregatesFilter<"admin"> | string | null
     zip_code?: IntNullableWithAggregatesFilter<"admin"> | number | null
+    profile_image?: BytesNullableWithAggregatesFilter<"admin"> | Uint8Array | null
     created_at?: DateTimeNullableWithAggregatesFilter<"admin"> | Date | string | null
     updated_at?: DateTimeNullableWithAggregatesFilter<"admin"> | Date | string | null
   }
@@ -11613,8 +13074,9 @@ export namespace Prisma {
     room_name?: StringFilter<"meeting_room"> | string
     capacity?: IntFilter<"meeting_room"> | number
     location_m?: StringFilter<"meeting_room"> | string
+    department?: StringFilter<"meeting_room"> | string
     status_m?: StringNullableFilter<"meeting_room"> | string | null
-    image?: StringNullableFilter<"meeting_room"> | string | null
+    image?: BytesNullableFilter<"meeting_room"> | Uint8Array | null
     details_m?: StringNullableFilter<"meeting_room"> | string | null
     created_at?: DateTimeNullableFilter<"meeting_room"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"meeting_room"> | Date | string | null
@@ -11628,6 +13090,7 @@ export namespace Prisma {
     room_name?: SortOrder
     capacity?: SortOrder
     location_m?: SortOrder
+    department?: SortOrder
     status_m?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     details_m?: SortOrderInput | SortOrder
@@ -11646,8 +13109,9 @@ export namespace Prisma {
     room_name?: StringFilter<"meeting_room"> | string
     capacity?: IntFilter<"meeting_room"> | number
     location_m?: StringFilter<"meeting_room"> | string
+    department?: StringFilter<"meeting_room"> | string
     status_m?: StringNullableFilter<"meeting_room"> | string | null
-    image?: StringNullableFilter<"meeting_room"> | string | null
+    image?: BytesNullableFilter<"meeting_room"> | Uint8Array | null
     details_m?: StringNullableFilter<"meeting_room"> | string | null
     created_at?: DateTimeNullableFilter<"meeting_room"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"meeting_room"> | Date | string | null
@@ -11661,6 +13125,7 @@ export namespace Prisma {
     room_name?: SortOrder
     capacity?: SortOrder
     location_m?: SortOrder
+    department?: SortOrder
     status_m?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     details_m?: SortOrderInput | SortOrder
@@ -11681,8 +13146,9 @@ export namespace Prisma {
     room_name?: StringWithAggregatesFilter<"meeting_room"> | string
     capacity?: IntWithAggregatesFilter<"meeting_room"> | number
     location_m?: StringWithAggregatesFilter<"meeting_room"> | string
+    department?: StringWithAggregatesFilter<"meeting_room"> | string
     status_m?: StringNullableWithAggregatesFilter<"meeting_room"> | string | null
-    image?: StringNullableWithAggregatesFilter<"meeting_room"> | string | null
+    image?: BytesNullableWithAggregatesFilter<"meeting_room"> | Uint8Array | null
     details_m?: StringNullableWithAggregatesFilter<"meeting_room"> | string | null
     created_at?: DateTimeNullableWithAggregatesFilter<"meeting_room"> | Date | string | null
     updated_at?: DateTimeNullableWithAggregatesFilter<"meeting_room"> | Date | string | null
@@ -11702,6 +13168,7 @@ export namespace Prisma {
     position?: StringNullableFilter<"officer"> | string | null
     department?: StringNullableFilter<"officer"> | string | null
     zip_code?: IntNullableFilter<"officer"> | number | null
+    profile_image?: BytesNullableFilter<"officer"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"officer"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"officer"> | Date | string | null
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
@@ -11719,6 +13186,7 @@ export namespace Prisma {
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
+    profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     roles?: rolesOrderByWithRelationInput
@@ -11739,6 +13207,7 @@ export namespace Prisma {
     position?: StringNullableFilter<"officer"> | string | null
     department?: StringNullableFilter<"officer"> | string | null
     zip_code?: IntNullableFilter<"officer"> | number | null
+    profile_image?: BytesNullableFilter<"officer"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"officer"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"officer"> | Date | string | null
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
@@ -11756,6 +13225,7 @@ export namespace Prisma {
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
+    profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     _count?: officerCountOrderByAggregateInput
@@ -11779,6 +13249,7 @@ export namespace Prisma {
     position?: StringNullableWithAggregatesFilter<"officer"> | string | null
     department?: StringNullableWithAggregatesFilter<"officer"> | string | null
     zip_code?: IntNullableWithAggregatesFilter<"officer"> | number | null
+    profile_image?: BytesNullableWithAggregatesFilter<"officer"> | Uint8Array | null
     created_at?: DateTimeNullableWithAggregatesFilter<"officer"> | Date | string | null
     updated_at?: DateTimeNullableWithAggregatesFilter<"officer"> | Date | string | null
   }
@@ -11797,6 +13268,8 @@ export namespace Prisma {
     status_r?: StringNullableFilter<"reservation"> | string | null
     officer_id?: IntNullableFilter<"reservation"> | number | null
     details_r?: StringNullableFilter<"reservation"> | string | null
+    booking_dates?: StringNullableFilter<"reservation"> | string | null
+    is_multi_day?: BoolNullableFilter<"reservation"> | boolean | null
     created_at?: DateTimeNullableFilter<"reservation"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"reservation"> | Date | string | null
     officer?: XOR<OfficerNullableScalarRelationFilter, officerWhereInput> | null
@@ -11815,6 +13288,8 @@ export namespace Prisma {
     status_r?: SortOrderInput | SortOrder
     officer_id?: SortOrderInput | SortOrder
     details_r?: SortOrderInput | SortOrder
+    booking_dates?: SortOrderInput | SortOrder
+    is_multi_day?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     officer?: officerOrderByWithRelationInput
@@ -11836,6 +13311,8 @@ export namespace Prisma {
     status_r?: StringNullableFilter<"reservation"> | string | null
     officer_id?: IntNullableFilter<"reservation"> | number | null
     details_r?: StringNullableFilter<"reservation"> | string | null
+    booking_dates?: StringNullableFilter<"reservation"> | string | null
+    is_multi_day?: BoolNullableFilter<"reservation"> | boolean | null
     created_at?: DateTimeNullableFilter<"reservation"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"reservation"> | Date | string | null
     officer?: XOR<OfficerNullableScalarRelationFilter, officerWhereInput> | null
@@ -11854,6 +13331,8 @@ export namespace Prisma {
     status_r?: SortOrderInput | SortOrder
     officer_id?: SortOrderInput | SortOrder
     details_r?: SortOrderInput | SortOrder
+    booking_dates?: SortOrderInput | SortOrder
+    is_multi_day?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     _count?: reservationCountOrderByAggregateInput
@@ -11877,6 +13356,8 @@ export namespace Prisma {
     status_r?: StringNullableWithAggregatesFilter<"reservation"> | string | null
     officer_id?: IntNullableWithAggregatesFilter<"reservation"> | number | null
     details_r?: StringNullableWithAggregatesFilter<"reservation"> | string | null
+    booking_dates?: StringNullableWithAggregatesFilter<"reservation"> | string | null
+    is_multi_day?: BoolNullableWithAggregatesFilter<"reservation"> | boolean | null
     created_at?: DateTimeNullableWithAggregatesFilter<"reservation"> | Date | string | null
     updated_at?: DateTimeNullableWithAggregatesFilter<"reservation"> | Date | string | null
   }
@@ -11956,6 +13437,7 @@ export namespace Prisma {
     admin?: AdminListRelationFilter
     officer?: OfficerListRelationFilter
     users?: UsersListRelationFilter
+    executive?: ExecutiveListRelationFilter
   }
 
   export type rolesOrderByWithRelationInput = {
@@ -11965,6 +13447,7 @@ export namespace Prisma {
     admin?: adminOrderByRelationAggregateInput
     officer?: officerOrderByRelationAggregateInput
     users?: usersOrderByRelationAggregateInput
+    executive?: executiveOrderByRelationAggregateInput
   }
 
   export type rolesWhereUniqueInput = Prisma.AtLeast<{
@@ -11977,6 +13460,7 @@ export namespace Prisma {
     admin?: AdminListRelationFilter
     officer?: OfficerListRelationFilter
     users?: UsersListRelationFilter
+    executive?: ExecutiveListRelationFilter
   }, "role_id">
 
   export type rolesOrderByWithAggregationInput = {
@@ -11999,6 +13483,103 @@ export namespace Prisma {
     role_status?: StringNullableWithAggregatesFilter<"roles"> | string | null
   }
 
+  export type executiveWhereInput = {
+    AND?: executiveWhereInput | executiveWhereInput[]
+    OR?: executiveWhereInput[]
+    NOT?: executiveWhereInput | executiveWhereInput[]
+    executive_id?: IntFilter<"executive"> | number
+    role_id?: IntFilter<"executive"> | number
+    first_name?: StringFilter<"executive"> | string
+    last_name?: StringFilter<"executive"> | string
+    email?: StringFilter<"executive"> | string
+    password?: StringFilter<"executive"> | string
+    citizen_id?: StringNullableFilter<"executive"> | string | null
+    position?: StringFilter<"executive"> | string
+    department?: StringFilter<"executive"> | string
+    zip_code?: IntNullableFilter<"executive"> | number | null
+    profile_image?: BytesNullableFilter<"executive"> | Uint8Array | null
+    created_at?: DateTimeNullableFilter<"executive"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"executive"> | Date | string | null
+    roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
+  }
+
+  export type executiveOrderByWithRelationInput = {
+    executive_id?: SortOrder
+    role_id?: SortOrder
+    first_name?: SortOrder
+    last_name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    citizen_id?: SortOrderInput | SortOrder
+    position?: SortOrder
+    department?: SortOrder
+    zip_code?: SortOrderInput | SortOrder
+    profile_image?: SortOrderInput | SortOrder
+    created_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    roles?: rolesOrderByWithRelationInput
+  }
+
+  export type executiveWhereUniqueInput = Prisma.AtLeast<{
+    executive_id?: number
+    email?: string
+    citizen_id?: string
+    AND?: executiveWhereInput | executiveWhereInput[]
+    OR?: executiveWhereInput[]
+    NOT?: executiveWhereInput | executiveWhereInput[]
+    role_id?: IntFilter<"executive"> | number
+    first_name?: StringFilter<"executive"> | string
+    last_name?: StringFilter<"executive"> | string
+    password?: StringFilter<"executive"> | string
+    position?: StringFilter<"executive"> | string
+    department?: StringFilter<"executive"> | string
+    zip_code?: IntNullableFilter<"executive"> | number | null
+    profile_image?: BytesNullableFilter<"executive"> | Uint8Array | null
+    created_at?: DateTimeNullableFilter<"executive"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"executive"> | Date | string | null
+    roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
+  }, "executive_id" | "email" | "citizen_id">
+
+  export type executiveOrderByWithAggregationInput = {
+    executive_id?: SortOrder
+    role_id?: SortOrder
+    first_name?: SortOrder
+    last_name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    citizen_id?: SortOrderInput | SortOrder
+    position?: SortOrder
+    department?: SortOrder
+    zip_code?: SortOrderInput | SortOrder
+    profile_image?: SortOrderInput | SortOrder
+    created_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    _count?: executiveCountOrderByAggregateInput
+    _avg?: executiveAvgOrderByAggregateInput
+    _max?: executiveMaxOrderByAggregateInput
+    _min?: executiveMinOrderByAggregateInput
+    _sum?: executiveSumOrderByAggregateInput
+  }
+
+  export type executiveScalarWhereWithAggregatesInput = {
+    AND?: executiveScalarWhereWithAggregatesInput | executiveScalarWhereWithAggregatesInput[]
+    OR?: executiveScalarWhereWithAggregatesInput[]
+    NOT?: executiveScalarWhereWithAggregatesInput | executiveScalarWhereWithAggregatesInput[]
+    executive_id?: IntWithAggregatesFilter<"executive"> | number
+    role_id?: IntWithAggregatesFilter<"executive"> | number
+    first_name?: StringWithAggregatesFilter<"executive"> | string
+    last_name?: StringWithAggregatesFilter<"executive"> | string
+    email?: StringWithAggregatesFilter<"executive"> | string
+    password?: StringWithAggregatesFilter<"executive"> | string
+    citizen_id?: StringNullableWithAggregatesFilter<"executive"> | string | null
+    position?: StringWithAggregatesFilter<"executive"> | string
+    department?: StringWithAggregatesFilter<"executive"> | string
+    zip_code?: IntNullableWithAggregatesFilter<"executive"> | number | null
+    profile_image?: BytesNullableWithAggregatesFilter<"executive"> | Uint8Array | null
+    created_at?: DateTimeNullableWithAggregatesFilter<"executive"> | Date | string | null
+    updated_at?: DateTimeNullableWithAggregatesFilter<"executive"> | Date | string | null
+  }
+
   export type usersWhereInput = {
     AND?: usersWhereInput | usersWhereInput[]
     OR?: usersWhereInput[]
@@ -12013,6 +13594,7 @@ export namespace Prisma {
     position?: StringNullableFilter<"users"> | string | null
     department?: StringNullableFilter<"users"> | string | null
     zip_code?: IntNullableFilter<"users"> | number | null
+    profile_image?: BytesNullableFilter<"users"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"users"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"users"> | Date | string | null
     reservation?: ReservationListRelationFilter
@@ -12031,6 +13613,7 @@ export namespace Prisma {
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
+    profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     reservation?: reservationOrderByRelationAggregateInput
@@ -12052,6 +13635,7 @@ export namespace Prisma {
     position?: StringNullableFilter<"users"> | string | null
     department?: StringNullableFilter<"users"> | string | null
     zip_code?: IntNullableFilter<"users"> | number | null
+    profile_image?: BytesNullableFilter<"users"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"users"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"users"> | Date | string | null
     reservation?: ReservationListRelationFilter
@@ -12070,6 +13654,7 @@ export namespace Prisma {
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
+    profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     _count?: usersCountOrderByAggregateInput
@@ -12093,6 +13678,7 @@ export namespace Prisma {
     position?: StringNullableWithAggregatesFilter<"users"> | string | null
     department?: StringNullableWithAggregatesFilter<"users"> | string | null
     zip_code?: IntNullableWithAggregatesFilter<"users"> | number | null
+    profile_image?: BytesNullableWithAggregatesFilter<"users"> | Uint8Array | null
     created_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
     updated_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
   }
@@ -12106,6 +13692,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     roles: rolesCreateNestedOneWithoutAdminInput
@@ -12122,6 +13709,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -12135,6 +13723,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     roles?: rolesUpdateOneRequiredWithoutAdminNestedInput
@@ -12151,6 +13740,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12166,6 +13756,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -12179,6 +13770,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12194,6 +13786,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12261,8 +13854,9 @@ export namespace Prisma {
     room_name: string
     capacity: number
     location_m: string
+    department: string
     status_m?: string | null
-    image?: string | null
+    image?: Uint8Array | null
     details_m?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
@@ -12276,8 +13870,9 @@ export namespace Prisma {
     room_name: string
     capacity: number
     location_m: string
+    department: string
     status_m?: string | null
-    image?: string | null
+    image?: Uint8Array | null
     details_m?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
@@ -12290,8 +13885,9 @@ export namespace Prisma {
     room_name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     location_m?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
     status_m?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     details_m?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12305,8 +13901,9 @@ export namespace Prisma {
     room_name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     location_m?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
     status_m?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     details_m?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12320,8 +13917,9 @@ export namespace Prisma {
     room_name: string
     capacity: number
     location_m: string
+    department: string
     status_m?: string | null
-    image?: string | null
+    image?: Uint8Array | null
     details_m?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
@@ -12331,8 +13929,9 @@ export namespace Prisma {
     room_name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     location_m?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
     status_m?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     details_m?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12343,8 +13942,9 @@ export namespace Prisma {
     room_name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     location_m?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
     status_m?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     details_m?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12359,6 +13959,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     roles: rolesCreateNestedOneWithoutOfficerInput
@@ -12376,6 +13977,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     reservation?: reservationUncheckedCreateNestedManyWithoutOfficerInput
@@ -12390,6 +13992,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     roles?: rolesUpdateOneRequiredWithoutOfficerNestedInput
@@ -12407,6 +14010,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUncheckedUpdateManyWithoutOfficerNestedInput
@@ -12423,6 +14027,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -12436,6 +14041,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12451,6 +14057,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12462,6 +14069,8 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     officer?: officerCreateNestedOneWithoutReservationInput
@@ -12480,6 +14089,8 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -12491,6 +14102,8 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     officer?: officerUpdateOneWithoutReservationNestedInput
@@ -12509,6 +14122,8 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12524,6 +14139,8 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -12535,6 +14152,8 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12550,6 +14169,8 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12618,6 +14239,7 @@ export namespace Prisma {
     admin?: adminCreateNestedManyWithoutRolesInput
     officer?: officerCreateNestedManyWithoutRolesInput
     users?: usersCreateNestedManyWithoutRolesInput
+    executive?: executiveCreateNestedManyWithoutRolesInput
   }
 
   export type rolesUncheckedCreateInput = {
@@ -12627,6 +14249,7 @@ export namespace Prisma {
     admin?: adminUncheckedCreateNestedManyWithoutRolesInput
     officer?: officerUncheckedCreateNestedManyWithoutRolesInput
     users?: usersUncheckedCreateNestedManyWithoutRolesInput
+    executive?: executiveUncheckedCreateNestedManyWithoutRolesInput
   }
 
   export type rolesUpdateInput = {
@@ -12635,6 +14258,7 @@ export namespace Prisma {
     admin?: adminUpdateManyWithoutRolesNestedInput
     officer?: officerUpdateManyWithoutRolesNestedInput
     users?: usersUpdateManyWithoutRolesNestedInput
+    executive?: executiveUpdateManyWithoutRolesNestedInput
   }
 
   export type rolesUncheckedUpdateInput = {
@@ -12644,6 +14268,7 @@ export namespace Prisma {
     admin?: adminUncheckedUpdateManyWithoutRolesNestedInput
     officer?: officerUncheckedUpdateManyWithoutRolesNestedInput
     users?: usersUncheckedUpdateManyWithoutRolesNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutRolesNestedInput
   }
 
   export type rolesCreateManyInput = {
@@ -12663,6 +14288,114 @@ export namespace Prisma {
     role_status?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type executiveCreateInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    roles: rolesCreateNestedOneWithoutExecutiveInput
+  }
+
+  export type executiveUncheckedCreateInput = {
+    executive_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveUpdateInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roles?: rolesUpdateOneRequiredWithoutExecutiveNestedInput
+  }
+
+  export type executiveUncheckedUpdateInput = {
+    executive_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveCreateManyInput = {
+    executive_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveUpdateManyMutationInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveUncheckedUpdateManyInput = {
+    executive_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type usersCreateInput = {
     first_name: string
     last_name: string
@@ -12672,6 +14405,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     reservation?: reservationCreateNestedManyWithoutUsersInput
@@ -12690,6 +14424,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     reservation?: reservationUncheckedCreateNestedManyWithoutUsersInput
@@ -12705,6 +14440,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUpdateManyWithoutUsersNestedInput
@@ -12723,6 +14459,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUncheckedUpdateManyWithoutUsersNestedInput
@@ -12740,6 +14477,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -12753,6 +14491,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12768,6 +14507,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -12824,6 +14564,13 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type BytesNullableFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
+    notIn?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
+    not?: NestedBytesNullableFilter<$PrismaModel> | Uint8Array | null
+  }
+
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -12856,6 +14603,7 @@ export namespace Prisma {
     position?: SortOrder
     department?: SortOrder
     zip_code?: SortOrder
+    profile_image?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -12877,6 +14625,7 @@ export namespace Prisma {
     position?: SortOrder
     department?: SortOrder
     zip_code?: SortOrder
+    profile_image?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -12892,6 +14641,7 @@ export namespace Prisma {
     position?: SortOrder
     department?: SortOrder
     zip_code?: SortOrder
+    profile_image?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -12968,6 +14718,16 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type BytesNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
+    notIn?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
+    not?: NestedBytesNullableWithAggregatesFilter<$PrismaModel> | Uint8Array | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBytesNullableFilter<$PrismaModel>
+    _max?: NestedBytesNullableFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -13063,6 +14823,7 @@ export namespace Prisma {
     room_name?: SortOrder
     capacity?: SortOrder
     location_m?: SortOrder
+    department?: SortOrder
     status_m?: SortOrder
     image?: SortOrder
     details_m?: SortOrder
@@ -13080,6 +14841,7 @@ export namespace Prisma {
     room_name?: SortOrder
     capacity?: SortOrder
     location_m?: SortOrder
+    department?: SortOrder
     status_m?: SortOrder
     image?: SortOrder
     details_m?: SortOrder
@@ -13092,6 +14854,7 @@ export namespace Prisma {
     room_name?: SortOrder
     capacity?: SortOrder
     location_m?: SortOrder
+    department?: SortOrder
     status_m?: SortOrder
     image?: SortOrder
     details_m?: SortOrder
@@ -13115,6 +14878,7 @@ export namespace Prisma {
     position?: SortOrder
     department?: SortOrder
     zip_code?: SortOrder
+    profile_image?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -13136,6 +14900,7 @@ export namespace Prisma {
     position?: SortOrder
     department?: SortOrder
     zip_code?: SortOrder
+    profile_image?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -13151,6 +14916,7 @@ export namespace Prisma {
     position?: SortOrder
     department?: SortOrder
     zip_code?: SortOrder
+    profile_image?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -13170,6 +14936,11 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
   export type OfficerNullableScalarRelationFilter = {
@@ -13198,6 +14969,8 @@ export namespace Prisma {
     status_r?: SortOrder
     officer_id?: SortOrder
     details_r?: SortOrder
+    booking_dates?: SortOrder
+    is_multi_day?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -13220,6 +14993,8 @@ export namespace Prisma {
     status_r?: SortOrder
     officer_id?: SortOrder
     details_r?: SortOrder
+    booking_dates?: SortOrder
+    is_multi_day?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -13235,6 +15010,8 @@ export namespace Prisma {
     status_r?: SortOrder
     officer_id?: SortOrder
     details_r?: SortOrder
+    booking_dates?: SortOrder
+    is_multi_day?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -13258,6 +15035,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type reviewCountOrderByAggregateInput = {
@@ -13319,6 +15104,12 @@ export namespace Prisma {
     none?: usersWhereInput
   }
 
+  export type ExecutiveListRelationFilter = {
+    every?: executiveWhereInput
+    some?: executiveWhereInput
+    none?: executiveWhereInput
+  }
+
   export type adminOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -13328,6 +15119,10 @@ export namespace Prisma {
   }
 
   export type usersOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type executiveOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13357,6 +15152,66 @@ export namespace Prisma {
     role_id?: SortOrder
   }
 
+  export type executiveCountOrderByAggregateInput = {
+    executive_id?: SortOrder
+    role_id?: SortOrder
+    first_name?: SortOrder
+    last_name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    citizen_id?: SortOrder
+    position?: SortOrder
+    department?: SortOrder
+    zip_code?: SortOrder
+    profile_image?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type executiveAvgOrderByAggregateInput = {
+    executive_id?: SortOrder
+    role_id?: SortOrder
+    zip_code?: SortOrder
+  }
+
+  export type executiveMaxOrderByAggregateInput = {
+    executive_id?: SortOrder
+    role_id?: SortOrder
+    first_name?: SortOrder
+    last_name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    citizen_id?: SortOrder
+    position?: SortOrder
+    department?: SortOrder
+    zip_code?: SortOrder
+    profile_image?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type executiveMinOrderByAggregateInput = {
+    executive_id?: SortOrder
+    role_id?: SortOrder
+    first_name?: SortOrder
+    last_name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    citizen_id?: SortOrder
+    position?: SortOrder
+    department?: SortOrder
+    zip_code?: SortOrder
+    profile_image?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type executiveSumOrderByAggregateInput = {
+    executive_id?: SortOrder
+    role_id?: SortOrder
+    zip_code?: SortOrder
+  }
+
   export type usersCountOrderByAggregateInput = {
     user_id?: SortOrder
     role_id?: SortOrder
@@ -13368,6 +15223,7 @@ export namespace Prisma {
     position?: SortOrder
     department?: SortOrder
     zip_code?: SortOrder
+    profile_image?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -13389,6 +15245,7 @@ export namespace Prisma {
     position?: SortOrder
     department?: SortOrder
     zip_code?: SortOrder
+    profile_image?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -13404,6 +15261,7 @@ export namespace Prisma {
     position?: SortOrder
     department?: SortOrder
     zip_code?: SortOrder
+    profile_image?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -13434,6 +15292,10 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type NullableBytesFieldUpdateOperationsInput = {
+    set?: Uint8Array | null
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -13674,6 +15536,10 @@ export namespace Prisma {
     set?: Date | string
   }
 
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
   export type officerUpdateOneWithoutReservationNestedInput = {
     create?: XOR<officerCreateWithoutReservationInput, officerUncheckedCreateWithoutReservationInput>
     connectOrCreate?: officerCreateOrConnectWithoutReservationInput
@@ -13757,6 +15623,13 @@ export namespace Prisma {
     connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
   }
 
+  export type executiveCreateNestedManyWithoutRolesInput = {
+    create?: XOR<executiveCreateWithoutRolesInput, executiveUncheckedCreateWithoutRolesInput> | executiveCreateWithoutRolesInput[] | executiveUncheckedCreateWithoutRolesInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutRolesInput | executiveCreateOrConnectWithoutRolesInput[]
+    createMany?: executiveCreateManyRolesInputEnvelope
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+  }
+
   export type adminUncheckedCreateNestedManyWithoutRolesInput = {
     create?: XOR<adminCreateWithoutRolesInput, adminUncheckedCreateWithoutRolesInput> | adminCreateWithoutRolesInput[] | adminUncheckedCreateWithoutRolesInput[]
     connectOrCreate?: adminCreateOrConnectWithoutRolesInput | adminCreateOrConnectWithoutRolesInput[]
@@ -13776,6 +15649,13 @@ export namespace Prisma {
     connectOrCreate?: usersCreateOrConnectWithoutRolesInput | usersCreateOrConnectWithoutRolesInput[]
     createMany?: usersCreateManyRolesInputEnvelope
     connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+  }
+
+  export type executiveUncheckedCreateNestedManyWithoutRolesInput = {
+    create?: XOR<executiveCreateWithoutRolesInput, executiveUncheckedCreateWithoutRolesInput> | executiveCreateWithoutRolesInput[] | executiveUncheckedCreateWithoutRolesInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutRolesInput | executiveCreateOrConnectWithoutRolesInput[]
+    createMany?: executiveCreateManyRolesInputEnvelope
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
   }
 
   export type adminUpdateManyWithoutRolesNestedInput = {
@@ -13820,6 +15700,20 @@ export namespace Prisma {
     deleteMany?: usersScalarWhereInput | usersScalarWhereInput[]
   }
 
+  export type executiveUpdateManyWithoutRolesNestedInput = {
+    create?: XOR<executiveCreateWithoutRolesInput, executiveUncheckedCreateWithoutRolesInput> | executiveCreateWithoutRolesInput[] | executiveUncheckedCreateWithoutRolesInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutRolesInput | executiveCreateOrConnectWithoutRolesInput[]
+    upsert?: executiveUpsertWithWhereUniqueWithoutRolesInput | executiveUpsertWithWhereUniqueWithoutRolesInput[]
+    createMany?: executiveCreateManyRolesInputEnvelope
+    set?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    disconnect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    delete?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    update?: executiveUpdateWithWhereUniqueWithoutRolesInput | executiveUpdateWithWhereUniqueWithoutRolesInput[]
+    updateMany?: executiveUpdateManyWithWhereWithoutRolesInput | executiveUpdateManyWithWhereWithoutRolesInput[]
+    deleteMany?: executiveScalarWhereInput | executiveScalarWhereInput[]
+  }
+
   export type adminUncheckedUpdateManyWithoutRolesNestedInput = {
     create?: XOR<adminCreateWithoutRolesInput, adminUncheckedCreateWithoutRolesInput> | adminCreateWithoutRolesInput[] | adminUncheckedCreateWithoutRolesInput[]
     connectOrCreate?: adminCreateOrConnectWithoutRolesInput | adminCreateOrConnectWithoutRolesInput[]
@@ -13860,6 +15754,34 @@ export namespace Prisma {
     update?: usersUpdateWithWhereUniqueWithoutRolesInput | usersUpdateWithWhereUniqueWithoutRolesInput[]
     updateMany?: usersUpdateManyWithWhereWithoutRolesInput | usersUpdateManyWithWhereWithoutRolesInput[]
     deleteMany?: usersScalarWhereInput | usersScalarWhereInput[]
+  }
+
+  export type executiveUncheckedUpdateManyWithoutRolesNestedInput = {
+    create?: XOR<executiveCreateWithoutRolesInput, executiveUncheckedCreateWithoutRolesInput> | executiveCreateWithoutRolesInput[] | executiveUncheckedCreateWithoutRolesInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutRolesInput | executiveCreateOrConnectWithoutRolesInput[]
+    upsert?: executiveUpsertWithWhereUniqueWithoutRolesInput | executiveUpsertWithWhereUniqueWithoutRolesInput[]
+    createMany?: executiveCreateManyRolesInputEnvelope
+    set?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    disconnect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    delete?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    update?: executiveUpdateWithWhereUniqueWithoutRolesInput | executiveUpdateWithWhereUniqueWithoutRolesInput[]
+    updateMany?: executiveUpdateManyWithWhereWithoutRolesInput | executiveUpdateManyWithWhereWithoutRolesInput[]
+    deleteMany?: executiveScalarWhereInput | executiveScalarWhereInput[]
+  }
+
+  export type rolesCreateNestedOneWithoutExecutiveInput = {
+    create?: XOR<rolesCreateWithoutExecutiveInput, rolesUncheckedCreateWithoutExecutiveInput>
+    connectOrCreate?: rolesCreateOrConnectWithoutExecutiveInput
+    connect?: rolesWhereUniqueInput
+  }
+
+  export type rolesUpdateOneRequiredWithoutExecutiveNestedInput = {
+    create?: XOR<rolesCreateWithoutExecutiveInput, rolesUncheckedCreateWithoutExecutiveInput>
+    connectOrCreate?: rolesCreateOrConnectWithoutExecutiveInput
+    upsert?: rolesUpsertWithoutExecutiveInput
+    connect?: rolesWhereUniqueInput
+    update?: XOR<XOR<rolesUpdateToOneWithWhereWithoutExecutiveInput, rolesUpdateWithoutExecutiveInput>, rolesUncheckedUpdateWithoutExecutiveInput>
   }
 
   export type reservationCreateNestedManyWithoutUsersInput = {
@@ -14010,6 +15932,13 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBytesNullableFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
+    notIn?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
+    not?: NestedBytesNullableFilter<$PrismaModel> | Uint8Array | null
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -14109,6 +16038,16 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBytesNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Uint8Array | BytesFieldRefInput<$PrismaModel> | null
+    in?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
+    notIn?: Uint8Array[] | ListBytesFieldRefInput<$PrismaModel> | null
+    not?: NestedBytesNullableWithAggregatesFilter<$PrismaModel> | Uint8Array | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBytesNullableFilter<$PrismaModel>
+    _max?: NestedBytesNullableFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -14134,6 +16073,11 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -14148,11 +16092,20 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
   export type rolesCreateWithoutAdminInput = {
     role_name: string
     role_status?: string | null
     officer?: officerCreateNestedManyWithoutRolesInput
     users?: usersCreateNestedManyWithoutRolesInput
+    executive?: executiveCreateNestedManyWithoutRolesInput
   }
 
   export type rolesUncheckedCreateWithoutAdminInput = {
@@ -14161,6 +16114,7 @@ export namespace Prisma {
     role_status?: string | null
     officer?: officerUncheckedCreateNestedManyWithoutRolesInput
     users?: usersUncheckedCreateNestedManyWithoutRolesInput
+    executive?: executiveUncheckedCreateNestedManyWithoutRolesInput
   }
 
   export type rolesCreateOrConnectWithoutAdminInput = {
@@ -14184,6 +16138,7 @@ export namespace Prisma {
     role_status?: NullableStringFieldUpdateOperationsInput | string | null
     officer?: officerUpdateManyWithoutRolesNestedInput
     users?: usersUpdateManyWithoutRolesNestedInput
+    executive?: executiveUpdateManyWithoutRolesNestedInput
   }
 
   export type rolesUncheckedUpdateWithoutAdminInput = {
@@ -14192,14 +16147,16 @@ export namespace Prisma {
     role_status?: NullableStringFieldUpdateOperationsInput | string | null
     officer?: officerUncheckedUpdateManyWithoutRolesNestedInput
     users?: usersUncheckedUpdateManyWithoutRolesNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutRolesNestedInput
   }
 
   export type meeting_roomCreateWithoutEquipmentInput = {
     room_name: string
     capacity: number
     location_m: string
+    department: string
     status_m?: string | null
-    image?: string | null
+    image?: Uint8Array | null
     details_m?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
@@ -14212,8 +16169,9 @@ export namespace Prisma {
     room_name: string
     capacity: number
     location_m: string
+    department: string
     status_m?: string | null
-    image?: string | null
+    image?: Uint8Array | null
     details_m?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
@@ -14241,8 +16199,9 @@ export namespace Prisma {
     room_name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     location_m?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
     status_m?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     details_m?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14255,8 +16214,9 @@ export namespace Prisma {
     room_name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     location_m?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
     status_m?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     details_m?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14296,6 +16256,8 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     officer?: officerCreateNestedOneWithoutReservationInput
@@ -14312,6 +16274,8 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -14409,6 +16373,8 @@ export namespace Prisma {
     status_r?: StringNullableFilter<"reservation"> | string | null
     officer_id?: IntNullableFilter<"reservation"> | number | null
     details_r?: StringNullableFilter<"reservation"> | string | null
+    booking_dates?: StringNullableFilter<"reservation"> | string | null
+    is_multi_day?: BoolNullableFilter<"reservation"> | boolean | null
     created_at?: DateTimeNullableFilter<"reservation"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"reservation"> | Date | string | null
   }
@@ -14446,6 +16412,7 @@ export namespace Prisma {
     role_status?: string | null
     admin?: adminCreateNestedManyWithoutRolesInput
     users?: usersCreateNestedManyWithoutRolesInput
+    executive?: executiveCreateNestedManyWithoutRolesInput
   }
 
   export type rolesUncheckedCreateWithoutOfficerInput = {
@@ -14454,6 +16421,7 @@ export namespace Prisma {
     role_status?: string | null
     admin?: adminUncheckedCreateNestedManyWithoutRolesInput
     users?: usersUncheckedCreateNestedManyWithoutRolesInput
+    executive?: executiveUncheckedCreateNestedManyWithoutRolesInput
   }
 
   export type rolesCreateOrConnectWithoutOfficerInput = {
@@ -14468,6 +16436,8 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     meeting_room?: meeting_roomCreateNestedOneWithoutReservationInput
@@ -14484,6 +16454,8 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -14514,6 +16486,7 @@ export namespace Prisma {
     role_status?: NullableStringFieldUpdateOperationsInput | string | null
     admin?: adminUpdateManyWithoutRolesNestedInput
     users?: usersUpdateManyWithoutRolesNestedInput
+    executive?: executiveUpdateManyWithoutRolesNestedInput
   }
 
   export type rolesUncheckedUpdateWithoutOfficerInput = {
@@ -14522,6 +16495,7 @@ export namespace Prisma {
     role_status?: NullableStringFieldUpdateOperationsInput | string | null
     admin?: adminUncheckedUpdateManyWithoutRolesNestedInput
     users?: usersUncheckedUpdateManyWithoutRolesNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutRolesNestedInput
   }
 
   export type reservationUpsertWithWhereUniqueWithoutOfficerInput = {
@@ -14549,6 +16523,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     roles: rolesCreateNestedOneWithoutOfficerInput
@@ -14565,6 +16540,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -14578,8 +16554,9 @@ export namespace Prisma {
     room_name: string
     capacity: number
     location_m: string
+    department: string
     status_m?: string | null
-    image?: string | null
+    image?: Uint8Array | null
     details_m?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
@@ -14592,8 +16569,9 @@ export namespace Prisma {
     room_name: string
     capacity: number
     location_m: string
+    department: string
     status_m?: string | null
-    image?: string | null
+    image?: Uint8Array | null
     details_m?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
@@ -14615,6 +16593,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     review?: reviewCreateNestedManyWithoutUsersInput
@@ -14632,6 +16611,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     review?: reviewUncheckedCreateNestedManyWithoutUsersInput
@@ -14662,6 +16642,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     roles?: rolesUpdateOneRequiredWithoutOfficerNestedInput
@@ -14678,6 +16659,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -14697,8 +16679,9 @@ export namespace Prisma {
     room_name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     location_m?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
     status_m?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     details_m?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14711,8 +16694,9 @@ export namespace Prisma {
     room_name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     location_m?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
     status_m?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     details_m?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14740,6 +16724,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     review?: reviewUpdateManyWithoutUsersNestedInput
@@ -14757,6 +16742,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     review?: reviewUncheckedUpdateManyWithoutUsersNestedInput
@@ -14766,8 +16752,9 @@ export namespace Prisma {
     room_name: string
     capacity: number
     location_m: string
+    department: string
     status_m?: string | null
-    image?: string | null
+    image?: Uint8Array | null
     details_m?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
@@ -14780,8 +16767,9 @@ export namespace Prisma {
     room_name: string
     capacity: number
     location_m: string
+    department: string
     status_m?: string | null
-    image?: string | null
+    image?: Uint8Array | null
     details_m?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
@@ -14803,6 +16791,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     reservation?: reservationCreateNestedManyWithoutUsersInput
@@ -14820,6 +16809,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     reservation?: reservationUncheckedCreateNestedManyWithoutUsersInput
@@ -14845,8 +16835,9 @@ export namespace Prisma {
     room_name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     location_m?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
     status_m?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     details_m?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14859,8 +16850,9 @@ export namespace Prisma {
     room_name?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
     location_m?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
     status_m?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     details_m?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14888,6 +16880,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUpdateManyWithoutUsersNestedInput
@@ -14905,6 +16898,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUncheckedUpdateManyWithoutUsersNestedInput
@@ -14919,6 +16913,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -14933,6 +16928,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -14956,6 +16952,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     reservation?: reservationCreateNestedManyWithoutOfficerInput
@@ -14971,6 +16968,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     reservation?: reservationUncheckedCreateNestedManyWithoutOfficerInput
@@ -14995,6 +16993,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     reservation?: reservationCreateNestedManyWithoutUsersInput
@@ -15011,6 +17010,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     reservation?: reservationUncheckedCreateNestedManyWithoutUsersInput
@@ -15024,6 +17024,45 @@ export namespace Prisma {
 
   export type usersCreateManyRolesInputEnvelope = {
     data: usersCreateManyRolesInput | usersCreateManyRolesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type executiveCreateWithoutRolesInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveUncheckedCreateWithoutRolesInput = {
+    executive_id?: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveCreateOrConnectWithoutRolesInput = {
+    where: executiveWhereUniqueInput
+    create: XOR<executiveCreateWithoutRolesInput, executiveUncheckedCreateWithoutRolesInput>
+  }
+
+  export type executiveCreateManyRolesInputEnvelope = {
+    data: executiveCreateManyRolesInput | executiveCreateManyRolesInput[]
     skipDuplicates?: boolean
   }
 
@@ -15057,6 +17096,7 @@ export namespace Prisma {
     position?: StringNullableFilter<"admin"> | string | null
     department?: StringNullableFilter<"admin"> | string | null
     zip_code?: IntNullableFilter<"admin"> | number | null
+    profile_image?: BytesNullableFilter<"admin"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"admin"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"admin"> | Date | string | null
   }
@@ -15091,6 +17131,7 @@ export namespace Prisma {
     position?: StringNullableFilter<"officer"> | string | null
     department?: StringNullableFilter<"officer"> | string | null
     zip_code?: IntNullableFilter<"officer"> | number | null
+    profile_image?: BytesNullableFilter<"officer"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"officer"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"officer"> | Date | string | null
   }
@@ -15125,8 +17166,94 @@ export namespace Prisma {
     position?: StringNullableFilter<"users"> | string | null
     department?: StringNullableFilter<"users"> | string | null
     zip_code?: IntNullableFilter<"users"> | number | null
+    profile_image?: BytesNullableFilter<"users"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"users"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"users"> | Date | string | null
+  }
+
+  export type executiveUpsertWithWhereUniqueWithoutRolesInput = {
+    where: executiveWhereUniqueInput
+    update: XOR<executiveUpdateWithoutRolesInput, executiveUncheckedUpdateWithoutRolesInput>
+    create: XOR<executiveCreateWithoutRolesInput, executiveUncheckedCreateWithoutRolesInput>
+  }
+
+  export type executiveUpdateWithWhereUniqueWithoutRolesInput = {
+    where: executiveWhereUniqueInput
+    data: XOR<executiveUpdateWithoutRolesInput, executiveUncheckedUpdateWithoutRolesInput>
+  }
+
+  export type executiveUpdateManyWithWhereWithoutRolesInput = {
+    where: executiveScalarWhereInput
+    data: XOR<executiveUpdateManyMutationInput, executiveUncheckedUpdateManyWithoutRolesInput>
+  }
+
+  export type executiveScalarWhereInput = {
+    AND?: executiveScalarWhereInput | executiveScalarWhereInput[]
+    OR?: executiveScalarWhereInput[]
+    NOT?: executiveScalarWhereInput | executiveScalarWhereInput[]
+    executive_id?: IntFilter<"executive"> | number
+    role_id?: IntFilter<"executive"> | number
+    first_name?: StringFilter<"executive"> | string
+    last_name?: StringFilter<"executive"> | string
+    email?: StringFilter<"executive"> | string
+    password?: StringFilter<"executive"> | string
+    citizen_id?: StringNullableFilter<"executive"> | string | null
+    position?: StringFilter<"executive"> | string
+    department?: StringFilter<"executive"> | string
+    zip_code?: IntNullableFilter<"executive"> | number | null
+    profile_image?: BytesNullableFilter<"executive"> | Uint8Array | null
+    created_at?: DateTimeNullableFilter<"executive"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"executive"> | Date | string | null
+  }
+
+  export type rolesCreateWithoutExecutiveInput = {
+    role_name: string
+    role_status?: string | null
+    admin?: adminCreateNestedManyWithoutRolesInput
+    officer?: officerCreateNestedManyWithoutRolesInput
+    users?: usersCreateNestedManyWithoutRolesInput
+  }
+
+  export type rolesUncheckedCreateWithoutExecutiveInput = {
+    role_id?: number
+    role_name: string
+    role_status?: string | null
+    admin?: adminUncheckedCreateNestedManyWithoutRolesInput
+    officer?: officerUncheckedCreateNestedManyWithoutRolesInput
+    users?: usersUncheckedCreateNestedManyWithoutRolesInput
+  }
+
+  export type rolesCreateOrConnectWithoutExecutiveInput = {
+    where: rolesWhereUniqueInput
+    create: XOR<rolesCreateWithoutExecutiveInput, rolesUncheckedCreateWithoutExecutiveInput>
+  }
+
+  export type rolesUpsertWithoutExecutiveInput = {
+    update: XOR<rolesUpdateWithoutExecutiveInput, rolesUncheckedUpdateWithoutExecutiveInput>
+    create: XOR<rolesCreateWithoutExecutiveInput, rolesUncheckedCreateWithoutExecutiveInput>
+    where?: rolesWhereInput
+  }
+
+  export type rolesUpdateToOneWithWhereWithoutExecutiveInput = {
+    where?: rolesWhereInput
+    data: XOR<rolesUpdateWithoutExecutiveInput, rolesUncheckedUpdateWithoutExecutiveInput>
+  }
+
+  export type rolesUpdateWithoutExecutiveInput = {
+    role_name?: StringFieldUpdateOperationsInput | string
+    role_status?: NullableStringFieldUpdateOperationsInput | string | null
+    admin?: adminUpdateManyWithoutRolesNestedInput
+    officer?: officerUpdateManyWithoutRolesNestedInput
+    users?: usersUpdateManyWithoutRolesNestedInput
+  }
+
+  export type rolesUncheckedUpdateWithoutExecutiveInput = {
+    role_id?: IntFieldUpdateOperationsInput | number
+    role_name?: StringFieldUpdateOperationsInput | string
+    role_status?: NullableStringFieldUpdateOperationsInput | string | null
+    admin?: adminUncheckedUpdateManyWithoutRolesNestedInput
+    officer?: officerUncheckedUpdateManyWithoutRolesNestedInput
+    users?: usersUncheckedUpdateManyWithoutRolesNestedInput
   }
 
   export type reservationCreateWithoutUsersInput = {
@@ -15136,6 +17263,8 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     officer?: officerCreateNestedOneWithoutReservationInput
@@ -15152,6 +17281,8 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -15196,6 +17327,7 @@ export namespace Prisma {
     role_status?: string | null
     admin?: adminCreateNestedManyWithoutRolesInput
     officer?: officerCreateNestedManyWithoutRolesInput
+    executive?: executiveCreateNestedManyWithoutRolesInput
   }
 
   export type rolesUncheckedCreateWithoutUsersInput = {
@@ -15204,6 +17336,7 @@ export namespace Prisma {
     role_status?: string | null
     admin?: adminUncheckedCreateNestedManyWithoutRolesInput
     officer?: officerUncheckedCreateNestedManyWithoutRolesInput
+    executive?: executiveUncheckedCreateNestedManyWithoutRolesInput
   }
 
   export type rolesCreateOrConnectWithoutUsersInput = {
@@ -15259,6 +17392,7 @@ export namespace Prisma {
     role_status?: NullableStringFieldUpdateOperationsInput | string | null
     admin?: adminUpdateManyWithoutRolesNestedInput
     officer?: officerUpdateManyWithoutRolesNestedInput
+    executive?: executiveUpdateManyWithoutRolesNestedInput
   }
 
   export type rolesUncheckedUpdateWithoutUsersInput = {
@@ -15267,6 +17401,7 @@ export namespace Prisma {
     role_status?: NullableStringFieldUpdateOperationsInput | string | null
     admin?: adminUncheckedUpdateManyWithoutRolesNestedInput
     officer?: officerUncheckedUpdateManyWithoutRolesNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutRolesNestedInput
   }
 
   export type equipmentCreateManyMeeting_roomInput = {
@@ -15287,6 +17422,8 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -15329,6 +17466,8 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     officer?: officerUpdateOneWithoutReservationNestedInput
@@ -15345,6 +17484,8 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15359,6 +17500,8 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15396,6 +17539,8 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -15407,6 +17552,8 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     meeting_room?: meeting_roomUpdateOneWithoutReservationNestedInput
@@ -15423,6 +17570,8 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15437,6 +17586,8 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15451,6 +17602,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -15465,6 +17617,7 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -15479,6 +17632,22 @@ export namespace Prisma {
     position?: string | null
     department?: string | null
     zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveCreateManyRolesInput = {
+    executive_id?: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -15492,6 +17661,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15506,6 +17676,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15520,6 +17691,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15533,6 +17705,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUpdateManyWithoutOfficerNestedInput
@@ -15548,6 +17721,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUncheckedUpdateManyWithoutOfficerNestedInput
@@ -15563,6 +17737,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15576,6 +17751,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUpdateManyWithoutUsersNestedInput
@@ -15592,6 +17768,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUncheckedUpdateManyWithoutUsersNestedInput
@@ -15608,6 +17785,51 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveUpdateWithoutRolesInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveUncheckedUpdateWithoutRolesInput = {
+    executive_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveUncheckedUpdateManyWithoutRolesInput = {
+    executive_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15622,6 +17844,8 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    booking_dates?: string | null
+    is_multi_day?: boolean | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -15641,6 +17865,8 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     officer?: officerUpdateOneWithoutReservationNestedInput
@@ -15657,6 +17883,8 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15671,6 +17899,8 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
+    is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }

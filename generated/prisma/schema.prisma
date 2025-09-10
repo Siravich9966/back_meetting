@@ -9,19 +9,20 @@ datasource db {
 }
 
 model admin {
-  admin_id   Int       @id @default(autoincrement())
-  role_id    Int
-  first_name String    @db.VarChar(255)
-  last_name  String    @db.VarChar(255)
-  email      String    @unique @db.VarChar(255)
-  password   String    @db.VarChar(255)
-  citizen_id String?   @unique @db.Char(13)
-  position   String?   @db.VarChar(255)
-  department String?   @db.VarChar(255)
-  zip_code   Int?
-  created_at DateTime? @default(now()) @db.Timestamptz(6)
-  updated_at DateTime? @default(now()) @db.Timestamptz(6)
-  roles      roles     @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)
+  admin_id      Int       @id @default(autoincrement())
+  role_id       Int
+  first_name    String    @db.VarChar(255)
+  last_name     String    @db.VarChar(255)
+  email         String    @unique @db.VarChar(255)
+  password      String    @db.VarChar(255)
+  citizen_id    String?   @unique @db.Char(13)
+  position      String?   @db.VarChar(255)
+  department    String?   @db.VarChar(255)
+  zip_code      Int?
+  profile_image Bytes? // เก็บรูปโปรไฟล์ใน database เป็น binary data
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime? @default(now()) @db.Timestamptz(6)
+  roles         roles     @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model equipment {
@@ -39,8 +40,9 @@ model meeting_room {
   room_name   String        @db.VarChar(255)
   capacity    Int
   location_m  String        @db.VarChar(255)
+  department  String        @db.VarChar(255) // เพิ่ม department field
   status_m    String?       @db.VarChar(255)
-  image       String?       @db.VarChar(255)
+  image       Bytes? // เก็บรูปใน database เป็น binary data
   details_m   String?       @db.VarChar(255)
   created_at  DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at  DateTime?     @default(now()) @db.Timestamptz(6)
@@ -50,20 +52,21 @@ model meeting_room {
 }
 
 model officer {
-  officer_id  Int           @id @default(autoincrement())
-  role_id     Int
-  first_name  String        @db.VarChar(255)
-  last_name   String        @db.VarChar(255)
-  email       String        @unique @db.VarChar(255)
-  password    String        @db.VarChar(255)
-  citizen_id  String?       @unique @db.Char(13)
-  position    String?       @db.VarChar(255)
-  department  String?       @db.VarChar(255)
-  zip_code    Int?
-  created_at  DateTime?     @default(now()) @db.Timestamptz(6)
-  updated_at  DateTime?     @default(now()) @db.Timestamptz(6)
-  roles       roles         @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)
-  reservation reservation[]
+  officer_id    Int           @id @default(autoincrement())
+  role_id       Int
+  first_name    String        @db.VarChar(255)
+  last_name     String        @db.VarChar(255)
+  email         String        @unique @db.VarChar(255)
+  password      String        @db.VarChar(255)
+  citizen_id    String?       @unique @db.Char(13)
+  position      String?       @db.VarChar(255)
+  department    String?       @db.VarChar(255)
+  zip_code      Int?
+  profile_image Bytes? // เก็บรูปโปรไฟล์ใน database เป็น binary data
+  created_at    DateTime?     @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime?     @default(now()) @db.Timestamptz(6)
+  roles         roles         @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)
+  reservation   reservation[]
 }
 
 model reservation {
@@ -77,6 +80,8 @@ model reservation {
   status_r       String?       @default("pending") @db.VarChar(255)
   officer_id     Int?
   details_r      String?       @db.VarChar(255)
+  booking_dates  String?       @db.Text // CSV string ของวันที่ทั้งหมดที่จอง เช่น "2025-08-29,2025-08-30,2025-08-31"
+  is_multi_day   Boolean?      @default(false) // flag บอกว่าเป็น multi-day booking หรือไม่
   created_at     DateTime?     @default(now()) @db.Timestamp(6)
   updated_at     DateTime?     @default(now()) @db.Timestamp(6)
   officer        officer?      @relation(fields: [officer_id], references: [officer_id], onDelete: NoAction, onUpdate: NoAction)
@@ -97,28 +102,47 @@ model review {
 }
 
 model roles {
-  role_id     Int       @id @default(autoincrement())
-  role_name   String    @db.VarChar(50)
-  role_status String?   @default("active") @db.VarChar(50)
+  role_id     Int         @id @default(autoincrement())
+  role_name   String      @db.VarChar(50)
+  role_status String?     @default("active") @db.VarChar(50)
   admin       admin[]
   officer     officer[]
   users       users[]
+  executive   executive[]
+}
+
+model executive {
+  executive_id  Int       @id @default(autoincrement())
+  role_id       Int
+  first_name    String    @db.VarChar(255)
+  last_name     String    @db.VarChar(255)
+  email         String    @unique @db.VarChar(255)
+  password      String    @db.VarChar(255)
+  citizen_id    String?   @unique @db.Char(13)
+  position      String    @db.VarChar(255) // "university_executive" หรือ "faculty_executive"
+  department    String    @db.VarChar(255) // สำนักงานอธิการบดี หรือ ชื่อคณะ
+  zip_code      Int?
+  profile_image Bytes? // เก็บรูปโปรไฟล์ใน database เป็น binary data
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime? @default(now()) @db.Timestamptz(6)
+  roles         roles     @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model users {
-  user_id     Int           @id(map: "user_pkey") @default(autoincrement())
-  role_id     Int
-  first_name  String        @db.VarChar(255)
-  last_name   String        @db.VarChar(255)
-  email       String        @unique(map: "user_email_key") @db.VarChar(255)
-  password    String        @db.VarChar(255)
-  citizen_id  String?       @unique(map: "user_citizen_id_key") @db.Char(13)
-  position    String?       @db.VarChar(255)
-  department  String?       @db.VarChar(255)
-  zip_code    Int?
-  created_at  DateTime?     @default(now()) @db.Timestamptz(6)
-  updated_at  DateTime?     @default(now()) @db.Timestamptz(6)
-  reservation reservation[]
-  review      review[]
-  roles       roles         @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id_fkey")
+  user_id       Int           @id(map: "user_pkey") @default(autoincrement())
+  role_id       Int
+  first_name    String        @db.VarChar(255)
+  last_name     String        @db.VarChar(255)
+  email         String        @unique(map: "user_email_key") @db.VarChar(255)
+  password      String        @db.VarChar(255)
+  citizen_id    String?       @unique(map: "user_citizen_id_key") @db.Char(13)
+  position      String?       @db.VarChar(255)
+  department    String?       @db.VarChar(255)
+  zip_code      Int?
+  profile_image Bytes? // เก็บรูปโปรไฟล์ใน database เป็น binary data
+  created_at    DateTime?     @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime?     @default(now()) @db.Timestamptz(6)
+  reservation   reservation[]
+  review        review[]
+  roles         roles         @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id_fkey")
 }
