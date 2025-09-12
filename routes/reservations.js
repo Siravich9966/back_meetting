@@ -221,7 +221,8 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
             select: {
               room_name: true,
               location_m: true,
-              capacity: true
+              capacity: true,
+              department: true
             }
           },
           users: {
@@ -243,7 +244,8 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         room_name: reservation.meeting_room.room_name,
         location: reservation.meeting_room.location_m,
         capacity: reservation.meeting_room.capacity,
-        department: reservation.users.department,
+        department: reservation.meeting_room.department, // ใช้ department ของห้อง ไม่ใช่ของผู้จอง
+        user_department: reservation.users.department, // เพิ่มไว้สำหรับอ้างอิงถ้าจำเป็น
         start_date: reservation.start_at,
         end_date: reservation.end_at,
         start_time: reservation.start_time,
@@ -300,7 +302,7 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         }
       }
 
-      // ตรวจสอบห้องประชุมที่มีอยู่
+      // ตรวจสอบห้องประชุมที่มีอยู่และสถานะ
       const room = await prisma.meeting_room.findUnique({
         where: { room_id: parseInt(room_id) }
       })
@@ -310,6 +312,15 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         return {
           success: false,
           message: 'ไม่พบห้องประชุมที่ต้องการ'
+        }
+      }
+
+      // ตรวจสอบสถานะห้อง
+      if (room.status_m !== 'available') {
+        set.status = 400
+        return {
+          success: false,
+          message: 'ห้องประชุมนี้ไม่พร้อมใช้งานในขณะนี้'
         }
       }
 
@@ -1339,11 +1350,18 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
 
   // อนุมัติการจอง
   .put('/:id/approve', async ({ request, params, body, set }) => {
+    console.log('🔥 [APPROVE API] Called with params:', params)
+    console.log('🔥 [APPROVE API] Body:', body)
+    console.log('🔥 [APPROVE API] Request method:', request.method)
+    console.log('🔥 [APPROVE API] Request URL:', request.url)
+    
     // ตรวจสอบสิทธิ์ officer
     const user = await authMiddleware(request, set)
+    console.log('🔥 [APPROVE API] Auth result:', user)
     if (user.success === false) return user
     
     if (!isOfficer(user)) {
+      console.log('🔥 [APPROVE API] User is not officer:', user.role)
       set.status = 403
       return {
         success: false,
