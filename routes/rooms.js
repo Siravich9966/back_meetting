@@ -95,7 +95,14 @@ export const roomRoutes = new Elysia({ prefix: '/rooms' })
           },
           _count: {
             select: {
-              reservation: true,
+              reservation: {
+                where: {
+                  status: 'approved',
+                  end_datetime: {
+                    gte: new Date() // เฉพาะการจองที่ยังไม่หมดอายุ
+                  }
+                }
+              },
               review: true
             }
           }
@@ -107,6 +114,8 @@ export const roomRoutes = new Elysia({ prefix: '/rooms' })
       const roomsWithImageFlag = rooms.map(room => ({
         ...room,
         hasImage: !!room.image, // แปลงเป็น boolean
+        has_image: !!room.image, // เพิ่มเพื่อ compatibility
+        active_bookings_count: room._count.reservation, // จำนวนการจองที่ใช้งานอยู่
         image: undefined // ลบ binary data ออกเพื่อประสิทธิภาพ
       }))
 
