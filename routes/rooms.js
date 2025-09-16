@@ -97,8 +97,8 @@ export const roomRoutes = new Elysia({ prefix: '/rooms' })
             select: {
               reservation: {
                 where: {
-                  status: 'approved',
-                  end_datetime: {
+                  status_r: 'approved',
+                  end_at: {
                     gte: new Date() // เฉพาะการจองที่ยังไม่หมดอายุ
                   }
                 }
@@ -794,9 +794,30 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
                 select: { image: true }
               })
               
+              // 👥 คำนวณจำนวนคนที่กำลังใช้งานในขณะนี้
+              const currentTime = new Date()
+              
+              // หา reservation ที่กำลัง active อยู่ในช่วงเวลานี้
+              const currentReservations = await prisma.reservation.findMany({
+                where: {
+                  room_id: room.room_id,
+                  status_r: 'approved', // ใช้ status_r แทน status
+                  // ตรวจสอบว่าอยู่ในช่วงเวลาการจองหรือไม่
+                  start_time: { lte: currentTime },
+                  end_time: { gte: currentTime }
+                },
+                select: {
+                  user_id: true // เนื่องจากไม่มี participants_count ใช้ user_id แทน
+                }
+              })
+              
+              // นับจำนวน reservation ที่ active ปัจจุบัน (แต่ละการจองคือ 1 คน)
+              const currentUsers = currentReservations.length
+              
               return {
                 ...room,
-                has_image: !!imageCheck?.image // ✅ ใช้ snake_case ตาม Frontend
+                has_image: !!imageCheck?.image, // ✅ ใช้ snake_case ตาม Frontend
+                current_users: currentUsers // 👥 จำนวนคนที่กำลังใช้งานปัจจุบัน
               }
             })
           )

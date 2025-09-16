@@ -47,6 +47,16 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
       
       const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0)
       
+      // Debug: ตรวจสอบ date range สำหรับเดือนกันยายน
+      if (parseInt(month) === 9 && parseInt(year) === 2025) {
+        console.log('🔍 [BACKEND-CALENDAR] Calendar Date Range for Sep 2025:', {
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+          totalDaysInMonth: endDate.getDate(),
+          dateRange: `${startDate.toISOString().split('T')[0]} to ${endDate.toISOString().split('T')[0]}`
+        })
+      }
+      
       // ดึงการจองที่ approved และ pending ในช่วงเวลานั้น พร้อมข้อมูลผู้จอง
       const reservations = await prisma.reservation.findMany({
         where: {
@@ -90,9 +100,32 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
         }
         
         // สร้าง template สำหรับแต่ละวันในเดือน
-        for (let day = 1; day <= endDate.getDate(); day++) {
+        const totalDaysInMonth = endDate.getDate()
+        
+        // Debug logging สำหรับทุกเดือน
+        console.log('🔍 [BACKEND-CALENDAR] Creating daily slots:', {
+          month: parseInt(month),
+          year: parseInt(year),
+          totalDaysInMonth,
+          willCreateDays: `1 to ${totalDaysInMonth}`
+        })
+        
+        for (let day = 1; day <= totalDaysInMonth; day++) {
           const currentDate = new Date(startDate.getFullYear(), startDate.getMonth(), day)
-          const dateKey = currentDate.toISOString().split('T')[0]
+          // แก้ไข timezone issue: ใช้ local date แทน UTC
+          const dateKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`
+          
+          // Debug เฉพาะวันที่ 30
+          if (day === 30) {
+            console.log('🔍 [BACKEND-CALENDAR] Creating day 30 data:', {
+              day,
+              currentDate: currentDate.toString(),
+              dateKey,
+              dayOfMonth: currentDate.getDate(),
+              month: currentDate.getMonth() + 1,
+              year: currentDate.getFullYear()
+            })
+          }
           
         // สร้าง hourly slots (8:00-22:00) - เวลาทำการใหม่
         const slots = []
@@ -152,6 +185,19 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
           }
         })
         
+        // Debug: ตรวจสอบข้อมูลที่ส่งออกสำหรับทุกเดือน
+        const dailyAvailabilityArray = Object.values(dailyAvailability)
+        console.log('🔍 [BACKEND-CALENDAR] Final daily availability data:', {
+          month: parseInt(month),
+          year: parseInt(year),
+          totalDaysCreated: dailyAvailabilityArray.length,
+          datesCreated: dailyAvailabilityArray.map(day => day.date).slice(0, 5),
+          lastDate: dailyAvailabilityArray[dailyAvailabilityArray.length - 1]?.date,
+          hasLastDayOfMonth: dailyAvailabilityArray.some(day => 
+            new Date(day.date).getDate() === totalDaysInMonth
+          )
+        })
+        
         return {
           success: true,
           message: `ปฏิทินการจองห้อง ${room.room_name} (รายละเอียด)`,
@@ -164,7 +210,7 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
             month: startDate.getMonth() + 1,
             year: startDate.getFullYear(),
             working_hours: workingHours,
-            daily_availability: Object.values(dailyAvailability)
+            daily_availability: dailyAvailabilityArray
           }
         }
       }
