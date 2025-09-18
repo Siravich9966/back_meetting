@@ -7,7 +7,10 @@
     "start": "bun index.js",
     "dev": "bun --watch index.js",
     "prod": "NODE_ENV=production bun index.js",
-    "postinstall": "npx prisma generate"
+    "postinstall": "npx prisma generate",
+    "setup-address": "bun setup-address-data.js",
+    "migrate": "npx prisma migrate dev",
+    "db-reset": "npx prisma migrate reset && bun setup-address-data.js"
   },
   "devDependencies": {
     "@types/bun": "latest",

@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia'
 import { authMiddleware } from '../middleware/index.js'
 import prisma from '../lib/prisma.js'
+import path from 'path'
 
 // ไม่ใช้ filesystem แล้ว - เก็บใน database
 
@@ -107,7 +108,8 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
       return {
         success: true,
         message: 'อัปโหลดรูปโปรไฟล์สำเร็จ',
-        data: updatedUser
+        data: updatedUser,
+        imageUrl: `/api/upload/profile-image/${userId}` // URL สำหรับดึงรูป
       }
 
     } catch (error) {
@@ -165,6 +167,7 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
       }
 
       // ลบรูปโปรไฟล์จากฐานข้อมูล
+      // อัปเดตรูปโปรไฟล์ในฐานข้อมูล (ลบข้อมูลรูป)
       const updatedUser = await prisma[tableName].update({
         where: { [idField]: userId },
         data: { 
@@ -183,11 +186,7 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
         }
       })
 
-      // ลบไฟล์รูปภาพ
-      const imagePath = path.join(process.cwd(), currentUser.profile_image.substring(1))
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath)
-      }
+      // รูปเก่าในฐานข้อมูลจะถูกลบอัตโนมัติ
 
       return {
         success: true,
@@ -201,6 +200,42 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
       return {
         success: false,
         message: 'เกิดข้อผิดพลาดในการลบรูปภาพ',
+        error: error.message
+      }
+    }
+  })
+
+// สร้าง public routes สำหรับดึงรูป (ไม่ต้อง authentication)
+export const publicUploadRoutes = new Elysia({ prefix: '/upload' })
+  // API สำหรับดึงรูปโปรไฟล์ (public)
+  .get('/profile-image/:userId', async ({ params: { userId }, set }) => {
+    try {
+      // หาข้อมูล user จาก userId
+      const user = await prisma.users.findUnique({
+        where: { user_id: parseInt(userId) },
+        select: { profile_image: true }
+      })
+
+      if (!user || !user.profile_image) {
+        set.status = 404
+        return {
+          success: false,
+          message: 'ไม่พบรูปโปรไฟล์'
+        }
+      }
+
+      // ส่งกลับ binary data เป็น image
+      set.headers['Content-Type'] = 'image/jpeg' // สามารถเปลี่ยนเป็น image/png ได้ตามต้องการ
+      set.headers['Cache-Control'] = 'public, max-age=31536000' // Cache 1 ปี
+      
+      return user.profile_image
+
+    } catch (error) {
+      console.error('Error fetching profile image:', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการดึงรูปภาพ',
         error: error.message
       }
     }

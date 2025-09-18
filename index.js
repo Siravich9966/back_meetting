@@ -26,6 +26,8 @@ import executiveRoutes from './routes/executive.js' // Executive APIs
 import { departmentRoutes } from './routes/departments.js' // Department APIs
 import positionRoutes from './routes/positions.js' // Position APIs
 import { reservationRoutes, userReservationRoutes, officerReservationRoutes } from './routes/reservations.js' // Reservation APIs
+import { addressRoutes } from './routes/address.js' // Address APIs (จังหวัด, อำเภอ, ตำบล)
+import { uploadRoutes, publicUploadRoutes } from './routes/upload.js' // Upload APIs (รูปโปรไฟล์, รูปห้องประชุม)
 
 // Configuration
 const PORT = process.env.PORT || 8000
@@ -125,9 +127,12 @@ app.group('/api', app => app
     }
   })
   .use(authRoutes) // Authentication APIs: /api/auth/register, /api/auth/login
+  .use(uploadRoutes) // Upload APIs: /api/upload/profile-image, /api/upload/room-image
+  .use(publicUploadRoutes) // Public Upload APIs: /api/upload/profile-image/:userId (no auth needed)
   .use(roomRoutes) // Room APIs: /api/rooms/*
   .use(positionRoutes) // Position APIs: /api/positions/*
   .use(departmentRoutes) // Department APIs: /api/departments/*
+  .use(addressRoutes) // Address APIs: /api/address/* (จังหวัด, อำเภอ, ตำบล)
   .use(reservationRoutes) // Reservation APIs: /api/reservations/*
   .use(protectedRoutes) // Protected APIs: /api/protected/*
   .use(userReservationRoutes) // User Reservation APIs: /api/protected/reservations/*

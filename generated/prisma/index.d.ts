@@ -58,6 +58,21 @@ export type executive = $Result.DefaultSelection<Prisma.$executivePayload>
  * 
  */
 export type users = $Result.DefaultSelection<Prisma.$usersPayload>
+/**
+ * Model Province
+ * 
+ */
+export type Province = $Result.DefaultSelection<Prisma.$ProvincePayload>
+/**
+ * Model District
+ * 
+ */
+export type District = $Result.DefaultSelection<Prisma.$DistrictPayload>
+/**
+ * Model Subdistrict
+ * 
+ */
+export type Subdistrict = $Result.DefaultSelection<Prisma.$SubdistrictPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -273,6 +288,36 @@ export class PrismaClient<
     * ```
     */
   get users(): Prisma.usersDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.province`: Exposes CRUD operations for the **Province** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Provinces
+    * const provinces = await prisma.province.findMany()
+    * ```
+    */
+  get province(): Prisma.ProvinceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.district`: Exposes CRUD operations for the **District** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Districts
+    * const districts = await prisma.district.findMany()
+    * ```
+    */
+  get district(): Prisma.DistrictDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.subdistrict`: Exposes CRUD operations for the **Subdistrict** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Subdistricts
+    * const subdistricts = await prisma.subdistrict.findMany()
+    * ```
+    */
+  get subdistrict(): Prisma.SubdistrictDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -721,7 +766,10 @@ export namespace Prisma {
     review: 'review',
     roles: 'roles',
     executive: 'executive',
-    users: 'users'
+    users: 'users',
+    Province: 'Province',
+    District: 'District',
+    Subdistrict: 'Subdistrict'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -740,7 +788,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "equipment" | "meeting_room" | "officer" | "reservation" | "review" | "roles" | "executive" | "users"
+      modelProps: "admin" | "equipment" | "meeting_room" | "officer" | "reservation" | "review" | "roles" | "executive" | "users" | "province" | "district" | "subdistrict"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1410,6 +1458,228 @@ export namespace Prisma {
           }
         }
       }
+      Province: {
+        payload: Prisma.$ProvincePayload<ExtArgs>
+        fields: Prisma.ProvinceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProvinceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProvinceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload>
+          }
+          findFirst: {
+            args: Prisma.ProvinceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProvinceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload>
+          }
+          findMany: {
+            args: Prisma.ProvinceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload>[]
+          }
+          create: {
+            args: Prisma.ProvinceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload>
+          }
+          createMany: {
+            args: Prisma.ProvinceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProvinceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload>[]
+          }
+          delete: {
+            args: Prisma.ProvinceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload>
+          }
+          update: {
+            args: Prisma.ProvinceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload>
+          }
+          deleteMany: {
+            args: Prisma.ProvinceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProvinceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProvinceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload>[]
+          }
+          upsert: {
+            args: Prisma.ProvinceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincePayload>
+          }
+          aggregate: {
+            args: Prisma.ProvinceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProvince>
+          }
+          groupBy: {
+            args: Prisma.ProvinceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProvinceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProvinceCountArgs<ExtArgs>
+            result: $Utils.Optional<ProvinceCountAggregateOutputType> | number
+          }
+        }
+      }
+      District: {
+        payload: Prisma.$DistrictPayload<ExtArgs>
+        fields: Prisma.DistrictFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DistrictFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DistrictFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload>
+          }
+          findFirst: {
+            args: Prisma.DistrictFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DistrictFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload>
+          }
+          findMany: {
+            args: Prisma.DistrictFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload>[]
+          }
+          create: {
+            args: Prisma.DistrictCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload>
+          }
+          createMany: {
+            args: Prisma.DistrictCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DistrictCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload>[]
+          }
+          delete: {
+            args: Prisma.DistrictDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload>
+          }
+          update: {
+            args: Prisma.DistrictUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload>
+          }
+          deleteMany: {
+            args: Prisma.DistrictDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DistrictUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DistrictUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload>[]
+          }
+          upsert: {
+            args: Prisma.DistrictUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DistrictPayload>
+          }
+          aggregate: {
+            args: Prisma.DistrictAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDistrict>
+          }
+          groupBy: {
+            args: Prisma.DistrictGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DistrictGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DistrictCountArgs<ExtArgs>
+            result: $Utils.Optional<DistrictCountAggregateOutputType> | number
+          }
+        }
+      }
+      Subdistrict: {
+        payload: Prisma.$SubdistrictPayload<ExtArgs>
+        fields: Prisma.SubdistrictFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SubdistrictFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SubdistrictFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload>
+          }
+          findFirst: {
+            args: Prisma.SubdistrictFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SubdistrictFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload>
+          }
+          findMany: {
+            args: Prisma.SubdistrictFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload>[]
+          }
+          create: {
+            args: Prisma.SubdistrictCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload>
+          }
+          createMany: {
+            args: Prisma.SubdistrictCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SubdistrictCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload>[]
+          }
+          delete: {
+            args: Prisma.SubdistrictDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload>
+          }
+          update: {
+            args: Prisma.SubdistrictUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload>
+          }
+          deleteMany: {
+            args: Prisma.SubdistrictDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SubdistrictUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SubdistrictUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload>[]
+          }
+          upsert: {
+            args: Prisma.SubdistrictUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdistrictPayload>
+          }
+          aggregate: {
+            args: Prisma.SubdistrictAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSubdistrict>
+          }
+          groupBy: {
+            args: Prisma.SubdistrictGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SubdistrictGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SubdistrictCountArgs<ExtArgs>
+            result: $Utils.Optional<SubdistrictCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1503,6 +1773,9 @@ export namespace Prisma {
     roles?: rolesOmit
     executive?: executiveOmit
     users?: usersOmit
+    province?: ProvinceOmit
+    district?: DistrictOmit
+    subdistrict?: SubdistrictOmit
   }
 
   /* Types for Logging */
@@ -1771,6 +2044,198 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ProvinceCountOutputType
+   */
+
+  export type ProvinceCountOutputType = {
+    districts: number
+    users: number
+    admin: number
+    officer: number
+    executive: number
+  }
+
+  export type ProvinceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    districts?: boolean | ProvinceCountOutputTypeCountDistrictsArgs
+    users?: boolean | ProvinceCountOutputTypeCountUsersArgs
+    admin?: boolean | ProvinceCountOutputTypeCountAdminArgs
+    officer?: boolean | ProvinceCountOutputTypeCountOfficerArgs
+    executive?: boolean | ProvinceCountOutputTypeCountExecutiveArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProvinceCountOutputType without action
+   */
+  export type ProvinceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProvinceCountOutputType
+     */
+    select?: ProvinceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProvinceCountOutputType without action
+   */
+  export type ProvinceCountOutputTypeCountDistrictsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DistrictWhereInput
+  }
+
+  /**
+   * ProvinceCountOutputType without action
+   */
+  export type ProvinceCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: usersWhereInput
+  }
+
+  /**
+   * ProvinceCountOutputType without action
+   */
+  export type ProvinceCountOutputTypeCountAdminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: adminWhereInput
+  }
+
+  /**
+   * ProvinceCountOutputType without action
+   */
+  export type ProvinceCountOutputTypeCountOfficerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: officerWhereInput
+  }
+
+  /**
+   * ProvinceCountOutputType without action
+   */
+  export type ProvinceCountOutputTypeCountExecutiveArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: executiveWhereInput
+  }
+
+
+  /**
+   * Count Type DistrictCountOutputType
+   */
+
+  export type DistrictCountOutputType = {
+    subdistricts: number
+    users: number
+    admin: number
+    officer: number
+    executive: number
+  }
+
+  export type DistrictCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subdistricts?: boolean | DistrictCountOutputTypeCountSubdistrictsArgs
+    users?: boolean | DistrictCountOutputTypeCountUsersArgs
+    admin?: boolean | DistrictCountOutputTypeCountAdminArgs
+    officer?: boolean | DistrictCountOutputTypeCountOfficerArgs
+    executive?: boolean | DistrictCountOutputTypeCountExecutiveArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DistrictCountOutputType without action
+   */
+  export type DistrictCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DistrictCountOutputType
+     */
+    select?: DistrictCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DistrictCountOutputType without action
+   */
+  export type DistrictCountOutputTypeCountSubdistrictsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubdistrictWhereInput
+  }
+
+  /**
+   * DistrictCountOutputType without action
+   */
+  export type DistrictCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: usersWhereInput
+  }
+
+  /**
+   * DistrictCountOutputType without action
+   */
+  export type DistrictCountOutputTypeCountAdminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: adminWhereInput
+  }
+
+  /**
+   * DistrictCountOutputType without action
+   */
+  export type DistrictCountOutputTypeCountOfficerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: officerWhereInput
+  }
+
+  /**
+   * DistrictCountOutputType without action
+   */
+  export type DistrictCountOutputTypeCountExecutiveArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: executiveWhereInput
+  }
+
+
+  /**
+   * Count Type SubdistrictCountOutputType
+   */
+
+  export type SubdistrictCountOutputType = {
+    users: number
+    admin: number
+    officer: number
+    executive: number
+  }
+
+  export type SubdistrictCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | SubdistrictCountOutputTypeCountUsersArgs
+    admin?: boolean | SubdistrictCountOutputTypeCountAdminArgs
+    officer?: boolean | SubdistrictCountOutputTypeCountOfficerArgs
+    executive?: boolean | SubdistrictCountOutputTypeCountExecutiveArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SubdistrictCountOutputType without action
+   */
+  export type SubdistrictCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdistrictCountOutputType
+     */
+    select?: SubdistrictCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SubdistrictCountOutputType without action
+   */
+  export type SubdistrictCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: usersWhereInput
+  }
+
+  /**
+   * SubdistrictCountOutputType without action
+   */
+  export type SubdistrictCountOutputTypeCountAdminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: adminWhereInput
+  }
+
+  /**
+   * SubdistrictCountOutputType without action
+   */
+  export type SubdistrictCountOutputTypeCountOfficerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: officerWhereInput
+  }
+
+  /**
+   * SubdistrictCountOutputType without action
+   */
+  export type SubdistrictCountOutputTypeCountExecutiveArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: executiveWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -1789,12 +2254,18 @@ export namespace Prisma {
   export type AdminAvgAggregateOutputType = {
     admin_id: number | null
     role_id: number | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
   }
 
   export type AdminSumAggregateOutputType = {
     admin_id: number | null
     role_id: number | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
   }
 
@@ -1808,6 +2279,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -1824,6 +2298,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -1840,6 +2317,9 @@ export namespace Prisma {
     citizen_id: number
     position: number
     department: number
+    province_id: number
+    district_id: number
+    subdistrict_id: number
     zip_code: number
     profile_image: number
     created_at: number
@@ -1851,12 +2331,18 @@ export namespace Prisma {
   export type AdminAvgAggregateInputType = {
     admin_id?: true
     role_id?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
   }
 
   export type AdminSumAggregateInputType = {
     admin_id?: true
     role_id?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
   }
 
@@ -1870,6 +2356,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -1886,6 +2375,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -1902,6 +2394,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -2005,6 +2500,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -2040,11 +2538,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | admin$provinceArgs<ExtArgs>
+    district?: boolean | admin$districtArgs<ExtArgs>
+    subdistrict?: boolean | admin$subdistrictArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
   export type adminSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2057,11 +2561,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | admin$provinceArgs<ExtArgs>
+    district?: boolean | admin$districtArgs<ExtArgs>
+    subdistrict?: boolean | admin$subdistrictArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
   export type adminSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2074,11 +2584,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | admin$provinceArgs<ExtArgs>
+    district?: boolean | admin$districtArgs<ExtArgs>
+    subdistrict?: boolean | admin$subdistrictArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
   export type adminSelectScalar = {
@@ -2091,27 +2607,42 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type adminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"admin_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["admin"]>
+  export type adminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"admin_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["admin"]>
   export type adminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | admin$provinceArgs<ExtArgs>
+    district?: boolean | admin$districtArgs<ExtArgs>
+    subdistrict?: boolean | admin$subdistrictArgs<ExtArgs>
   }
   export type adminIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | admin$provinceArgs<ExtArgs>
+    district?: boolean | admin$districtArgs<ExtArgs>
+    subdistrict?: boolean | admin$subdistrictArgs<ExtArgs>
   }
   export type adminIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | admin$provinceArgs<ExtArgs>
+    district?: boolean | admin$districtArgs<ExtArgs>
+    subdistrict?: boolean | admin$subdistrictArgs<ExtArgs>
   }
 
   export type $adminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "admin"
     objects: {
       roles: Prisma.$rolesPayload<ExtArgs>
+      province: Prisma.$ProvincePayload<ExtArgs> | null
+      district: Prisma.$DistrictPayload<ExtArgs> | null
+      subdistrict: Prisma.$SubdistrictPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       admin_id: number
@@ -2123,6 +2654,9 @@ export namespace Prisma {
       citizen_id: string | null
       position: string | null
       department: string | null
+      province_id: number | null
+      district_id: number | null
+      subdistrict_id: number | null
       zip_code: number | null
       profile_image: Uint8Array | null
       created_at: Date | null
@@ -2522,6 +3056,9 @@ export namespace Prisma {
   export interface Prisma__adminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     roles<T extends rolesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, rolesDefaultArgs<ExtArgs>>): Prisma__rolesClient<$Result.GetResult<Prisma.$rolesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    province<T extends admin$provinceArgs<ExtArgs> = {}>(args?: Subset<T, admin$provinceArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    district<T extends admin$districtArgs<ExtArgs> = {}>(args?: Subset<T, admin$districtArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    subdistrict<T extends admin$subdistrictArgs<ExtArgs> = {}>(args?: Subset<T, admin$subdistrictArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2560,6 +3097,9 @@ export namespace Prisma {
     readonly citizen_id: FieldRef<"admin", 'String'>
     readonly position: FieldRef<"admin", 'String'>
     readonly department: FieldRef<"admin", 'String'>
+    readonly province_id: FieldRef<"admin", 'Int'>
+    readonly district_id: FieldRef<"admin", 'Int'>
+    readonly subdistrict_id: FieldRef<"admin", 'Int'>
     readonly zip_code: FieldRef<"admin", 'Int'>
     readonly profile_image: FieldRef<"admin", 'Bytes'>
     readonly created_at: FieldRef<"admin", 'DateTime'>
@@ -2957,6 +3497,63 @@ export namespace Prisma {
      * Limit how many admins to delete.
      */
     limit?: number
+  }
+
+  /**
+   * admin.province
+   */
+  export type admin$provinceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    where?: ProvinceWhereInput
+  }
+
+  /**
+   * admin.district
+   */
+  export type admin$districtArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    where?: DistrictWhereInput
+  }
+
+  /**
+   * admin.subdistrict
+   */
+  export type admin$subdistrictArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    where?: SubdistrictWhereInput
   }
 
   /**
@@ -5335,12 +5932,18 @@ export namespace Prisma {
   export type OfficerAvgAggregateOutputType = {
     officer_id: number | null
     role_id: number | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
   }
 
   export type OfficerSumAggregateOutputType = {
     officer_id: number | null
     role_id: number | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
   }
 
@@ -5354,6 +5957,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -5370,6 +5976,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -5386,6 +5995,9 @@ export namespace Prisma {
     citizen_id: number
     position: number
     department: number
+    province_id: number
+    district_id: number
+    subdistrict_id: number
     zip_code: number
     profile_image: number
     created_at: number
@@ -5397,12 +6009,18 @@ export namespace Prisma {
   export type OfficerAvgAggregateInputType = {
     officer_id?: true
     role_id?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
   }
 
   export type OfficerSumAggregateInputType = {
     officer_id?: true
     role_id?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
   }
 
@@ -5416,6 +6034,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -5432,6 +6053,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -5448,6 +6072,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -5551,6 +6178,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -5586,11 +6216,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | officer$provinceArgs<ExtArgs>
+    district?: boolean | officer$districtArgs<ExtArgs>
+    subdistrict?: boolean | officer$subdistrictArgs<ExtArgs>
     reservation?: boolean | officer$reservationArgs<ExtArgs>
     _count?: boolean | OfficerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["officer"]>
@@ -5605,11 +6241,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | officer$provinceArgs<ExtArgs>
+    district?: boolean | officer$districtArgs<ExtArgs>
+    subdistrict?: boolean | officer$subdistrictArgs<ExtArgs>
   }, ExtArgs["result"]["officer"]>
 
   export type officerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5622,11 +6264,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | officer$provinceArgs<ExtArgs>
+    district?: boolean | officer$districtArgs<ExtArgs>
+    subdistrict?: boolean | officer$subdistrictArgs<ExtArgs>
   }, ExtArgs["result"]["officer"]>
 
   export type officerSelectScalar = {
@@ -5639,29 +6287,44 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type officerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"officer_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["officer"]>
+  export type officerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"officer_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["officer"]>
   export type officerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | officer$provinceArgs<ExtArgs>
+    district?: boolean | officer$districtArgs<ExtArgs>
+    subdistrict?: boolean | officer$subdistrictArgs<ExtArgs>
     reservation?: boolean | officer$reservationArgs<ExtArgs>
     _count?: boolean | OfficerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type officerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | officer$provinceArgs<ExtArgs>
+    district?: boolean | officer$districtArgs<ExtArgs>
+    subdistrict?: boolean | officer$subdistrictArgs<ExtArgs>
   }
   export type officerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | officer$provinceArgs<ExtArgs>
+    district?: boolean | officer$districtArgs<ExtArgs>
+    subdistrict?: boolean | officer$subdistrictArgs<ExtArgs>
   }
 
   export type $officerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "officer"
     objects: {
       roles: Prisma.$rolesPayload<ExtArgs>
+      province: Prisma.$ProvincePayload<ExtArgs> | null
+      district: Prisma.$DistrictPayload<ExtArgs> | null
+      subdistrict: Prisma.$SubdistrictPayload<ExtArgs> | null
       reservation: Prisma.$reservationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -5674,6 +6337,9 @@ export namespace Prisma {
       citizen_id: string | null
       position: string | null
       department: string | null
+      province_id: number | null
+      district_id: number | null
+      subdistrict_id: number | null
       zip_code: number | null
       profile_image: Uint8Array | null
       created_at: Date | null
@@ -6073,6 +6739,9 @@ export namespace Prisma {
   export interface Prisma__officerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     roles<T extends rolesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, rolesDefaultArgs<ExtArgs>>): Prisma__rolesClient<$Result.GetResult<Prisma.$rolesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    province<T extends officer$provinceArgs<ExtArgs> = {}>(args?: Subset<T, officer$provinceArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    district<T extends officer$districtArgs<ExtArgs> = {}>(args?: Subset<T, officer$districtArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    subdistrict<T extends officer$subdistrictArgs<ExtArgs> = {}>(args?: Subset<T, officer$subdistrictArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     reservation<T extends officer$reservationArgs<ExtArgs> = {}>(args?: Subset<T, officer$reservationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$reservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6112,6 +6781,9 @@ export namespace Prisma {
     readonly citizen_id: FieldRef<"officer", 'String'>
     readonly position: FieldRef<"officer", 'String'>
     readonly department: FieldRef<"officer", 'String'>
+    readonly province_id: FieldRef<"officer", 'Int'>
+    readonly district_id: FieldRef<"officer", 'Int'>
+    readonly subdistrict_id: FieldRef<"officer", 'Int'>
     readonly zip_code: FieldRef<"officer", 'Int'>
     readonly profile_image: FieldRef<"officer", 'Bytes'>
     readonly created_at: FieldRef<"officer", 'DateTime'>
@@ -6512,6 +7184,63 @@ export namespace Prisma {
   }
 
   /**
+   * officer.province
+   */
+  export type officer$provinceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    where?: ProvinceWhereInput
+  }
+
+  /**
+   * officer.district
+   */
+  export type officer$districtArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    where?: DistrictWhereInput
+  }
+
+  /**
+   * officer.subdistrict
+   */
+  export type officer$subdistrictArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    where?: SubdistrictWhereInput
+  }
+
+  /**
    * officer.reservation
    */
   export type officer$reservationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6591,6 +7320,7 @@ export namespace Prisma {
     status_r: string | null
     officer_id: number | null
     details_r: string | null
+    rejected_reason: string | null
     booking_dates: string | null
     is_multi_day: boolean | null
     created_at: Date | null
@@ -6608,6 +7338,7 @@ export namespace Prisma {
     status_r: string | null
     officer_id: number | null
     details_r: string | null
+    rejected_reason: string | null
     booking_dates: string | null
     is_multi_day: boolean | null
     created_at: Date | null
@@ -6625,6 +7356,7 @@ export namespace Prisma {
     status_r: number
     officer_id: number
     details_r: number
+    rejected_reason: number
     booking_dates: number
     is_multi_day: number
     created_at: number
@@ -6658,6 +7390,7 @@ export namespace Prisma {
     status_r?: true
     officer_id?: true
     details_r?: true
+    rejected_reason?: true
     booking_dates?: true
     is_multi_day?: true
     created_at?: true
@@ -6675,6 +7408,7 @@ export namespace Prisma {
     status_r?: true
     officer_id?: true
     details_r?: true
+    rejected_reason?: true
     booking_dates?: true
     is_multi_day?: true
     created_at?: true
@@ -6692,6 +7426,7 @@ export namespace Prisma {
     status_r?: true
     officer_id?: true
     details_r?: true
+    rejected_reason?: true
     booking_dates?: true
     is_multi_day?: true
     created_at?: true
@@ -6796,6 +7531,7 @@ export namespace Prisma {
     status_r: string | null
     officer_id: number | null
     details_r: string | null
+    rejected_reason: string | null
     booking_dates: string | null
     is_multi_day: boolean | null
     created_at: Date | null
@@ -6832,6 +7568,7 @@ export namespace Prisma {
     status_r?: boolean
     officer_id?: boolean
     details_r?: boolean
+    rejected_reason?: boolean
     booking_dates?: boolean
     is_multi_day?: boolean
     created_at?: boolean
@@ -6852,6 +7589,7 @@ export namespace Prisma {
     status_r?: boolean
     officer_id?: boolean
     details_r?: boolean
+    rejected_reason?: boolean
     booking_dates?: boolean
     is_multi_day?: boolean
     created_at?: boolean
@@ -6872,6 +7610,7 @@ export namespace Prisma {
     status_r?: boolean
     officer_id?: boolean
     details_r?: boolean
+    rejected_reason?: boolean
     booking_dates?: boolean
     is_multi_day?: boolean
     created_at?: boolean
@@ -6892,13 +7631,14 @@ export namespace Prisma {
     status_r?: boolean
     officer_id?: boolean
     details_r?: boolean
+    rejected_reason?: boolean
     booking_dates?: boolean
     is_multi_day?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type reservationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"reservation_id" | "user_id" | "room_id" | "start_at" | "end_at" | "start_time" | "end_time" | "status_r" | "officer_id" | "details_r" | "booking_dates" | "is_multi_day" | "created_at" | "updated_at", ExtArgs["result"]["reservation"]>
+  export type reservationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"reservation_id" | "user_id" | "room_id" | "start_at" | "end_at" | "start_time" | "end_time" | "status_r" | "officer_id" | "details_r" | "rejected_reason" | "booking_dates" | "is_multi_day" | "created_at" | "updated_at", ExtArgs["result"]["reservation"]>
   export type reservationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     officer?: boolean | reservation$officerArgs<ExtArgs>
     meeting_room?: boolean | reservation$meeting_roomArgs<ExtArgs>
@@ -6933,6 +7673,7 @@ export namespace Prisma {
       status_r: string | null
       officer_id: number | null
       details_r: string | null
+      rejected_reason: string | null
       booking_dates: string | null
       is_multi_day: boolean | null
       created_at: Date | null
@@ -7373,6 +8114,7 @@ export namespace Prisma {
     readonly status_r: FieldRef<"reservation", 'String'>
     readonly officer_id: FieldRef<"reservation", 'Int'>
     readonly details_r: FieldRef<"reservation", 'String'>
+    readonly rejected_reason: FieldRef<"reservation", 'String'>
     readonly booking_dates: FieldRef<"reservation", 'String'>
     readonly is_multi_day: FieldRef<"reservation", 'Boolean'>
     readonly created_at: FieldRef<"reservation", 'DateTime'>
@@ -10188,12 +10930,18 @@ export namespace Prisma {
   export type ExecutiveAvgAggregateOutputType = {
     executive_id: number | null
     role_id: number | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
   }
 
   export type ExecutiveSumAggregateOutputType = {
     executive_id: number | null
     role_id: number | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
   }
 
@@ -10207,6 +10955,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -10223,6 +10974,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -10239,6 +10993,9 @@ export namespace Prisma {
     citizen_id: number
     position: number
     department: number
+    province_id: number
+    district_id: number
+    subdistrict_id: number
     zip_code: number
     profile_image: number
     created_at: number
@@ -10250,12 +11007,18 @@ export namespace Prisma {
   export type ExecutiveAvgAggregateInputType = {
     executive_id?: true
     role_id?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
   }
 
   export type ExecutiveSumAggregateInputType = {
     executive_id?: true
     role_id?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
   }
 
@@ -10269,6 +11032,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -10285,6 +11051,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -10301,6 +11070,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -10404,6 +11176,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string
     department: string
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -10439,11 +11214,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | executive$provinceArgs<ExtArgs>
+    district?: boolean | executive$districtArgs<ExtArgs>
+    subdistrict?: boolean | executive$subdistrictArgs<ExtArgs>
   }, ExtArgs["result"]["executive"]>
 
   export type executiveSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10456,11 +11237,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | executive$provinceArgs<ExtArgs>
+    district?: boolean | executive$districtArgs<ExtArgs>
+    subdistrict?: boolean | executive$subdistrictArgs<ExtArgs>
   }, ExtArgs["result"]["executive"]>
 
   export type executiveSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10473,11 +11260,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | executive$provinceArgs<ExtArgs>
+    district?: boolean | executive$districtArgs<ExtArgs>
+    subdistrict?: boolean | executive$subdistrictArgs<ExtArgs>
   }, ExtArgs["result"]["executive"]>
 
   export type executiveSelectScalar = {
@@ -10490,27 +11283,42 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type executiveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"executive_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["executive"]>
+  export type executiveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"executive_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["executive"]>
   export type executiveInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | executive$provinceArgs<ExtArgs>
+    district?: boolean | executive$districtArgs<ExtArgs>
+    subdistrict?: boolean | executive$subdistrictArgs<ExtArgs>
   }
   export type executiveIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | executive$provinceArgs<ExtArgs>
+    district?: boolean | executive$districtArgs<ExtArgs>
+    subdistrict?: boolean | executive$subdistrictArgs<ExtArgs>
   }
   export type executiveIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | executive$provinceArgs<ExtArgs>
+    district?: boolean | executive$districtArgs<ExtArgs>
+    subdistrict?: boolean | executive$subdistrictArgs<ExtArgs>
   }
 
   export type $executivePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "executive"
     objects: {
       roles: Prisma.$rolesPayload<ExtArgs>
+      province: Prisma.$ProvincePayload<ExtArgs> | null
+      district: Prisma.$DistrictPayload<ExtArgs> | null
+      subdistrict: Prisma.$SubdistrictPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       executive_id: number
@@ -10522,6 +11330,9 @@ export namespace Prisma {
       citizen_id: string | null
       position: string
       department: string
+      province_id: number | null
+      district_id: number | null
+      subdistrict_id: number | null
       zip_code: number | null
       profile_image: Uint8Array | null
       created_at: Date | null
@@ -10921,6 +11732,9 @@ export namespace Prisma {
   export interface Prisma__executiveClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     roles<T extends rolesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, rolesDefaultArgs<ExtArgs>>): Prisma__rolesClient<$Result.GetResult<Prisma.$rolesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    province<T extends executive$provinceArgs<ExtArgs> = {}>(args?: Subset<T, executive$provinceArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    district<T extends executive$districtArgs<ExtArgs> = {}>(args?: Subset<T, executive$districtArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    subdistrict<T extends executive$subdistrictArgs<ExtArgs> = {}>(args?: Subset<T, executive$subdistrictArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10959,6 +11773,9 @@ export namespace Prisma {
     readonly citizen_id: FieldRef<"executive", 'String'>
     readonly position: FieldRef<"executive", 'String'>
     readonly department: FieldRef<"executive", 'String'>
+    readonly province_id: FieldRef<"executive", 'Int'>
+    readonly district_id: FieldRef<"executive", 'Int'>
+    readonly subdistrict_id: FieldRef<"executive", 'Int'>
     readonly zip_code: FieldRef<"executive", 'Int'>
     readonly profile_image: FieldRef<"executive", 'Bytes'>
     readonly created_at: FieldRef<"executive", 'DateTime'>
@@ -11359,6 +12176,63 @@ export namespace Prisma {
   }
 
   /**
+   * executive.province
+   */
+  export type executive$provinceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    where?: ProvinceWhereInput
+  }
+
+  /**
+   * executive.district
+   */
+  export type executive$districtArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    where?: DistrictWhereInput
+  }
+
+  /**
+   * executive.subdistrict
+   */
+  export type executive$subdistrictArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    where?: SubdistrictWhereInput
+  }
+
+  /**
    * executive without action
    */
   export type executiveDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11392,12 +12266,18 @@ export namespace Prisma {
   export type UsersAvgAggregateOutputType = {
     user_id: number | null
     role_id: number | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
   }
 
   export type UsersSumAggregateOutputType = {
     user_id: number | null
     role_id: number | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
   }
 
@@ -11411,6 +12291,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -11427,6 +12310,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -11443,6 +12329,9 @@ export namespace Prisma {
     citizen_id: number
     position: number
     department: number
+    province_id: number
+    district_id: number
+    subdistrict_id: number
     zip_code: number
     profile_image: number
     created_at: number
@@ -11454,12 +12343,18 @@ export namespace Prisma {
   export type UsersAvgAggregateInputType = {
     user_id?: true
     role_id?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
   }
 
   export type UsersSumAggregateInputType = {
     user_id?: true
     role_id?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
   }
 
@@ -11473,6 +12368,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -11489,6 +12387,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -11505,6 +12406,9 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    province_id?: true
+    district_id?: true
+    subdistrict_id?: true
     zip_code?: true
     profile_image?: true
     created_at?: true
@@ -11608,6 +12512,9 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    province_id: number | null
+    district_id: number | null
+    subdistrict_id: number | null
     zip_code: number | null
     profile_image: Uint8Array | null
     created_at: Date | null
@@ -11643,6 +12550,9 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
@@ -11650,6 +12560,9 @@ export namespace Prisma {
     reservation?: boolean | users$reservationArgs<ExtArgs>
     review?: boolean | users$reviewArgs<ExtArgs>
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | users$provinceArgs<ExtArgs>
+    district?: boolean | users$districtArgs<ExtArgs>
+    subdistrict?: boolean | users$subdistrictArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["users"]>
 
@@ -11663,11 +12576,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | users$provinceArgs<ExtArgs>
+    district?: boolean | users$districtArgs<ExtArgs>
+    subdistrict?: boolean | users$subdistrictArgs<ExtArgs>
   }, ExtArgs["result"]["users"]>
 
   export type usersSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11680,11 +12599,17 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | users$provinceArgs<ExtArgs>
+    district?: boolean | users$districtArgs<ExtArgs>
+    subdistrict?: boolean | users$subdistrictArgs<ExtArgs>
   }, ExtArgs["result"]["users"]>
 
   export type usersSelectScalar = {
@@ -11697,24 +12622,36 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    province_id?: boolean
+    district_id?: boolean
+    subdistrict_id?: boolean
     zip_code?: boolean
     profile_image?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
+  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
   export type usersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     reservation?: boolean | users$reservationArgs<ExtArgs>
     review?: boolean | users$reviewArgs<ExtArgs>
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | users$provinceArgs<ExtArgs>
+    district?: boolean | users$districtArgs<ExtArgs>
+    subdistrict?: boolean | users$subdistrictArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type usersIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | users$provinceArgs<ExtArgs>
+    district?: boolean | users$districtArgs<ExtArgs>
+    subdistrict?: boolean | users$subdistrictArgs<ExtArgs>
   }
   export type usersIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
+    province?: boolean | users$provinceArgs<ExtArgs>
+    district?: boolean | users$districtArgs<ExtArgs>
+    subdistrict?: boolean | users$subdistrictArgs<ExtArgs>
   }
 
   export type $usersPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11723,6 +12660,9 @@ export namespace Prisma {
       reservation: Prisma.$reservationPayload<ExtArgs>[]
       review: Prisma.$reviewPayload<ExtArgs>[]
       roles: Prisma.$rolesPayload<ExtArgs>
+      province: Prisma.$ProvincePayload<ExtArgs> | null
+      district: Prisma.$DistrictPayload<ExtArgs> | null
+      subdistrict: Prisma.$SubdistrictPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       user_id: number
@@ -11734,6 +12674,9 @@ export namespace Prisma {
       citizen_id: string | null
       position: string | null
       department: string | null
+      province_id: number | null
+      district_id: number | null
+      subdistrict_id: number | null
       zip_code: number | null
       profile_image: Uint8Array | null
       created_at: Date | null
@@ -12135,6 +13078,9 @@ export namespace Prisma {
     reservation<T extends users$reservationArgs<ExtArgs> = {}>(args?: Subset<T, users$reservationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$reservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     review<T extends users$reviewArgs<ExtArgs> = {}>(args?: Subset<T, users$reviewArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$reviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     roles<T extends rolesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, rolesDefaultArgs<ExtArgs>>): Prisma__rolesClient<$Result.GetResult<Prisma.$rolesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    province<T extends users$provinceArgs<ExtArgs> = {}>(args?: Subset<T, users$provinceArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    district<T extends users$districtArgs<ExtArgs> = {}>(args?: Subset<T, users$districtArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    subdistrict<T extends users$subdistrictArgs<ExtArgs> = {}>(args?: Subset<T, users$subdistrictArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12173,6 +13119,9 @@ export namespace Prisma {
     readonly citizen_id: FieldRef<"users", 'String'>
     readonly position: FieldRef<"users", 'String'>
     readonly department: FieldRef<"users", 'String'>
+    readonly province_id: FieldRef<"users", 'Int'>
+    readonly district_id: FieldRef<"users", 'Int'>
+    readonly subdistrict_id: FieldRef<"users", 'Int'>
     readonly zip_code: FieldRef<"users", 'Int'>
     readonly profile_image: FieldRef<"users", 'Bytes'>
     readonly created_at: FieldRef<"users", 'DateTime'>
@@ -12621,6 +13570,63 @@ export namespace Prisma {
   }
 
   /**
+   * users.province
+   */
+  export type users$provinceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    where?: ProvinceWhereInput
+  }
+
+  /**
+   * users.district
+   */
+  export type users$districtArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    where?: DistrictWhereInput
+  }
+
+  /**
+   * users.subdistrict
+   */
+  export type users$subdistrictArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    where?: SubdistrictWhereInput
+  }
+
+  /**
    * users without action
    */
   export type usersDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12636,6 +13642,3592 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: usersInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Province
+   */
+
+  export type AggregateProvince = {
+    _count: ProvinceCountAggregateOutputType | null
+    _avg: ProvinceAvgAggregateOutputType | null
+    _sum: ProvinceSumAggregateOutputType | null
+    _min: ProvinceMinAggregateOutputType | null
+    _max: ProvinceMaxAggregateOutputType | null
+  }
+
+  export type ProvinceAvgAggregateOutputType = {
+    province_id: number | null
+  }
+
+  export type ProvinceSumAggregateOutputType = {
+    province_id: number | null
+  }
+
+  export type ProvinceMinAggregateOutputType = {
+    province_id: number | null
+    province_name: string | null
+  }
+
+  export type ProvinceMaxAggregateOutputType = {
+    province_id: number | null
+    province_name: string | null
+  }
+
+  export type ProvinceCountAggregateOutputType = {
+    province_id: number
+    province_name: number
+    _all: number
+  }
+
+
+  export type ProvinceAvgAggregateInputType = {
+    province_id?: true
+  }
+
+  export type ProvinceSumAggregateInputType = {
+    province_id?: true
+  }
+
+  export type ProvinceMinAggregateInputType = {
+    province_id?: true
+    province_name?: true
+  }
+
+  export type ProvinceMaxAggregateInputType = {
+    province_id?: true
+    province_name?: true
+  }
+
+  export type ProvinceCountAggregateInputType = {
+    province_id?: true
+    province_name?: true
+    _all?: true
+  }
+
+  export type ProvinceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Province to aggregate.
+     */
+    where?: ProvinceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Provinces to fetch.
+     */
+    orderBy?: ProvinceOrderByWithRelationInput | ProvinceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProvinceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Provinces.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Provinces
+    **/
+    _count?: true | ProvinceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProvinceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProvinceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProvinceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProvinceMaxAggregateInputType
+  }
+
+  export type GetProvinceAggregateType<T extends ProvinceAggregateArgs> = {
+        [P in keyof T & keyof AggregateProvince]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProvince[P]>
+      : GetScalarType<T[P], AggregateProvince[P]>
+  }
+
+
+
+
+  export type ProvinceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProvinceWhereInput
+    orderBy?: ProvinceOrderByWithAggregationInput | ProvinceOrderByWithAggregationInput[]
+    by: ProvinceScalarFieldEnum[] | ProvinceScalarFieldEnum
+    having?: ProvinceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProvinceCountAggregateInputType | true
+    _avg?: ProvinceAvgAggregateInputType
+    _sum?: ProvinceSumAggregateInputType
+    _min?: ProvinceMinAggregateInputType
+    _max?: ProvinceMaxAggregateInputType
+  }
+
+  export type ProvinceGroupByOutputType = {
+    province_id: number
+    province_name: string
+    _count: ProvinceCountAggregateOutputType | null
+    _avg: ProvinceAvgAggregateOutputType | null
+    _sum: ProvinceSumAggregateOutputType | null
+    _min: ProvinceMinAggregateOutputType | null
+    _max: ProvinceMaxAggregateOutputType | null
+  }
+
+  type GetProvinceGroupByPayload<T extends ProvinceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProvinceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProvinceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProvinceGroupByOutputType[P]>
+            : GetScalarType<T[P], ProvinceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProvinceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    province_id?: boolean
+    province_name?: boolean
+    districts?: boolean | Province$districtsArgs<ExtArgs>
+    users?: boolean | Province$usersArgs<ExtArgs>
+    admin?: boolean | Province$adminArgs<ExtArgs>
+    officer?: boolean | Province$officerArgs<ExtArgs>
+    executive?: boolean | Province$executiveArgs<ExtArgs>
+    _count?: boolean | ProvinceCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["province"]>
+
+  export type ProvinceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    province_id?: boolean
+    province_name?: boolean
+  }, ExtArgs["result"]["province"]>
+
+  export type ProvinceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    province_id?: boolean
+    province_name?: boolean
+  }, ExtArgs["result"]["province"]>
+
+  export type ProvinceSelectScalar = {
+    province_id?: boolean
+    province_name?: boolean
+  }
+
+  export type ProvinceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"province_id" | "province_name", ExtArgs["result"]["province"]>
+  export type ProvinceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    districts?: boolean | Province$districtsArgs<ExtArgs>
+    users?: boolean | Province$usersArgs<ExtArgs>
+    admin?: boolean | Province$adminArgs<ExtArgs>
+    officer?: boolean | Province$officerArgs<ExtArgs>
+    executive?: boolean | Province$executiveArgs<ExtArgs>
+    _count?: boolean | ProvinceCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProvinceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ProvinceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ProvincePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Province"
+    objects: {
+      districts: Prisma.$DistrictPayload<ExtArgs>[]
+      users: Prisma.$usersPayload<ExtArgs>[]
+      admin: Prisma.$adminPayload<ExtArgs>[]
+      officer: Prisma.$officerPayload<ExtArgs>[]
+      executive: Prisma.$executivePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      province_id: number
+      province_name: string
+    }, ExtArgs["result"]["province"]>
+    composites: {}
+  }
+
+  type ProvinceGetPayload<S extends boolean | null | undefined | ProvinceDefaultArgs> = $Result.GetResult<Prisma.$ProvincePayload, S>
+
+  type ProvinceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProvinceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProvinceCountAggregateInputType | true
+    }
+
+  export interface ProvinceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Province'], meta: { name: 'Province' } }
+    /**
+     * Find zero or one Province that matches the filter.
+     * @param {ProvinceFindUniqueArgs} args - Arguments to find a Province
+     * @example
+     * // Get one Province
+     * const province = await prisma.province.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProvinceFindUniqueArgs>(args: SelectSubset<T, ProvinceFindUniqueArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Province that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProvinceFindUniqueOrThrowArgs} args - Arguments to find a Province
+     * @example
+     * // Get one Province
+     * const province = await prisma.province.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProvinceFindUniqueOrThrowArgs>(args: SelectSubset<T, ProvinceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Province that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvinceFindFirstArgs} args - Arguments to find a Province
+     * @example
+     * // Get one Province
+     * const province = await prisma.province.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProvinceFindFirstArgs>(args?: SelectSubset<T, ProvinceFindFirstArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Province that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvinceFindFirstOrThrowArgs} args - Arguments to find a Province
+     * @example
+     * // Get one Province
+     * const province = await prisma.province.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProvinceFindFirstOrThrowArgs>(args?: SelectSubset<T, ProvinceFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Provinces that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvinceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Provinces
+     * const provinces = await prisma.province.findMany()
+     * 
+     * // Get first 10 Provinces
+     * const provinces = await prisma.province.findMany({ take: 10 })
+     * 
+     * // Only select the `province_id`
+     * const provinceWithProvince_idOnly = await prisma.province.findMany({ select: { province_id: true } })
+     * 
+     */
+    findMany<T extends ProvinceFindManyArgs>(args?: SelectSubset<T, ProvinceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Province.
+     * @param {ProvinceCreateArgs} args - Arguments to create a Province.
+     * @example
+     * // Create one Province
+     * const Province = await prisma.province.create({
+     *   data: {
+     *     // ... data to create a Province
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProvinceCreateArgs>(args: SelectSubset<T, ProvinceCreateArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Provinces.
+     * @param {ProvinceCreateManyArgs} args - Arguments to create many Provinces.
+     * @example
+     * // Create many Provinces
+     * const province = await prisma.province.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProvinceCreateManyArgs>(args?: SelectSubset<T, ProvinceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Provinces and returns the data saved in the database.
+     * @param {ProvinceCreateManyAndReturnArgs} args - Arguments to create many Provinces.
+     * @example
+     * // Create many Provinces
+     * const province = await prisma.province.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Provinces and only return the `province_id`
+     * const provinceWithProvince_idOnly = await prisma.province.createManyAndReturn({
+     *   select: { province_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProvinceCreateManyAndReturnArgs>(args?: SelectSubset<T, ProvinceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Province.
+     * @param {ProvinceDeleteArgs} args - Arguments to delete one Province.
+     * @example
+     * // Delete one Province
+     * const Province = await prisma.province.delete({
+     *   where: {
+     *     // ... filter to delete one Province
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProvinceDeleteArgs>(args: SelectSubset<T, ProvinceDeleteArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Province.
+     * @param {ProvinceUpdateArgs} args - Arguments to update one Province.
+     * @example
+     * // Update one Province
+     * const province = await prisma.province.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProvinceUpdateArgs>(args: SelectSubset<T, ProvinceUpdateArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Provinces.
+     * @param {ProvinceDeleteManyArgs} args - Arguments to filter Provinces to delete.
+     * @example
+     * // Delete a few Provinces
+     * const { count } = await prisma.province.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProvinceDeleteManyArgs>(args?: SelectSubset<T, ProvinceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Provinces.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvinceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Provinces
+     * const province = await prisma.province.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProvinceUpdateManyArgs>(args: SelectSubset<T, ProvinceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Provinces and returns the data updated in the database.
+     * @param {ProvinceUpdateManyAndReturnArgs} args - Arguments to update many Provinces.
+     * @example
+     * // Update many Provinces
+     * const province = await prisma.province.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Provinces and only return the `province_id`
+     * const provinceWithProvince_idOnly = await prisma.province.updateManyAndReturn({
+     *   select: { province_id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProvinceUpdateManyAndReturnArgs>(args: SelectSubset<T, ProvinceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Province.
+     * @param {ProvinceUpsertArgs} args - Arguments to update or create a Province.
+     * @example
+     * // Update or create a Province
+     * const province = await prisma.province.upsert({
+     *   create: {
+     *     // ... data to create a Province
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Province we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProvinceUpsertArgs>(args: SelectSubset<T, ProvinceUpsertArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Provinces.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvinceCountArgs} args - Arguments to filter Provinces to count.
+     * @example
+     * // Count the number of Provinces
+     * const count = await prisma.province.count({
+     *   where: {
+     *     // ... the filter for the Provinces we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProvinceCountArgs>(
+      args?: Subset<T, ProvinceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProvinceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Province.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvinceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProvinceAggregateArgs>(args: Subset<T, ProvinceAggregateArgs>): Prisma.PrismaPromise<GetProvinceAggregateType<T>>
+
+    /**
+     * Group by Province.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvinceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProvinceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProvinceGroupByArgs['orderBy'] }
+        : { orderBy?: ProvinceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProvinceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProvinceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Province model
+   */
+  readonly fields: ProvinceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Province.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProvinceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    districts<T extends Province$districtsArgs<ExtArgs> = {}>(args?: Subset<T, Province$districtsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    users<T extends Province$usersArgs<ExtArgs> = {}>(args?: Subset<T, Province$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    admin<T extends Province$adminArgs<ExtArgs> = {}>(args?: Subset<T, Province$adminArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    officer<T extends Province$officerArgs<ExtArgs> = {}>(args?: Subset<T, Province$officerArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$officerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    executive<T extends Province$executiveArgs<ExtArgs> = {}>(args?: Subset<T, Province$executiveArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Province model
+   */
+  interface ProvinceFieldRefs {
+    readonly province_id: FieldRef<"Province", 'Int'>
+    readonly province_name: FieldRef<"Province", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Province findUnique
+   */
+  export type ProvinceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    /**
+     * Filter, which Province to fetch.
+     */
+    where: ProvinceWhereUniqueInput
+  }
+
+  /**
+   * Province findUniqueOrThrow
+   */
+  export type ProvinceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    /**
+     * Filter, which Province to fetch.
+     */
+    where: ProvinceWhereUniqueInput
+  }
+
+  /**
+   * Province findFirst
+   */
+  export type ProvinceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    /**
+     * Filter, which Province to fetch.
+     */
+    where?: ProvinceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Provinces to fetch.
+     */
+    orderBy?: ProvinceOrderByWithRelationInput | ProvinceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Provinces.
+     */
+    cursor?: ProvinceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Provinces.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Provinces.
+     */
+    distinct?: ProvinceScalarFieldEnum | ProvinceScalarFieldEnum[]
+  }
+
+  /**
+   * Province findFirstOrThrow
+   */
+  export type ProvinceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    /**
+     * Filter, which Province to fetch.
+     */
+    where?: ProvinceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Provinces to fetch.
+     */
+    orderBy?: ProvinceOrderByWithRelationInput | ProvinceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Provinces.
+     */
+    cursor?: ProvinceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Provinces.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Provinces.
+     */
+    distinct?: ProvinceScalarFieldEnum | ProvinceScalarFieldEnum[]
+  }
+
+  /**
+   * Province findMany
+   */
+  export type ProvinceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    /**
+     * Filter, which Provinces to fetch.
+     */
+    where?: ProvinceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Provinces to fetch.
+     */
+    orderBy?: ProvinceOrderByWithRelationInput | ProvinceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Provinces.
+     */
+    cursor?: ProvinceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Provinces.
+     */
+    skip?: number
+    distinct?: ProvinceScalarFieldEnum | ProvinceScalarFieldEnum[]
+  }
+
+  /**
+   * Province create
+   */
+  export type ProvinceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Province.
+     */
+    data: XOR<ProvinceCreateInput, ProvinceUncheckedCreateInput>
+  }
+
+  /**
+   * Province createMany
+   */
+  export type ProvinceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Provinces.
+     */
+    data: ProvinceCreateManyInput | ProvinceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Province createManyAndReturn
+   */
+  export type ProvinceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * The data used to create many Provinces.
+     */
+    data: ProvinceCreateManyInput | ProvinceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Province update
+   */
+  export type ProvinceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Province.
+     */
+    data: XOR<ProvinceUpdateInput, ProvinceUncheckedUpdateInput>
+    /**
+     * Choose, which Province to update.
+     */
+    where: ProvinceWhereUniqueInput
+  }
+
+  /**
+   * Province updateMany
+   */
+  export type ProvinceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Provinces.
+     */
+    data: XOR<ProvinceUpdateManyMutationInput, ProvinceUncheckedUpdateManyInput>
+    /**
+     * Filter which Provinces to update
+     */
+    where?: ProvinceWhereInput
+    /**
+     * Limit how many Provinces to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Province updateManyAndReturn
+   */
+  export type ProvinceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * The data used to update Provinces.
+     */
+    data: XOR<ProvinceUpdateManyMutationInput, ProvinceUncheckedUpdateManyInput>
+    /**
+     * Filter which Provinces to update
+     */
+    where?: ProvinceWhereInput
+    /**
+     * Limit how many Provinces to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Province upsert
+   */
+  export type ProvinceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Province to update in case it exists.
+     */
+    where: ProvinceWhereUniqueInput
+    /**
+     * In case the Province found by the `where` argument doesn't exist, create a new Province with this data.
+     */
+    create: XOR<ProvinceCreateInput, ProvinceUncheckedCreateInput>
+    /**
+     * In case the Province was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProvinceUpdateInput, ProvinceUncheckedUpdateInput>
+  }
+
+  /**
+   * Province delete
+   */
+  export type ProvinceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+    /**
+     * Filter which Province to delete.
+     */
+    where: ProvinceWhereUniqueInput
+  }
+
+  /**
+   * Province deleteMany
+   */
+  export type ProvinceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Provinces to delete
+     */
+    where?: ProvinceWhereInput
+    /**
+     * Limit how many Provinces to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Province.districts
+   */
+  export type Province$districtsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    where?: DistrictWhereInput
+    orderBy?: DistrictOrderByWithRelationInput | DistrictOrderByWithRelationInput[]
+    cursor?: DistrictWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DistrictScalarFieldEnum | DistrictScalarFieldEnum[]
+  }
+
+  /**
+   * Province.users
+   */
+  export type Province$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the users
+     */
+    select?: usersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the users
+     */
+    omit?: usersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: usersInclude<ExtArgs> | null
+    where?: usersWhereInput
+    orderBy?: usersOrderByWithRelationInput | usersOrderByWithRelationInput[]
+    cursor?: usersWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UsersScalarFieldEnum | UsersScalarFieldEnum[]
+  }
+
+  /**
+   * Province.admin
+   */
+  export type Province$adminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin
+     */
+    select?: adminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin
+     */
+    omit?: adminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: adminInclude<ExtArgs> | null
+    where?: adminWhereInput
+    orderBy?: adminOrderByWithRelationInput | adminOrderByWithRelationInput[]
+    cursor?: adminWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminScalarFieldEnum | AdminScalarFieldEnum[]
+  }
+
+  /**
+   * Province.officer
+   */
+  export type Province$officerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the officer
+     */
+    select?: officerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the officer
+     */
+    omit?: officerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: officerInclude<ExtArgs> | null
+    where?: officerWhereInput
+    orderBy?: officerOrderByWithRelationInput | officerOrderByWithRelationInput[]
+    cursor?: officerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OfficerScalarFieldEnum | OfficerScalarFieldEnum[]
+  }
+
+  /**
+   * Province.executive
+   */
+  export type Province$executiveArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    where?: executiveWhereInput
+    orderBy?: executiveOrderByWithRelationInput | executiveOrderByWithRelationInput[]
+    cursor?: executiveWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExecutiveScalarFieldEnum | ExecutiveScalarFieldEnum[]
+  }
+
+  /**
+   * Province without action
+   */
+  export type ProvinceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Province
+     */
+    select?: ProvinceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Province
+     */
+    omit?: ProvinceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvinceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model District
+   */
+
+  export type AggregateDistrict = {
+    _count: DistrictCountAggregateOutputType | null
+    _avg: DistrictAvgAggregateOutputType | null
+    _sum: DistrictSumAggregateOutputType | null
+    _min: DistrictMinAggregateOutputType | null
+    _max: DistrictMaxAggregateOutputType | null
+  }
+
+  export type DistrictAvgAggregateOutputType = {
+    district_id: number | null
+    province_id: number | null
+  }
+
+  export type DistrictSumAggregateOutputType = {
+    district_id: number | null
+    province_id: number | null
+  }
+
+  export type DistrictMinAggregateOutputType = {
+    district_id: number | null
+    province_id: number | null
+    district_name: string | null
+  }
+
+  export type DistrictMaxAggregateOutputType = {
+    district_id: number | null
+    province_id: number | null
+    district_name: string | null
+  }
+
+  export type DistrictCountAggregateOutputType = {
+    district_id: number
+    province_id: number
+    district_name: number
+    _all: number
+  }
+
+
+  export type DistrictAvgAggregateInputType = {
+    district_id?: true
+    province_id?: true
+  }
+
+  export type DistrictSumAggregateInputType = {
+    district_id?: true
+    province_id?: true
+  }
+
+  export type DistrictMinAggregateInputType = {
+    district_id?: true
+    province_id?: true
+    district_name?: true
+  }
+
+  export type DistrictMaxAggregateInputType = {
+    district_id?: true
+    province_id?: true
+    district_name?: true
+  }
+
+  export type DistrictCountAggregateInputType = {
+    district_id?: true
+    province_id?: true
+    district_name?: true
+    _all?: true
+  }
+
+  export type DistrictAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which District to aggregate.
+     */
+    where?: DistrictWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Districts to fetch.
+     */
+    orderBy?: DistrictOrderByWithRelationInput | DistrictOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DistrictWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Districts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Districts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Districts
+    **/
+    _count?: true | DistrictCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DistrictAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DistrictSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DistrictMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DistrictMaxAggregateInputType
+  }
+
+  export type GetDistrictAggregateType<T extends DistrictAggregateArgs> = {
+        [P in keyof T & keyof AggregateDistrict]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDistrict[P]>
+      : GetScalarType<T[P], AggregateDistrict[P]>
+  }
+
+
+
+
+  export type DistrictGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DistrictWhereInput
+    orderBy?: DistrictOrderByWithAggregationInput | DistrictOrderByWithAggregationInput[]
+    by: DistrictScalarFieldEnum[] | DistrictScalarFieldEnum
+    having?: DistrictScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DistrictCountAggregateInputType | true
+    _avg?: DistrictAvgAggregateInputType
+    _sum?: DistrictSumAggregateInputType
+    _min?: DistrictMinAggregateInputType
+    _max?: DistrictMaxAggregateInputType
+  }
+
+  export type DistrictGroupByOutputType = {
+    district_id: number
+    province_id: number
+    district_name: string
+    _count: DistrictCountAggregateOutputType | null
+    _avg: DistrictAvgAggregateOutputType | null
+    _sum: DistrictSumAggregateOutputType | null
+    _min: DistrictMinAggregateOutputType | null
+    _max: DistrictMaxAggregateOutputType | null
+  }
+
+  type GetDistrictGroupByPayload<T extends DistrictGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DistrictGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DistrictGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DistrictGroupByOutputType[P]>
+            : GetScalarType<T[P], DistrictGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DistrictSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    district_id?: boolean
+    province_id?: boolean
+    district_name?: boolean
+    province?: boolean | ProvinceDefaultArgs<ExtArgs>
+    subdistricts?: boolean | District$subdistrictsArgs<ExtArgs>
+    users?: boolean | District$usersArgs<ExtArgs>
+    admin?: boolean | District$adminArgs<ExtArgs>
+    officer?: boolean | District$officerArgs<ExtArgs>
+    executive?: boolean | District$executiveArgs<ExtArgs>
+    _count?: boolean | DistrictCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["district"]>
+
+  export type DistrictSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    district_id?: boolean
+    province_id?: boolean
+    district_name?: boolean
+    province?: boolean | ProvinceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["district"]>
+
+  export type DistrictSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    district_id?: boolean
+    province_id?: boolean
+    district_name?: boolean
+    province?: boolean | ProvinceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["district"]>
+
+  export type DistrictSelectScalar = {
+    district_id?: boolean
+    province_id?: boolean
+    district_name?: boolean
+  }
+
+  export type DistrictOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"district_id" | "province_id" | "district_name", ExtArgs["result"]["district"]>
+  export type DistrictInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    province?: boolean | ProvinceDefaultArgs<ExtArgs>
+    subdistricts?: boolean | District$subdistrictsArgs<ExtArgs>
+    users?: boolean | District$usersArgs<ExtArgs>
+    admin?: boolean | District$adminArgs<ExtArgs>
+    officer?: boolean | District$officerArgs<ExtArgs>
+    executive?: boolean | District$executiveArgs<ExtArgs>
+    _count?: boolean | DistrictCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DistrictIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    province?: boolean | ProvinceDefaultArgs<ExtArgs>
+  }
+  export type DistrictIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    province?: boolean | ProvinceDefaultArgs<ExtArgs>
+  }
+
+  export type $DistrictPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "District"
+    objects: {
+      province: Prisma.$ProvincePayload<ExtArgs>
+      subdistricts: Prisma.$SubdistrictPayload<ExtArgs>[]
+      users: Prisma.$usersPayload<ExtArgs>[]
+      admin: Prisma.$adminPayload<ExtArgs>[]
+      officer: Prisma.$officerPayload<ExtArgs>[]
+      executive: Prisma.$executivePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      district_id: number
+      province_id: number
+      district_name: string
+    }, ExtArgs["result"]["district"]>
+    composites: {}
+  }
+
+  type DistrictGetPayload<S extends boolean | null | undefined | DistrictDefaultArgs> = $Result.GetResult<Prisma.$DistrictPayload, S>
+
+  type DistrictCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DistrictFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DistrictCountAggregateInputType | true
+    }
+
+  export interface DistrictDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['District'], meta: { name: 'District' } }
+    /**
+     * Find zero or one District that matches the filter.
+     * @param {DistrictFindUniqueArgs} args - Arguments to find a District
+     * @example
+     * // Get one District
+     * const district = await prisma.district.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DistrictFindUniqueArgs>(args: SelectSubset<T, DistrictFindUniqueArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one District that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DistrictFindUniqueOrThrowArgs} args - Arguments to find a District
+     * @example
+     * // Get one District
+     * const district = await prisma.district.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DistrictFindUniqueOrThrowArgs>(args: SelectSubset<T, DistrictFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first District that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DistrictFindFirstArgs} args - Arguments to find a District
+     * @example
+     * // Get one District
+     * const district = await prisma.district.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DistrictFindFirstArgs>(args?: SelectSubset<T, DistrictFindFirstArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first District that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DistrictFindFirstOrThrowArgs} args - Arguments to find a District
+     * @example
+     * // Get one District
+     * const district = await prisma.district.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DistrictFindFirstOrThrowArgs>(args?: SelectSubset<T, DistrictFindFirstOrThrowArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Districts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DistrictFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Districts
+     * const districts = await prisma.district.findMany()
+     * 
+     * // Get first 10 Districts
+     * const districts = await prisma.district.findMany({ take: 10 })
+     * 
+     * // Only select the `district_id`
+     * const districtWithDistrict_idOnly = await prisma.district.findMany({ select: { district_id: true } })
+     * 
+     */
+    findMany<T extends DistrictFindManyArgs>(args?: SelectSubset<T, DistrictFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a District.
+     * @param {DistrictCreateArgs} args - Arguments to create a District.
+     * @example
+     * // Create one District
+     * const District = await prisma.district.create({
+     *   data: {
+     *     // ... data to create a District
+     *   }
+     * })
+     * 
+     */
+    create<T extends DistrictCreateArgs>(args: SelectSubset<T, DistrictCreateArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Districts.
+     * @param {DistrictCreateManyArgs} args - Arguments to create many Districts.
+     * @example
+     * // Create many Districts
+     * const district = await prisma.district.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DistrictCreateManyArgs>(args?: SelectSubset<T, DistrictCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Districts and returns the data saved in the database.
+     * @param {DistrictCreateManyAndReturnArgs} args - Arguments to create many Districts.
+     * @example
+     * // Create many Districts
+     * const district = await prisma.district.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Districts and only return the `district_id`
+     * const districtWithDistrict_idOnly = await prisma.district.createManyAndReturn({
+     *   select: { district_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DistrictCreateManyAndReturnArgs>(args?: SelectSubset<T, DistrictCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a District.
+     * @param {DistrictDeleteArgs} args - Arguments to delete one District.
+     * @example
+     * // Delete one District
+     * const District = await prisma.district.delete({
+     *   where: {
+     *     // ... filter to delete one District
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DistrictDeleteArgs>(args: SelectSubset<T, DistrictDeleteArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one District.
+     * @param {DistrictUpdateArgs} args - Arguments to update one District.
+     * @example
+     * // Update one District
+     * const district = await prisma.district.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DistrictUpdateArgs>(args: SelectSubset<T, DistrictUpdateArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Districts.
+     * @param {DistrictDeleteManyArgs} args - Arguments to filter Districts to delete.
+     * @example
+     * // Delete a few Districts
+     * const { count } = await prisma.district.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DistrictDeleteManyArgs>(args?: SelectSubset<T, DistrictDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Districts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DistrictUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Districts
+     * const district = await prisma.district.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DistrictUpdateManyArgs>(args: SelectSubset<T, DistrictUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Districts and returns the data updated in the database.
+     * @param {DistrictUpdateManyAndReturnArgs} args - Arguments to update many Districts.
+     * @example
+     * // Update many Districts
+     * const district = await prisma.district.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Districts and only return the `district_id`
+     * const districtWithDistrict_idOnly = await prisma.district.updateManyAndReturn({
+     *   select: { district_id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DistrictUpdateManyAndReturnArgs>(args: SelectSubset<T, DistrictUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one District.
+     * @param {DistrictUpsertArgs} args - Arguments to update or create a District.
+     * @example
+     * // Update or create a District
+     * const district = await prisma.district.upsert({
+     *   create: {
+     *     // ... data to create a District
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the District we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DistrictUpsertArgs>(args: SelectSubset<T, DistrictUpsertArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Districts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DistrictCountArgs} args - Arguments to filter Districts to count.
+     * @example
+     * // Count the number of Districts
+     * const count = await prisma.district.count({
+     *   where: {
+     *     // ... the filter for the Districts we want to count
+     *   }
+     * })
+    **/
+    count<T extends DistrictCountArgs>(
+      args?: Subset<T, DistrictCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DistrictCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a District.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DistrictAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DistrictAggregateArgs>(args: Subset<T, DistrictAggregateArgs>): Prisma.PrismaPromise<GetDistrictAggregateType<T>>
+
+    /**
+     * Group by District.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DistrictGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DistrictGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DistrictGroupByArgs['orderBy'] }
+        : { orderBy?: DistrictGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DistrictGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDistrictGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the District model
+   */
+  readonly fields: DistrictFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for District.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DistrictClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    province<T extends ProvinceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProvinceDefaultArgs<ExtArgs>>): Prisma__ProvinceClient<$Result.GetResult<Prisma.$ProvincePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    subdistricts<T extends District$subdistrictsArgs<ExtArgs> = {}>(args?: Subset<T, District$subdistrictsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    users<T extends District$usersArgs<ExtArgs> = {}>(args?: Subset<T, District$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    admin<T extends District$adminArgs<ExtArgs> = {}>(args?: Subset<T, District$adminArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    officer<T extends District$officerArgs<ExtArgs> = {}>(args?: Subset<T, District$officerArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$officerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    executive<T extends District$executiveArgs<ExtArgs> = {}>(args?: Subset<T, District$executiveArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the District model
+   */
+  interface DistrictFieldRefs {
+    readonly district_id: FieldRef<"District", 'Int'>
+    readonly province_id: FieldRef<"District", 'Int'>
+    readonly district_name: FieldRef<"District", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * District findUnique
+   */
+  export type DistrictFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    /**
+     * Filter, which District to fetch.
+     */
+    where: DistrictWhereUniqueInput
+  }
+
+  /**
+   * District findUniqueOrThrow
+   */
+  export type DistrictFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    /**
+     * Filter, which District to fetch.
+     */
+    where: DistrictWhereUniqueInput
+  }
+
+  /**
+   * District findFirst
+   */
+  export type DistrictFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    /**
+     * Filter, which District to fetch.
+     */
+    where?: DistrictWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Districts to fetch.
+     */
+    orderBy?: DistrictOrderByWithRelationInput | DistrictOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Districts.
+     */
+    cursor?: DistrictWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Districts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Districts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Districts.
+     */
+    distinct?: DistrictScalarFieldEnum | DistrictScalarFieldEnum[]
+  }
+
+  /**
+   * District findFirstOrThrow
+   */
+  export type DistrictFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    /**
+     * Filter, which District to fetch.
+     */
+    where?: DistrictWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Districts to fetch.
+     */
+    orderBy?: DistrictOrderByWithRelationInput | DistrictOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Districts.
+     */
+    cursor?: DistrictWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Districts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Districts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Districts.
+     */
+    distinct?: DistrictScalarFieldEnum | DistrictScalarFieldEnum[]
+  }
+
+  /**
+   * District findMany
+   */
+  export type DistrictFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    /**
+     * Filter, which Districts to fetch.
+     */
+    where?: DistrictWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Districts to fetch.
+     */
+    orderBy?: DistrictOrderByWithRelationInput | DistrictOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Districts.
+     */
+    cursor?: DistrictWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Districts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Districts.
+     */
+    skip?: number
+    distinct?: DistrictScalarFieldEnum | DistrictScalarFieldEnum[]
+  }
+
+  /**
+   * District create
+   */
+  export type DistrictCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    /**
+     * The data needed to create a District.
+     */
+    data: XOR<DistrictCreateInput, DistrictUncheckedCreateInput>
+  }
+
+  /**
+   * District createMany
+   */
+  export type DistrictCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Districts.
+     */
+    data: DistrictCreateManyInput | DistrictCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * District createManyAndReturn
+   */
+  export type DistrictCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * The data used to create many Districts.
+     */
+    data: DistrictCreateManyInput | DistrictCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * District update
+   */
+  export type DistrictUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    /**
+     * The data needed to update a District.
+     */
+    data: XOR<DistrictUpdateInput, DistrictUncheckedUpdateInput>
+    /**
+     * Choose, which District to update.
+     */
+    where: DistrictWhereUniqueInput
+  }
+
+  /**
+   * District updateMany
+   */
+  export type DistrictUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Districts.
+     */
+    data: XOR<DistrictUpdateManyMutationInput, DistrictUncheckedUpdateManyInput>
+    /**
+     * Filter which Districts to update
+     */
+    where?: DistrictWhereInput
+    /**
+     * Limit how many Districts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * District updateManyAndReturn
+   */
+  export type DistrictUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * The data used to update Districts.
+     */
+    data: XOR<DistrictUpdateManyMutationInput, DistrictUncheckedUpdateManyInput>
+    /**
+     * Filter which Districts to update
+     */
+    where?: DistrictWhereInput
+    /**
+     * Limit how many Districts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * District upsert
+   */
+  export type DistrictUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    /**
+     * The filter to search for the District to update in case it exists.
+     */
+    where: DistrictWhereUniqueInput
+    /**
+     * In case the District found by the `where` argument doesn't exist, create a new District with this data.
+     */
+    create: XOR<DistrictCreateInput, DistrictUncheckedCreateInput>
+    /**
+     * In case the District was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DistrictUpdateInput, DistrictUncheckedUpdateInput>
+  }
+
+  /**
+   * District delete
+   */
+  export type DistrictDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    /**
+     * Filter which District to delete.
+     */
+    where: DistrictWhereUniqueInput
+  }
+
+  /**
+   * District deleteMany
+   */
+  export type DistrictDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Districts to delete
+     */
+    where?: DistrictWhereInput
+    /**
+     * Limit how many Districts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * District.subdistricts
+   */
+  export type District$subdistrictsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    where?: SubdistrictWhereInput
+    orderBy?: SubdistrictOrderByWithRelationInput | SubdistrictOrderByWithRelationInput[]
+    cursor?: SubdistrictWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SubdistrictScalarFieldEnum | SubdistrictScalarFieldEnum[]
+  }
+
+  /**
+   * District.users
+   */
+  export type District$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the users
+     */
+    select?: usersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the users
+     */
+    omit?: usersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: usersInclude<ExtArgs> | null
+    where?: usersWhereInput
+    orderBy?: usersOrderByWithRelationInput | usersOrderByWithRelationInput[]
+    cursor?: usersWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UsersScalarFieldEnum | UsersScalarFieldEnum[]
+  }
+
+  /**
+   * District.admin
+   */
+  export type District$adminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin
+     */
+    select?: adminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin
+     */
+    omit?: adminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: adminInclude<ExtArgs> | null
+    where?: adminWhereInput
+    orderBy?: adminOrderByWithRelationInput | adminOrderByWithRelationInput[]
+    cursor?: adminWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminScalarFieldEnum | AdminScalarFieldEnum[]
+  }
+
+  /**
+   * District.officer
+   */
+  export type District$officerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the officer
+     */
+    select?: officerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the officer
+     */
+    omit?: officerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: officerInclude<ExtArgs> | null
+    where?: officerWhereInput
+    orderBy?: officerOrderByWithRelationInput | officerOrderByWithRelationInput[]
+    cursor?: officerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OfficerScalarFieldEnum | OfficerScalarFieldEnum[]
+  }
+
+  /**
+   * District.executive
+   */
+  export type District$executiveArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    where?: executiveWhereInput
+    orderBy?: executiveOrderByWithRelationInput | executiveOrderByWithRelationInput[]
+    cursor?: executiveWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExecutiveScalarFieldEnum | ExecutiveScalarFieldEnum[]
+  }
+
+  /**
+   * District without action
+   */
+  export type DistrictDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Subdistrict
+   */
+
+  export type AggregateSubdistrict = {
+    _count: SubdistrictCountAggregateOutputType | null
+    _avg: SubdistrictAvgAggregateOutputType | null
+    _sum: SubdistrictSumAggregateOutputType | null
+    _min: SubdistrictMinAggregateOutputType | null
+    _max: SubdistrictMaxAggregateOutputType | null
+  }
+
+  export type SubdistrictAvgAggregateOutputType = {
+    subdistrict_id: number | null
+    district_id: number | null
+  }
+
+  export type SubdistrictSumAggregateOutputType = {
+    subdistrict_id: number | null
+    district_id: number | null
+  }
+
+  export type SubdistrictMinAggregateOutputType = {
+    subdistrict_id: number | null
+    district_id: number | null
+    subdistrict_name: string | null
+    zip_code: string | null
+  }
+
+  export type SubdistrictMaxAggregateOutputType = {
+    subdistrict_id: number | null
+    district_id: number | null
+    subdistrict_name: string | null
+    zip_code: string | null
+  }
+
+  export type SubdistrictCountAggregateOutputType = {
+    subdistrict_id: number
+    district_id: number
+    subdistrict_name: number
+    zip_code: number
+    _all: number
+  }
+
+
+  export type SubdistrictAvgAggregateInputType = {
+    subdistrict_id?: true
+    district_id?: true
+  }
+
+  export type SubdistrictSumAggregateInputType = {
+    subdistrict_id?: true
+    district_id?: true
+  }
+
+  export type SubdistrictMinAggregateInputType = {
+    subdistrict_id?: true
+    district_id?: true
+    subdistrict_name?: true
+    zip_code?: true
+  }
+
+  export type SubdistrictMaxAggregateInputType = {
+    subdistrict_id?: true
+    district_id?: true
+    subdistrict_name?: true
+    zip_code?: true
+  }
+
+  export type SubdistrictCountAggregateInputType = {
+    subdistrict_id?: true
+    district_id?: true
+    subdistrict_name?: true
+    zip_code?: true
+    _all?: true
+  }
+
+  export type SubdistrictAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Subdistrict to aggregate.
+     */
+    where?: SubdistrictWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Subdistricts to fetch.
+     */
+    orderBy?: SubdistrictOrderByWithRelationInput | SubdistrictOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SubdistrictWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Subdistricts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Subdistricts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Subdistricts
+    **/
+    _count?: true | SubdistrictCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SubdistrictAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SubdistrictSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SubdistrictMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SubdistrictMaxAggregateInputType
+  }
+
+  export type GetSubdistrictAggregateType<T extends SubdistrictAggregateArgs> = {
+        [P in keyof T & keyof AggregateSubdistrict]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSubdistrict[P]>
+      : GetScalarType<T[P], AggregateSubdistrict[P]>
+  }
+
+
+
+
+  export type SubdistrictGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubdistrictWhereInput
+    orderBy?: SubdistrictOrderByWithAggregationInput | SubdistrictOrderByWithAggregationInput[]
+    by: SubdistrictScalarFieldEnum[] | SubdistrictScalarFieldEnum
+    having?: SubdistrictScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SubdistrictCountAggregateInputType | true
+    _avg?: SubdistrictAvgAggregateInputType
+    _sum?: SubdistrictSumAggregateInputType
+    _min?: SubdistrictMinAggregateInputType
+    _max?: SubdistrictMaxAggregateInputType
+  }
+
+  export type SubdistrictGroupByOutputType = {
+    subdistrict_id: number
+    district_id: number
+    subdistrict_name: string
+    zip_code: string | null
+    _count: SubdistrictCountAggregateOutputType | null
+    _avg: SubdistrictAvgAggregateOutputType | null
+    _sum: SubdistrictSumAggregateOutputType | null
+    _min: SubdistrictMinAggregateOutputType | null
+    _max: SubdistrictMaxAggregateOutputType | null
+  }
+
+  type GetSubdistrictGroupByPayload<T extends SubdistrictGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SubdistrictGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SubdistrictGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SubdistrictGroupByOutputType[P]>
+            : GetScalarType<T[P], SubdistrictGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SubdistrictSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    subdistrict_id?: boolean
+    district_id?: boolean
+    subdistrict_name?: boolean
+    zip_code?: boolean
+    district?: boolean | DistrictDefaultArgs<ExtArgs>
+    users?: boolean | Subdistrict$usersArgs<ExtArgs>
+    admin?: boolean | Subdistrict$adminArgs<ExtArgs>
+    officer?: boolean | Subdistrict$officerArgs<ExtArgs>
+    executive?: boolean | Subdistrict$executiveArgs<ExtArgs>
+    _count?: boolean | SubdistrictCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subdistrict"]>
+
+  export type SubdistrictSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    subdistrict_id?: boolean
+    district_id?: boolean
+    subdistrict_name?: boolean
+    zip_code?: boolean
+    district?: boolean | DistrictDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subdistrict"]>
+
+  export type SubdistrictSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    subdistrict_id?: boolean
+    district_id?: boolean
+    subdistrict_name?: boolean
+    zip_code?: boolean
+    district?: boolean | DistrictDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subdistrict"]>
+
+  export type SubdistrictSelectScalar = {
+    subdistrict_id?: boolean
+    district_id?: boolean
+    subdistrict_name?: boolean
+    zip_code?: boolean
+  }
+
+  export type SubdistrictOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"subdistrict_id" | "district_id" | "subdistrict_name" | "zip_code", ExtArgs["result"]["subdistrict"]>
+  export type SubdistrictInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    district?: boolean | DistrictDefaultArgs<ExtArgs>
+    users?: boolean | Subdistrict$usersArgs<ExtArgs>
+    admin?: boolean | Subdistrict$adminArgs<ExtArgs>
+    officer?: boolean | Subdistrict$officerArgs<ExtArgs>
+    executive?: boolean | Subdistrict$executiveArgs<ExtArgs>
+    _count?: boolean | SubdistrictCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SubdistrictIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    district?: boolean | DistrictDefaultArgs<ExtArgs>
+  }
+  export type SubdistrictIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    district?: boolean | DistrictDefaultArgs<ExtArgs>
+  }
+
+  export type $SubdistrictPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Subdistrict"
+    objects: {
+      district: Prisma.$DistrictPayload<ExtArgs>
+      users: Prisma.$usersPayload<ExtArgs>[]
+      admin: Prisma.$adminPayload<ExtArgs>[]
+      officer: Prisma.$officerPayload<ExtArgs>[]
+      executive: Prisma.$executivePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      subdistrict_id: number
+      district_id: number
+      subdistrict_name: string
+      zip_code: string | null
+    }, ExtArgs["result"]["subdistrict"]>
+    composites: {}
+  }
+
+  type SubdistrictGetPayload<S extends boolean | null | undefined | SubdistrictDefaultArgs> = $Result.GetResult<Prisma.$SubdistrictPayload, S>
+
+  type SubdistrictCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SubdistrictFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SubdistrictCountAggregateInputType | true
+    }
+
+  export interface SubdistrictDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Subdistrict'], meta: { name: 'Subdistrict' } }
+    /**
+     * Find zero or one Subdistrict that matches the filter.
+     * @param {SubdistrictFindUniqueArgs} args - Arguments to find a Subdistrict
+     * @example
+     * // Get one Subdistrict
+     * const subdistrict = await prisma.subdistrict.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SubdistrictFindUniqueArgs>(args: SelectSubset<T, SubdistrictFindUniqueArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Subdistrict that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SubdistrictFindUniqueOrThrowArgs} args - Arguments to find a Subdistrict
+     * @example
+     * // Get one Subdistrict
+     * const subdistrict = await prisma.subdistrict.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SubdistrictFindUniqueOrThrowArgs>(args: SelectSubset<T, SubdistrictFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Subdistrict that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdistrictFindFirstArgs} args - Arguments to find a Subdistrict
+     * @example
+     * // Get one Subdistrict
+     * const subdistrict = await prisma.subdistrict.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SubdistrictFindFirstArgs>(args?: SelectSubset<T, SubdistrictFindFirstArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Subdistrict that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdistrictFindFirstOrThrowArgs} args - Arguments to find a Subdistrict
+     * @example
+     * // Get one Subdistrict
+     * const subdistrict = await prisma.subdistrict.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SubdistrictFindFirstOrThrowArgs>(args?: SelectSubset<T, SubdistrictFindFirstOrThrowArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Subdistricts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdistrictFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Subdistricts
+     * const subdistricts = await prisma.subdistrict.findMany()
+     * 
+     * // Get first 10 Subdistricts
+     * const subdistricts = await prisma.subdistrict.findMany({ take: 10 })
+     * 
+     * // Only select the `subdistrict_id`
+     * const subdistrictWithSubdistrict_idOnly = await prisma.subdistrict.findMany({ select: { subdistrict_id: true } })
+     * 
+     */
+    findMany<T extends SubdistrictFindManyArgs>(args?: SelectSubset<T, SubdistrictFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Subdistrict.
+     * @param {SubdistrictCreateArgs} args - Arguments to create a Subdistrict.
+     * @example
+     * // Create one Subdistrict
+     * const Subdistrict = await prisma.subdistrict.create({
+     *   data: {
+     *     // ... data to create a Subdistrict
+     *   }
+     * })
+     * 
+     */
+    create<T extends SubdistrictCreateArgs>(args: SelectSubset<T, SubdistrictCreateArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Subdistricts.
+     * @param {SubdistrictCreateManyArgs} args - Arguments to create many Subdistricts.
+     * @example
+     * // Create many Subdistricts
+     * const subdistrict = await prisma.subdistrict.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SubdistrictCreateManyArgs>(args?: SelectSubset<T, SubdistrictCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Subdistricts and returns the data saved in the database.
+     * @param {SubdistrictCreateManyAndReturnArgs} args - Arguments to create many Subdistricts.
+     * @example
+     * // Create many Subdistricts
+     * const subdistrict = await prisma.subdistrict.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Subdistricts and only return the `subdistrict_id`
+     * const subdistrictWithSubdistrict_idOnly = await prisma.subdistrict.createManyAndReturn({
+     *   select: { subdistrict_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SubdistrictCreateManyAndReturnArgs>(args?: SelectSubset<T, SubdistrictCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Subdistrict.
+     * @param {SubdistrictDeleteArgs} args - Arguments to delete one Subdistrict.
+     * @example
+     * // Delete one Subdistrict
+     * const Subdistrict = await prisma.subdistrict.delete({
+     *   where: {
+     *     // ... filter to delete one Subdistrict
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SubdistrictDeleteArgs>(args: SelectSubset<T, SubdistrictDeleteArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Subdistrict.
+     * @param {SubdistrictUpdateArgs} args - Arguments to update one Subdistrict.
+     * @example
+     * // Update one Subdistrict
+     * const subdistrict = await prisma.subdistrict.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SubdistrictUpdateArgs>(args: SelectSubset<T, SubdistrictUpdateArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Subdistricts.
+     * @param {SubdistrictDeleteManyArgs} args - Arguments to filter Subdistricts to delete.
+     * @example
+     * // Delete a few Subdistricts
+     * const { count } = await prisma.subdistrict.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SubdistrictDeleteManyArgs>(args?: SelectSubset<T, SubdistrictDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Subdistricts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdistrictUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Subdistricts
+     * const subdistrict = await prisma.subdistrict.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SubdistrictUpdateManyArgs>(args: SelectSubset<T, SubdistrictUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Subdistricts and returns the data updated in the database.
+     * @param {SubdistrictUpdateManyAndReturnArgs} args - Arguments to update many Subdistricts.
+     * @example
+     * // Update many Subdistricts
+     * const subdistrict = await prisma.subdistrict.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Subdistricts and only return the `subdistrict_id`
+     * const subdistrictWithSubdistrict_idOnly = await prisma.subdistrict.updateManyAndReturn({
+     *   select: { subdistrict_id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SubdistrictUpdateManyAndReturnArgs>(args: SelectSubset<T, SubdistrictUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Subdistrict.
+     * @param {SubdistrictUpsertArgs} args - Arguments to update or create a Subdistrict.
+     * @example
+     * // Update or create a Subdistrict
+     * const subdistrict = await prisma.subdistrict.upsert({
+     *   create: {
+     *     // ... data to create a Subdistrict
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Subdistrict we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SubdistrictUpsertArgs>(args: SelectSubset<T, SubdistrictUpsertArgs<ExtArgs>>): Prisma__SubdistrictClient<$Result.GetResult<Prisma.$SubdistrictPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Subdistricts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdistrictCountArgs} args - Arguments to filter Subdistricts to count.
+     * @example
+     * // Count the number of Subdistricts
+     * const count = await prisma.subdistrict.count({
+     *   where: {
+     *     // ... the filter for the Subdistricts we want to count
+     *   }
+     * })
+    **/
+    count<T extends SubdistrictCountArgs>(
+      args?: Subset<T, SubdistrictCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SubdistrictCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Subdistrict.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdistrictAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SubdistrictAggregateArgs>(args: Subset<T, SubdistrictAggregateArgs>): Prisma.PrismaPromise<GetSubdistrictAggregateType<T>>
+
+    /**
+     * Group by Subdistrict.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdistrictGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SubdistrictGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SubdistrictGroupByArgs['orderBy'] }
+        : { orderBy?: SubdistrictGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SubdistrictGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSubdistrictGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Subdistrict model
+   */
+  readonly fields: SubdistrictFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Subdistrict.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SubdistrictClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    district<T extends DistrictDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DistrictDefaultArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    users<T extends Subdistrict$usersArgs<ExtArgs> = {}>(args?: Subset<T, Subdistrict$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    admin<T extends Subdistrict$adminArgs<ExtArgs> = {}>(args?: Subset<T, Subdistrict$adminArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$adminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    officer<T extends Subdistrict$officerArgs<ExtArgs> = {}>(args?: Subset<T, Subdistrict$officerArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$officerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    executive<T extends Subdistrict$executiveArgs<ExtArgs> = {}>(args?: Subset<T, Subdistrict$executiveArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$executivePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Subdistrict model
+   */
+  interface SubdistrictFieldRefs {
+    readonly subdistrict_id: FieldRef<"Subdistrict", 'Int'>
+    readonly district_id: FieldRef<"Subdistrict", 'Int'>
+    readonly subdistrict_name: FieldRef<"Subdistrict", 'String'>
+    readonly zip_code: FieldRef<"Subdistrict", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Subdistrict findUnique
+   */
+  export type SubdistrictFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    /**
+     * Filter, which Subdistrict to fetch.
+     */
+    where: SubdistrictWhereUniqueInput
+  }
+
+  /**
+   * Subdistrict findUniqueOrThrow
+   */
+  export type SubdistrictFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    /**
+     * Filter, which Subdistrict to fetch.
+     */
+    where: SubdistrictWhereUniqueInput
+  }
+
+  /**
+   * Subdistrict findFirst
+   */
+  export type SubdistrictFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    /**
+     * Filter, which Subdistrict to fetch.
+     */
+    where?: SubdistrictWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Subdistricts to fetch.
+     */
+    orderBy?: SubdistrictOrderByWithRelationInput | SubdistrictOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Subdistricts.
+     */
+    cursor?: SubdistrictWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Subdistricts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Subdistricts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Subdistricts.
+     */
+    distinct?: SubdistrictScalarFieldEnum | SubdistrictScalarFieldEnum[]
+  }
+
+  /**
+   * Subdistrict findFirstOrThrow
+   */
+  export type SubdistrictFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    /**
+     * Filter, which Subdistrict to fetch.
+     */
+    where?: SubdistrictWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Subdistricts to fetch.
+     */
+    orderBy?: SubdistrictOrderByWithRelationInput | SubdistrictOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Subdistricts.
+     */
+    cursor?: SubdistrictWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Subdistricts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Subdistricts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Subdistricts.
+     */
+    distinct?: SubdistrictScalarFieldEnum | SubdistrictScalarFieldEnum[]
+  }
+
+  /**
+   * Subdistrict findMany
+   */
+  export type SubdistrictFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    /**
+     * Filter, which Subdistricts to fetch.
+     */
+    where?: SubdistrictWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Subdistricts to fetch.
+     */
+    orderBy?: SubdistrictOrderByWithRelationInput | SubdistrictOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Subdistricts.
+     */
+    cursor?: SubdistrictWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Subdistricts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Subdistricts.
+     */
+    skip?: number
+    distinct?: SubdistrictScalarFieldEnum | SubdistrictScalarFieldEnum[]
+  }
+
+  /**
+   * Subdistrict create
+   */
+  export type SubdistrictCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Subdistrict.
+     */
+    data: XOR<SubdistrictCreateInput, SubdistrictUncheckedCreateInput>
+  }
+
+  /**
+   * Subdistrict createMany
+   */
+  export type SubdistrictCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Subdistricts.
+     */
+    data: SubdistrictCreateManyInput | SubdistrictCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Subdistrict createManyAndReturn
+   */
+  export type SubdistrictCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * The data used to create many Subdistricts.
+     */
+    data: SubdistrictCreateManyInput | SubdistrictCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Subdistrict update
+   */
+  export type SubdistrictUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Subdistrict.
+     */
+    data: XOR<SubdistrictUpdateInput, SubdistrictUncheckedUpdateInput>
+    /**
+     * Choose, which Subdistrict to update.
+     */
+    where: SubdistrictWhereUniqueInput
+  }
+
+  /**
+   * Subdistrict updateMany
+   */
+  export type SubdistrictUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Subdistricts.
+     */
+    data: XOR<SubdistrictUpdateManyMutationInput, SubdistrictUncheckedUpdateManyInput>
+    /**
+     * Filter which Subdistricts to update
+     */
+    where?: SubdistrictWhereInput
+    /**
+     * Limit how many Subdistricts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Subdistrict updateManyAndReturn
+   */
+  export type SubdistrictUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * The data used to update Subdistricts.
+     */
+    data: XOR<SubdistrictUpdateManyMutationInput, SubdistrictUncheckedUpdateManyInput>
+    /**
+     * Filter which Subdistricts to update
+     */
+    where?: SubdistrictWhereInput
+    /**
+     * Limit how many Subdistricts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Subdistrict upsert
+   */
+  export type SubdistrictUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Subdistrict to update in case it exists.
+     */
+    where: SubdistrictWhereUniqueInput
+    /**
+     * In case the Subdistrict found by the `where` argument doesn't exist, create a new Subdistrict with this data.
+     */
+    create: XOR<SubdistrictCreateInput, SubdistrictUncheckedCreateInput>
+    /**
+     * In case the Subdistrict was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SubdistrictUpdateInput, SubdistrictUncheckedUpdateInput>
+  }
+
+  /**
+   * Subdistrict delete
+   */
+  export type SubdistrictDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
+    /**
+     * Filter which Subdistrict to delete.
+     */
+    where: SubdistrictWhereUniqueInput
+  }
+
+  /**
+   * Subdistrict deleteMany
+   */
+  export type SubdistrictDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Subdistricts to delete
+     */
+    where?: SubdistrictWhereInput
+    /**
+     * Limit how many Subdistricts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Subdistrict.users
+   */
+  export type Subdistrict$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the users
+     */
+    select?: usersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the users
+     */
+    omit?: usersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: usersInclude<ExtArgs> | null
+    where?: usersWhereInput
+    orderBy?: usersOrderByWithRelationInput | usersOrderByWithRelationInput[]
+    cursor?: usersWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UsersScalarFieldEnum | UsersScalarFieldEnum[]
+  }
+
+  /**
+   * Subdistrict.admin
+   */
+  export type Subdistrict$adminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin
+     */
+    select?: adminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin
+     */
+    omit?: adminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: adminInclude<ExtArgs> | null
+    where?: adminWhereInput
+    orderBy?: adminOrderByWithRelationInput | adminOrderByWithRelationInput[]
+    cursor?: adminWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminScalarFieldEnum | AdminScalarFieldEnum[]
+  }
+
+  /**
+   * Subdistrict.officer
+   */
+  export type Subdistrict$officerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the officer
+     */
+    select?: officerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the officer
+     */
+    omit?: officerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: officerInclude<ExtArgs> | null
+    where?: officerWhereInput
+    orderBy?: officerOrderByWithRelationInput | officerOrderByWithRelationInput[]
+    cursor?: officerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OfficerScalarFieldEnum | OfficerScalarFieldEnum[]
+  }
+
+  /**
+   * Subdistrict.executive
+   */
+  export type Subdistrict$executiveArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the executive
+     */
+    select?: executiveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the executive
+     */
+    omit?: executiveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: executiveInclude<ExtArgs> | null
+    where?: executiveWhereInput
+    orderBy?: executiveOrderByWithRelationInput | executiveOrderByWithRelationInput[]
+    cursor?: executiveWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExecutiveScalarFieldEnum | ExecutiveScalarFieldEnum[]
+  }
+
+  /**
+   * Subdistrict without action
+   */
+  export type SubdistrictDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdistrict
+     */
+    select?: SubdistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subdistrict
+     */
+    omit?: SubdistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdistrictInclude<ExtArgs> | null
   }
 
 
@@ -12663,6 +17255,9 @@ export namespace Prisma {
     citizen_id: 'citizen_id',
     position: 'position',
     department: 'department',
+    province_id: 'province_id',
+    district_id: 'district_id',
+    subdistrict_id: 'subdistrict_id',
     zip_code: 'zip_code',
     profile_image: 'profile_image',
     created_at: 'created_at',
@@ -12710,6 +17305,9 @@ export namespace Prisma {
     citizen_id: 'citizen_id',
     position: 'position',
     department: 'department',
+    province_id: 'province_id',
+    district_id: 'district_id',
+    subdistrict_id: 'subdistrict_id',
     zip_code: 'zip_code',
     profile_image: 'profile_image',
     created_at: 'created_at',
@@ -12730,6 +17328,7 @@ export namespace Prisma {
     status_r: 'status_r',
     officer_id: 'officer_id',
     details_r: 'details_r',
+    rejected_reason: 'rejected_reason',
     booking_dates: 'booking_dates',
     is_multi_day: 'is_multi_day',
     created_at: 'created_at',
@@ -12770,6 +17369,9 @@ export namespace Prisma {
     citizen_id: 'citizen_id',
     position: 'position',
     department: 'department',
+    province_id: 'province_id',
+    district_id: 'district_id',
+    subdistrict_id: 'subdistrict_id',
     zip_code: 'zip_code',
     profile_image: 'profile_image',
     created_at: 'created_at',
@@ -12789,6 +17391,9 @@ export namespace Prisma {
     citizen_id: 'citizen_id',
     position: 'position',
     department: 'department',
+    province_id: 'province_id',
+    district_id: 'district_id',
+    subdistrict_id: 'subdistrict_id',
     zip_code: 'zip_code',
     profile_image: 'profile_image',
     created_at: 'created_at',
@@ -12796,6 +17401,33 @@ export namespace Prisma {
   };
 
   export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+  export const ProvinceScalarFieldEnum: {
+    province_id: 'province_id',
+    province_name: 'province_name'
+  };
+
+  export type ProvinceScalarFieldEnum = (typeof ProvinceScalarFieldEnum)[keyof typeof ProvinceScalarFieldEnum]
+
+
+  export const DistrictScalarFieldEnum: {
+    district_id: 'district_id',
+    province_id: 'province_id',
+    district_name: 'district_name'
+  };
+
+  export type DistrictScalarFieldEnum = (typeof DistrictScalarFieldEnum)[keyof typeof DistrictScalarFieldEnum]
+
+
+  export const SubdistrictScalarFieldEnum: {
+    subdistrict_id: 'subdistrict_id',
+    district_id: 'district_id',
+    subdistrict_name: 'subdistrict_name',
+    zip_code: 'zip_code'
+  };
+
+  export type SubdistrictScalarFieldEnum = (typeof SubdistrictScalarFieldEnum)[keyof typeof SubdistrictScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -12920,11 +17552,17 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"admin"> | string | null
     position?: StringNullableFilter<"admin"> | string | null
     department?: StringNullableFilter<"admin"> | string | null
+    province_id?: IntNullableFilter<"admin"> | number | null
+    district_id?: IntNullableFilter<"admin"> | number | null
+    subdistrict_id?: IntNullableFilter<"admin"> | number | null
     zip_code?: IntNullableFilter<"admin"> | number | null
     profile_image?: BytesNullableFilter<"admin"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"admin"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"admin"> | Date | string | null
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
+    province?: XOR<ProvinceNullableScalarRelationFilter, ProvinceWhereInput> | null
+    district?: XOR<DistrictNullableScalarRelationFilter, DistrictWhereInput> | null
+    subdistrict?: XOR<SubdistrictNullableScalarRelationFilter, SubdistrictWhereInput> | null
   }
 
   export type adminOrderByWithRelationInput = {
@@ -12937,11 +17575,17 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    province_id?: SortOrderInput | SortOrder
+    district_id?: SortOrderInput | SortOrder
+    subdistrict_id?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
     profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     roles?: rolesOrderByWithRelationInput
+    province?: ProvinceOrderByWithRelationInput
+    district?: DistrictOrderByWithRelationInput
+    subdistrict?: SubdistrictOrderByWithRelationInput
   }
 
   export type adminWhereUniqueInput = Prisma.AtLeast<{
@@ -12957,11 +17601,17 @@ export namespace Prisma {
     password?: StringFilter<"admin"> | string
     position?: StringNullableFilter<"admin"> | string | null
     department?: StringNullableFilter<"admin"> | string | null
+    province_id?: IntNullableFilter<"admin"> | number | null
+    district_id?: IntNullableFilter<"admin"> | number | null
+    subdistrict_id?: IntNullableFilter<"admin"> | number | null
     zip_code?: IntNullableFilter<"admin"> | number | null
     profile_image?: BytesNullableFilter<"admin"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"admin"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"admin"> | Date | string | null
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
+    province?: XOR<ProvinceNullableScalarRelationFilter, ProvinceWhereInput> | null
+    district?: XOR<DistrictNullableScalarRelationFilter, DistrictWhereInput> | null
+    subdistrict?: XOR<SubdistrictNullableScalarRelationFilter, SubdistrictWhereInput> | null
   }, "admin_id" | "email" | "citizen_id">
 
   export type adminOrderByWithAggregationInput = {
@@ -12974,6 +17624,9 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    province_id?: SortOrderInput | SortOrder
+    district_id?: SortOrderInput | SortOrder
+    subdistrict_id?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
     profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
@@ -12998,6 +17651,9 @@ export namespace Prisma {
     citizen_id?: StringNullableWithAggregatesFilter<"admin"> | string | null
     position?: StringNullableWithAggregatesFilter<"admin"> | string | null
     department?: StringNullableWithAggregatesFilter<"admin"> | string | null
+    province_id?: IntNullableWithAggregatesFilter<"admin"> | number | null
+    district_id?: IntNullableWithAggregatesFilter<"admin"> | number | null
+    subdistrict_id?: IntNullableWithAggregatesFilter<"admin"> | number | null
     zip_code?: IntNullableWithAggregatesFilter<"admin"> | number | null
     profile_image?: BytesNullableWithAggregatesFilter<"admin"> | Uint8Array | null
     created_at?: DateTimeNullableWithAggregatesFilter<"admin"> | Date | string | null
@@ -13167,11 +17823,17 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"officer"> | string | null
     position?: StringNullableFilter<"officer"> | string | null
     department?: StringNullableFilter<"officer"> | string | null
+    province_id?: IntNullableFilter<"officer"> | number | null
+    district_id?: IntNullableFilter<"officer"> | number | null
+    subdistrict_id?: IntNullableFilter<"officer"> | number | null
     zip_code?: IntNullableFilter<"officer"> | number | null
     profile_image?: BytesNullableFilter<"officer"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"officer"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"officer"> | Date | string | null
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
+    province?: XOR<ProvinceNullableScalarRelationFilter, ProvinceWhereInput> | null
+    district?: XOR<DistrictNullableScalarRelationFilter, DistrictWhereInput> | null
+    subdistrict?: XOR<SubdistrictNullableScalarRelationFilter, SubdistrictWhereInput> | null
     reservation?: ReservationListRelationFilter
   }
 
@@ -13185,11 +17847,17 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    province_id?: SortOrderInput | SortOrder
+    district_id?: SortOrderInput | SortOrder
+    subdistrict_id?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
     profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     roles?: rolesOrderByWithRelationInput
+    province?: ProvinceOrderByWithRelationInput
+    district?: DistrictOrderByWithRelationInput
+    subdistrict?: SubdistrictOrderByWithRelationInput
     reservation?: reservationOrderByRelationAggregateInput
   }
 
@@ -13206,11 +17874,17 @@ export namespace Prisma {
     password?: StringFilter<"officer"> | string
     position?: StringNullableFilter<"officer"> | string | null
     department?: StringNullableFilter<"officer"> | string | null
+    province_id?: IntNullableFilter<"officer"> | number | null
+    district_id?: IntNullableFilter<"officer"> | number | null
+    subdistrict_id?: IntNullableFilter<"officer"> | number | null
     zip_code?: IntNullableFilter<"officer"> | number | null
     profile_image?: BytesNullableFilter<"officer"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"officer"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"officer"> | Date | string | null
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
+    province?: XOR<ProvinceNullableScalarRelationFilter, ProvinceWhereInput> | null
+    district?: XOR<DistrictNullableScalarRelationFilter, DistrictWhereInput> | null
+    subdistrict?: XOR<SubdistrictNullableScalarRelationFilter, SubdistrictWhereInput> | null
     reservation?: ReservationListRelationFilter
   }, "officer_id" | "email" | "citizen_id">
 
@@ -13224,6 +17898,9 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    province_id?: SortOrderInput | SortOrder
+    district_id?: SortOrderInput | SortOrder
+    subdistrict_id?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
     profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
@@ -13248,6 +17925,9 @@ export namespace Prisma {
     citizen_id?: StringNullableWithAggregatesFilter<"officer"> | string | null
     position?: StringNullableWithAggregatesFilter<"officer"> | string | null
     department?: StringNullableWithAggregatesFilter<"officer"> | string | null
+    province_id?: IntNullableWithAggregatesFilter<"officer"> | number | null
+    district_id?: IntNullableWithAggregatesFilter<"officer"> | number | null
+    subdistrict_id?: IntNullableWithAggregatesFilter<"officer"> | number | null
     zip_code?: IntNullableWithAggregatesFilter<"officer"> | number | null
     profile_image?: BytesNullableWithAggregatesFilter<"officer"> | Uint8Array | null
     created_at?: DateTimeNullableWithAggregatesFilter<"officer"> | Date | string | null
@@ -13268,6 +17948,7 @@ export namespace Prisma {
     status_r?: StringNullableFilter<"reservation"> | string | null
     officer_id?: IntNullableFilter<"reservation"> | number | null
     details_r?: StringNullableFilter<"reservation"> | string | null
+    rejected_reason?: StringNullableFilter<"reservation"> | string | null
     booking_dates?: StringNullableFilter<"reservation"> | string | null
     is_multi_day?: BoolNullableFilter<"reservation"> | boolean | null
     created_at?: DateTimeNullableFilter<"reservation"> | Date | string | null
@@ -13288,6 +17969,7 @@ export namespace Prisma {
     status_r?: SortOrderInput | SortOrder
     officer_id?: SortOrderInput | SortOrder
     details_r?: SortOrderInput | SortOrder
+    rejected_reason?: SortOrderInput | SortOrder
     booking_dates?: SortOrderInput | SortOrder
     is_multi_day?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
@@ -13311,6 +17993,7 @@ export namespace Prisma {
     status_r?: StringNullableFilter<"reservation"> | string | null
     officer_id?: IntNullableFilter<"reservation"> | number | null
     details_r?: StringNullableFilter<"reservation"> | string | null
+    rejected_reason?: StringNullableFilter<"reservation"> | string | null
     booking_dates?: StringNullableFilter<"reservation"> | string | null
     is_multi_day?: BoolNullableFilter<"reservation"> | boolean | null
     created_at?: DateTimeNullableFilter<"reservation"> | Date | string | null
@@ -13331,6 +18014,7 @@ export namespace Prisma {
     status_r?: SortOrderInput | SortOrder
     officer_id?: SortOrderInput | SortOrder
     details_r?: SortOrderInput | SortOrder
+    rejected_reason?: SortOrderInput | SortOrder
     booking_dates?: SortOrderInput | SortOrder
     is_multi_day?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
@@ -13356,6 +18040,7 @@ export namespace Prisma {
     status_r?: StringNullableWithAggregatesFilter<"reservation"> | string | null
     officer_id?: IntNullableWithAggregatesFilter<"reservation"> | number | null
     details_r?: StringNullableWithAggregatesFilter<"reservation"> | string | null
+    rejected_reason?: StringNullableWithAggregatesFilter<"reservation"> | string | null
     booking_dates?: StringNullableWithAggregatesFilter<"reservation"> | string | null
     is_multi_day?: BoolNullableWithAggregatesFilter<"reservation"> | boolean | null
     created_at?: DateTimeNullableWithAggregatesFilter<"reservation"> | Date | string | null
@@ -13496,11 +18181,17 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"executive"> | string | null
     position?: StringFilter<"executive"> | string
     department?: StringFilter<"executive"> | string
+    province_id?: IntNullableFilter<"executive"> | number | null
+    district_id?: IntNullableFilter<"executive"> | number | null
+    subdistrict_id?: IntNullableFilter<"executive"> | number | null
     zip_code?: IntNullableFilter<"executive"> | number | null
     profile_image?: BytesNullableFilter<"executive"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"executive"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"executive"> | Date | string | null
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
+    province?: XOR<ProvinceNullableScalarRelationFilter, ProvinceWhereInput> | null
+    district?: XOR<DistrictNullableScalarRelationFilter, DistrictWhereInput> | null
+    subdistrict?: XOR<SubdistrictNullableScalarRelationFilter, SubdistrictWhereInput> | null
   }
 
   export type executiveOrderByWithRelationInput = {
@@ -13513,11 +18204,17 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrderInput | SortOrder
+    district_id?: SortOrderInput | SortOrder
+    subdistrict_id?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
     profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     roles?: rolesOrderByWithRelationInput
+    province?: ProvinceOrderByWithRelationInput
+    district?: DistrictOrderByWithRelationInput
+    subdistrict?: SubdistrictOrderByWithRelationInput
   }
 
   export type executiveWhereUniqueInput = Prisma.AtLeast<{
@@ -13533,11 +18230,17 @@ export namespace Prisma {
     password?: StringFilter<"executive"> | string
     position?: StringFilter<"executive"> | string
     department?: StringFilter<"executive"> | string
+    province_id?: IntNullableFilter<"executive"> | number | null
+    district_id?: IntNullableFilter<"executive"> | number | null
+    subdistrict_id?: IntNullableFilter<"executive"> | number | null
     zip_code?: IntNullableFilter<"executive"> | number | null
     profile_image?: BytesNullableFilter<"executive"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"executive"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"executive"> | Date | string | null
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
+    province?: XOR<ProvinceNullableScalarRelationFilter, ProvinceWhereInput> | null
+    district?: XOR<DistrictNullableScalarRelationFilter, DistrictWhereInput> | null
+    subdistrict?: XOR<SubdistrictNullableScalarRelationFilter, SubdistrictWhereInput> | null
   }, "executive_id" | "email" | "citizen_id">
 
   export type executiveOrderByWithAggregationInput = {
@@ -13550,6 +18253,9 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrderInput | SortOrder
+    district_id?: SortOrderInput | SortOrder
+    subdistrict_id?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
     profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
@@ -13574,6 +18280,9 @@ export namespace Prisma {
     citizen_id?: StringNullableWithAggregatesFilter<"executive"> | string | null
     position?: StringWithAggregatesFilter<"executive"> | string
     department?: StringWithAggregatesFilter<"executive"> | string
+    province_id?: IntNullableWithAggregatesFilter<"executive"> | number | null
+    district_id?: IntNullableWithAggregatesFilter<"executive"> | number | null
+    subdistrict_id?: IntNullableWithAggregatesFilter<"executive"> | number | null
     zip_code?: IntNullableWithAggregatesFilter<"executive"> | number | null
     profile_image?: BytesNullableWithAggregatesFilter<"executive"> | Uint8Array | null
     created_at?: DateTimeNullableWithAggregatesFilter<"executive"> | Date | string | null
@@ -13593,6 +18302,9 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"users"> | string | null
     position?: StringNullableFilter<"users"> | string | null
     department?: StringNullableFilter<"users"> | string | null
+    province_id?: IntNullableFilter<"users"> | number | null
+    district_id?: IntNullableFilter<"users"> | number | null
+    subdistrict_id?: IntNullableFilter<"users"> | number | null
     zip_code?: IntNullableFilter<"users"> | number | null
     profile_image?: BytesNullableFilter<"users"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"users"> | Date | string | null
@@ -13600,6 +18312,9 @@ export namespace Prisma {
     reservation?: ReservationListRelationFilter
     review?: ReviewListRelationFilter
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
+    province?: XOR<ProvinceNullableScalarRelationFilter, ProvinceWhereInput> | null
+    district?: XOR<DistrictNullableScalarRelationFilter, DistrictWhereInput> | null
+    subdistrict?: XOR<SubdistrictNullableScalarRelationFilter, SubdistrictWhereInput> | null
   }
 
   export type usersOrderByWithRelationInput = {
@@ -13612,6 +18327,9 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    province_id?: SortOrderInput | SortOrder
+    district_id?: SortOrderInput | SortOrder
+    subdistrict_id?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
     profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
@@ -13619,6 +18337,9 @@ export namespace Prisma {
     reservation?: reservationOrderByRelationAggregateInput
     review?: reviewOrderByRelationAggregateInput
     roles?: rolesOrderByWithRelationInput
+    province?: ProvinceOrderByWithRelationInput
+    district?: DistrictOrderByWithRelationInput
+    subdistrict?: SubdistrictOrderByWithRelationInput
   }
 
   export type usersWhereUniqueInput = Prisma.AtLeast<{
@@ -13634,6 +18355,9 @@ export namespace Prisma {
     password?: StringFilter<"users"> | string
     position?: StringNullableFilter<"users"> | string | null
     department?: StringNullableFilter<"users"> | string | null
+    province_id?: IntNullableFilter<"users"> | number | null
+    district_id?: IntNullableFilter<"users"> | number | null
+    subdistrict_id?: IntNullableFilter<"users"> | number | null
     zip_code?: IntNullableFilter<"users"> | number | null
     profile_image?: BytesNullableFilter<"users"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"users"> | Date | string | null
@@ -13641,6 +18365,9 @@ export namespace Prisma {
     reservation?: ReservationListRelationFilter
     review?: ReviewListRelationFilter
     roles?: XOR<RolesScalarRelationFilter, rolesWhereInput>
+    province?: XOR<ProvinceNullableScalarRelationFilter, ProvinceWhereInput> | null
+    district?: XOR<DistrictNullableScalarRelationFilter, DistrictWhereInput> | null
+    subdistrict?: XOR<SubdistrictNullableScalarRelationFilter, SubdistrictWhereInput> | null
   }, "user_id" | "email" | "citizen_id">
 
   export type usersOrderByWithAggregationInput = {
@@ -13653,6 +18380,9 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    province_id?: SortOrderInput | SortOrder
+    district_id?: SortOrderInput | SortOrder
+    subdistrict_id?: SortOrderInput | SortOrder
     zip_code?: SortOrderInput | SortOrder
     profile_image?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
@@ -13677,10 +18407,193 @@ export namespace Prisma {
     citizen_id?: StringNullableWithAggregatesFilter<"users"> | string | null
     position?: StringNullableWithAggregatesFilter<"users"> | string | null
     department?: StringNullableWithAggregatesFilter<"users"> | string | null
+    province_id?: IntNullableWithAggregatesFilter<"users"> | number | null
+    district_id?: IntNullableWithAggregatesFilter<"users"> | number | null
+    subdistrict_id?: IntNullableWithAggregatesFilter<"users"> | number | null
     zip_code?: IntNullableWithAggregatesFilter<"users"> | number | null
     profile_image?: BytesNullableWithAggregatesFilter<"users"> | Uint8Array | null
     created_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
     updated_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
+  }
+
+  export type ProvinceWhereInput = {
+    AND?: ProvinceWhereInput | ProvinceWhereInput[]
+    OR?: ProvinceWhereInput[]
+    NOT?: ProvinceWhereInput | ProvinceWhereInput[]
+    province_id?: IntFilter<"Province"> | number
+    province_name?: StringFilter<"Province"> | string
+    districts?: DistrictListRelationFilter
+    users?: UsersListRelationFilter
+    admin?: AdminListRelationFilter
+    officer?: OfficerListRelationFilter
+    executive?: ExecutiveListRelationFilter
+  }
+
+  export type ProvinceOrderByWithRelationInput = {
+    province_id?: SortOrder
+    province_name?: SortOrder
+    districts?: DistrictOrderByRelationAggregateInput
+    users?: usersOrderByRelationAggregateInput
+    admin?: adminOrderByRelationAggregateInput
+    officer?: officerOrderByRelationAggregateInput
+    executive?: executiveOrderByRelationAggregateInput
+  }
+
+  export type ProvinceWhereUniqueInput = Prisma.AtLeast<{
+    province_id?: number
+    AND?: ProvinceWhereInput | ProvinceWhereInput[]
+    OR?: ProvinceWhereInput[]
+    NOT?: ProvinceWhereInput | ProvinceWhereInput[]
+    province_name?: StringFilter<"Province"> | string
+    districts?: DistrictListRelationFilter
+    users?: UsersListRelationFilter
+    admin?: AdminListRelationFilter
+    officer?: OfficerListRelationFilter
+    executive?: ExecutiveListRelationFilter
+  }, "province_id">
+
+  export type ProvinceOrderByWithAggregationInput = {
+    province_id?: SortOrder
+    province_name?: SortOrder
+    _count?: ProvinceCountOrderByAggregateInput
+    _avg?: ProvinceAvgOrderByAggregateInput
+    _max?: ProvinceMaxOrderByAggregateInput
+    _min?: ProvinceMinOrderByAggregateInput
+    _sum?: ProvinceSumOrderByAggregateInput
+  }
+
+  export type ProvinceScalarWhereWithAggregatesInput = {
+    AND?: ProvinceScalarWhereWithAggregatesInput | ProvinceScalarWhereWithAggregatesInput[]
+    OR?: ProvinceScalarWhereWithAggregatesInput[]
+    NOT?: ProvinceScalarWhereWithAggregatesInput | ProvinceScalarWhereWithAggregatesInput[]
+    province_id?: IntWithAggregatesFilter<"Province"> | number
+    province_name?: StringWithAggregatesFilter<"Province"> | string
+  }
+
+  export type DistrictWhereInput = {
+    AND?: DistrictWhereInput | DistrictWhereInput[]
+    OR?: DistrictWhereInput[]
+    NOT?: DistrictWhereInput | DistrictWhereInput[]
+    district_id?: IntFilter<"District"> | number
+    province_id?: IntFilter<"District"> | number
+    district_name?: StringFilter<"District"> | string
+    province?: XOR<ProvinceScalarRelationFilter, ProvinceWhereInput>
+    subdistricts?: SubdistrictListRelationFilter
+    users?: UsersListRelationFilter
+    admin?: AdminListRelationFilter
+    officer?: OfficerListRelationFilter
+    executive?: ExecutiveListRelationFilter
+  }
+
+  export type DistrictOrderByWithRelationInput = {
+    district_id?: SortOrder
+    province_id?: SortOrder
+    district_name?: SortOrder
+    province?: ProvinceOrderByWithRelationInput
+    subdistricts?: SubdistrictOrderByRelationAggregateInput
+    users?: usersOrderByRelationAggregateInput
+    admin?: adminOrderByRelationAggregateInput
+    officer?: officerOrderByRelationAggregateInput
+    executive?: executiveOrderByRelationAggregateInput
+  }
+
+  export type DistrictWhereUniqueInput = Prisma.AtLeast<{
+    district_id?: number
+    AND?: DistrictWhereInput | DistrictWhereInput[]
+    OR?: DistrictWhereInput[]
+    NOT?: DistrictWhereInput | DistrictWhereInput[]
+    province_id?: IntFilter<"District"> | number
+    district_name?: StringFilter<"District"> | string
+    province?: XOR<ProvinceScalarRelationFilter, ProvinceWhereInput>
+    subdistricts?: SubdistrictListRelationFilter
+    users?: UsersListRelationFilter
+    admin?: AdminListRelationFilter
+    officer?: OfficerListRelationFilter
+    executive?: ExecutiveListRelationFilter
+  }, "district_id">
+
+  export type DistrictOrderByWithAggregationInput = {
+    district_id?: SortOrder
+    province_id?: SortOrder
+    district_name?: SortOrder
+    _count?: DistrictCountOrderByAggregateInput
+    _avg?: DistrictAvgOrderByAggregateInput
+    _max?: DistrictMaxOrderByAggregateInput
+    _min?: DistrictMinOrderByAggregateInput
+    _sum?: DistrictSumOrderByAggregateInput
+  }
+
+  export type DistrictScalarWhereWithAggregatesInput = {
+    AND?: DistrictScalarWhereWithAggregatesInput | DistrictScalarWhereWithAggregatesInput[]
+    OR?: DistrictScalarWhereWithAggregatesInput[]
+    NOT?: DistrictScalarWhereWithAggregatesInput | DistrictScalarWhereWithAggregatesInput[]
+    district_id?: IntWithAggregatesFilter<"District"> | number
+    province_id?: IntWithAggregatesFilter<"District"> | number
+    district_name?: StringWithAggregatesFilter<"District"> | string
+  }
+
+  export type SubdistrictWhereInput = {
+    AND?: SubdistrictWhereInput | SubdistrictWhereInput[]
+    OR?: SubdistrictWhereInput[]
+    NOT?: SubdistrictWhereInput | SubdistrictWhereInput[]
+    subdistrict_id?: IntFilter<"Subdistrict"> | number
+    district_id?: IntFilter<"Subdistrict"> | number
+    subdistrict_name?: StringFilter<"Subdistrict"> | string
+    zip_code?: StringNullableFilter<"Subdistrict"> | string | null
+    district?: XOR<DistrictScalarRelationFilter, DistrictWhereInput>
+    users?: UsersListRelationFilter
+    admin?: AdminListRelationFilter
+    officer?: OfficerListRelationFilter
+    executive?: ExecutiveListRelationFilter
+  }
+
+  export type SubdistrictOrderByWithRelationInput = {
+    subdistrict_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_name?: SortOrder
+    zip_code?: SortOrderInput | SortOrder
+    district?: DistrictOrderByWithRelationInput
+    users?: usersOrderByRelationAggregateInput
+    admin?: adminOrderByRelationAggregateInput
+    officer?: officerOrderByRelationAggregateInput
+    executive?: executiveOrderByRelationAggregateInput
+  }
+
+  export type SubdistrictWhereUniqueInput = Prisma.AtLeast<{
+    subdistrict_id?: number
+    AND?: SubdistrictWhereInput | SubdistrictWhereInput[]
+    OR?: SubdistrictWhereInput[]
+    NOT?: SubdistrictWhereInput | SubdistrictWhereInput[]
+    district_id?: IntFilter<"Subdistrict"> | number
+    subdistrict_name?: StringFilter<"Subdistrict"> | string
+    zip_code?: StringNullableFilter<"Subdistrict"> | string | null
+    district?: XOR<DistrictScalarRelationFilter, DistrictWhereInput>
+    users?: UsersListRelationFilter
+    admin?: AdminListRelationFilter
+    officer?: OfficerListRelationFilter
+    executive?: ExecutiveListRelationFilter
+  }, "subdistrict_id">
+
+  export type SubdistrictOrderByWithAggregationInput = {
+    subdistrict_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_name?: SortOrder
+    zip_code?: SortOrderInput | SortOrder
+    _count?: SubdistrictCountOrderByAggregateInput
+    _avg?: SubdistrictAvgOrderByAggregateInput
+    _max?: SubdistrictMaxOrderByAggregateInput
+    _min?: SubdistrictMinOrderByAggregateInput
+    _sum?: SubdistrictSumOrderByAggregateInput
+  }
+
+  export type SubdistrictScalarWhereWithAggregatesInput = {
+    AND?: SubdistrictScalarWhereWithAggregatesInput | SubdistrictScalarWhereWithAggregatesInput[]
+    OR?: SubdistrictScalarWhereWithAggregatesInput[]
+    NOT?: SubdistrictScalarWhereWithAggregatesInput | SubdistrictScalarWhereWithAggregatesInput[]
+    subdistrict_id?: IntWithAggregatesFilter<"Subdistrict"> | number
+    district_id?: IntWithAggregatesFilter<"Subdistrict"> | number
+    subdistrict_name?: StringWithAggregatesFilter<"Subdistrict"> | string
+    zip_code?: StringNullableWithAggregatesFilter<"Subdistrict"> | string | null
   }
 
   export type adminCreateInput = {
@@ -13696,6 +18609,9 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     roles: rolesCreateNestedOneWithoutAdminInput
+    province?: ProvinceCreateNestedOneWithoutAdminInput
+    district?: DistrictCreateNestedOneWithoutAdminInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutAdminInput
   }
 
   export type adminUncheckedCreateInput = {
@@ -13708,6 +18624,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -13727,6 +18646,9 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     roles?: rolesUpdateOneRequiredWithoutAdminNestedInput
+    province?: ProvinceUpdateOneWithoutAdminNestedInput
+    district?: DistrictUpdateOneWithoutAdminNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutAdminNestedInput
   }
 
   export type adminUncheckedUpdateInput = {
@@ -13739,6 +18661,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13755,6 +18680,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -13785,6 +18713,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13963,6 +18894,9 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     roles: rolesCreateNestedOneWithoutOfficerInput
+    province?: ProvinceCreateNestedOneWithoutOfficerInput
+    district?: DistrictCreateNestedOneWithoutOfficerInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutOfficerInput
     reservation?: reservationCreateNestedManyWithoutOfficerInput
   }
 
@@ -13976,6 +18910,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -13996,6 +18933,9 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     roles?: rolesUpdateOneRequiredWithoutOfficerNestedInput
+    province?: ProvinceUpdateOneWithoutOfficerNestedInput
+    district?: DistrictUpdateOneWithoutOfficerNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutOfficerNestedInput
     reservation?: reservationUpdateManyWithoutOfficerNestedInput
   }
 
@@ -14009,6 +18949,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14026,6 +18969,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -14056,6 +19002,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14069,6 +19018,7 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -14089,6 +19039,7 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -14102,6 +19053,7 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14122,6 +19074,7 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14139,6 +19092,7 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -14152,6 +19106,7 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14169,6 +19124,7 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14301,6 +19257,9 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     roles: rolesCreateNestedOneWithoutExecutiveInput
+    province?: ProvinceCreateNestedOneWithoutExecutiveInput
+    district?: DistrictCreateNestedOneWithoutExecutiveInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutExecutiveInput
   }
 
   export type executiveUncheckedCreateInput = {
@@ -14313,6 +19272,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -14332,6 +19294,9 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     roles?: rolesUpdateOneRequiredWithoutExecutiveNestedInput
+    province?: ProvinceUpdateOneWithoutExecutiveNestedInput
+    district?: DistrictUpdateOneWithoutExecutiveNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutExecutiveNestedInput
   }
 
   export type executiveUncheckedUpdateInput = {
@@ -14344,6 +19309,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14360,6 +19328,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -14390,6 +19361,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14411,6 +19385,9 @@ export namespace Prisma {
     reservation?: reservationCreateNestedManyWithoutUsersInput
     review?: reviewCreateNestedManyWithoutUsersInput
     roles: rolesCreateNestedOneWithoutUsersInput
+    province?: ProvinceCreateNestedOneWithoutUsersInput
+    district?: DistrictCreateNestedOneWithoutUsersInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutUsersInput
   }
 
   export type usersUncheckedCreateInput = {
@@ -14423,6 +19400,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -14446,6 +19426,9 @@ export namespace Prisma {
     reservation?: reservationUpdateManyWithoutUsersNestedInput
     review?: reviewUpdateManyWithoutUsersNestedInput
     roles?: rolesUpdateOneRequiredWithoutUsersNestedInput
+    province?: ProvinceUpdateOneWithoutUsersNestedInput
+    district?: DistrictUpdateOneWithoutUsersNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateInput = {
@@ -14458,6 +19441,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -14476,6 +19462,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -14506,10 +19495,184 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProvinceCreateInput = {
+    province_name: string
+    districts?: DistrictCreateNestedManyWithoutProvinceInput
+    users?: usersCreateNestedManyWithoutProvinceInput
+    admin?: adminCreateNestedManyWithoutProvinceInput
+    officer?: officerCreateNestedManyWithoutProvinceInput
+    executive?: executiveCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceUncheckedCreateInput = {
+    province_id?: number
+    province_name: string
+    districts?: DistrictUncheckedCreateNestedManyWithoutProvinceInput
+    users?: usersUncheckedCreateNestedManyWithoutProvinceInput
+    admin?: adminUncheckedCreateNestedManyWithoutProvinceInput
+    officer?: officerUncheckedCreateNestedManyWithoutProvinceInput
+    executive?: executiveUncheckedCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceUpdateInput = {
+    province_name?: StringFieldUpdateOperationsInput | string
+    districts?: DistrictUpdateManyWithoutProvinceNestedInput
+    users?: usersUpdateManyWithoutProvinceNestedInput
+    admin?: adminUpdateManyWithoutProvinceNestedInput
+    officer?: officerUpdateManyWithoutProvinceNestedInput
+    executive?: executiveUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type ProvinceUncheckedUpdateInput = {
+    province_id?: IntFieldUpdateOperationsInput | number
+    province_name?: StringFieldUpdateOperationsInput | string
+    districts?: DistrictUncheckedUpdateManyWithoutProvinceNestedInput
+    users?: usersUncheckedUpdateManyWithoutProvinceNestedInput
+    admin?: adminUncheckedUpdateManyWithoutProvinceNestedInput
+    officer?: officerUncheckedUpdateManyWithoutProvinceNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type ProvinceCreateManyInput = {
+    province_id?: number
+    province_name: string
+  }
+
+  export type ProvinceUpdateManyMutationInput = {
+    province_name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProvinceUncheckedUpdateManyInput = {
+    province_id?: IntFieldUpdateOperationsInput | number
+    province_name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DistrictCreateInput = {
+    district_name: string
+    province: ProvinceCreateNestedOneWithoutDistrictsInput
+    subdistricts?: SubdistrictCreateNestedManyWithoutDistrictInput
+    users?: usersCreateNestedManyWithoutDistrictInput
+    admin?: adminCreateNestedManyWithoutDistrictInput
+    officer?: officerCreateNestedManyWithoutDistrictInput
+    executive?: executiveCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictUncheckedCreateInput = {
+    district_id?: number
+    province_id: number
+    district_name: string
+    subdistricts?: SubdistrictUncheckedCreateNestedManyWithoutDistrictInput
+    users?: usersUncheckedCreateNestedManyWithoutDistrictInput
+    admin?: adminUncheckedCreateNestedManyWithoutDistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutDistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictUpdateInput = {
+    district_name?: StringFieldUpdateOperationsInput | string
+    province?: ProvinceUpdateOneRequiredWithoutDistrictsNestedInput
+    subdistricts?: SubdistrictUpdateManyWithoutDistrictNestedInput
+    users?: usersUpdateManyWithoutDistrictNestedInput
+    admin?: adminUpdateManyWithoutDistrictNestedInput
+    officer?: officerUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type DistrictUncheckedUpdateInput = {
+    district_id?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    district_name?: StringFieldUpdateOperationsInput | string
+    subdistricts?: SubdistrictUncheckedUpdateManyWithoutDistrictNestedInput
+    users?: usersUncheckedUpdateManyWithoutDistrictNestedInput
+    admin?: adminUncheckedUpdateManyWithoutDistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type DistrictCreateManyInput = {
+    district_id?: number
+    province_id: number
+    district_name: string
+  }
+
+  export type DistrictUpdateManyMutationInput = {
+    district_name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DistrictUncheckedUpdateManyInput = {
+    district_id?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    district_name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubdistrictCreateInput = {
+    subdistrict_name: string
+    zip_code?: string | null
+    district: DistrictCreateNestedOneWithoutSubdistrictsInput
+    users?: usersCreateNestedManyWithoutSubdistrictInput
+    admin?: adminCreateNestedManyWithoutSubdistrictInput
+    officer?: officerCreateNestedManyWithoutSubdistrictInput
+    executive?: executiveCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictUncheckedCreateInput = {
+    subdistrict_id?: number
+    district_id: number
+    subdistrict_name: string
+    zip_code?: string | null
+    users?: usersUncheckedCreateNestedManyWithoutSubdistrictInput
+    admin?: adminUncheckedCreateNestedManyWithoutSubdistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutSubdistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictUpdateInput = {
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: DistrictUpdateOneRequiredWithoutSubdistrictsNestedInput
+    users?: usersUpdateManyWithoutSubdistrictNestedInput
+    admin?: adminUpdateManyWithoutSubdistrictNestedInput
+    officer?: officerUpdateManyWithoutSubdistrictNestedInput
+    executive?: executiveUpdateManyWithoutSubdistrictNestedInput
+  }
+
+  export type SubdistrictUncheckedUpdateInput = {
+    subdistrict_id?: IntFieldUpdateOperationsInput | number
+    district_id?: IntFieldUpdateOperationsInput | number
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    users?: usersUncheckedUpdateManyWithoutSubdistrictNestedInput
+    admin?: adminUncheckedUpdateManyWithoutSubdistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutSubdistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutSubdistrictNestedInput
+  }
+
+  export type SubdistrictCreateManyInput = {
+    subdistrict_id?: number
+    district_id: number
+    subdistrict_name: string
+    zip_code?: string | null
+  }
+
+  export type SubdistrictUpdateManyMutationInput = {
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SubdistrictUncheckedUpdateManyInput = {
+    subdistrict_id?: IntFieldUpdateOperationsInput | number
+    district_id?: IntFieldUpdateOperationsInput | number
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -14587,6 +19750,21 @@ export namespace Prisma {
     isNot?: rolesWhereInput
   }
 
+  export type ProvinceNullableScalarRelationFilter = {
+    is?: ProvinceWhereInput | null
+    isNot?: ProvinceWhereInput | null
+  }
+
+  export type DistrictNullableScalarRelationFilter = {
+    is?: DistrictWhereInput | null
+    isNot?: DistrictWhereInput | null
+  }
+
+  export type SubdistrictNullableScalarRelationFilter = {
+    is?: SubdistrictWhereInput | null
+    isNot?: SubdistrictWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -14602,6 +19780,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -14611,6 +19792,9 @@ export namespace Prisma {
   export type adminAvgOrderByAggregateInput = {
     admin_id?: SortOrder
     role_id?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
   }
 
@@ -14624,6 +19808,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -14640,6 +19827,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -14649,6 +19839,9 @@ export namespace Prisma {
   export type adminSumOrderByAggregateInput = {
     admin_id?: SortOrder
     role_id?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
   }
 
@@ -14877,6 +20070,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -14886,6 +20082,9 @@ export namespace Prisma {
   export type officerAvgOrderByAggregateInput = {
     officer_id?: SortOrder
     role_id?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
   }
 
@@ -14899,6 +20098,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -14915,6 +20117,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -14924,6 +20129,9 @@ export namespace Prisma {
   export type officerSumOrderByAggregateInput = {
     officer_id?: SortOrder
     role_id?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
   }
 
@@ -14969,6 +20177,7 @@ export namespace Prisma {
     status_r?: SortOrder
     officer_id?: SortOrder
     details_r?: SortOrder
+    rejected_reason?: SortOrder
     booking_dates?: SortOrder
     is_multi_day?: SortOrder
     created_at?: SortOrder
@@ -14993,6 +20202,7 @@ export namespace Prisma {
     status_r?: SortOrder
     officer_id?: SortOrder
     details_r?: SortOrder
+    rejected_reason?: SortOrder
     booking_dates?: SortOrder
     is_multi_day?: SortOrder
     created_at?: SortOrder
@@ -15010,6 +20220,7 @@ export namespace Prisma {
     status_r?: SortOrder
     officer_id?: SortOrder
     details_r?: SortOrder
+    rejected_reason?: SortOrder
     booking_dates?: SortOrder
     is_multi_day?: SortOrder
     created_at?: SortOrder
@@ -15162,6 +20373,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -15171,6 +20385,9 @@ export namespace Prisma {
   export type executiveAvgOrderByAggregateInput = {
     executive_id?: SortOrder
     role_id?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
   }
 
@@ -15184,6 +20401,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -15200,6 +20420,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -15209,6 +20432,9 @@ export namespace Prisma {
   export type executiveSumOrderByAggregateInput = {
     executive_id?: SortOrder
     role_id?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
   }
 
@@ -15222,6 +20448,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -15231,6 +20460,9 @@ export namespace Prisma {
   export type usersAvgOrderByAggregateInput = {
     user_id?: SortOrder
     role_id?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
   }
 
@@ -15244,6 +20476,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -15260,6 +20495,9 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
     profile_image?: SortOrder
     created_at?: SortOrder
@@ -15269,13 +20507,146 @@ export namespace Prisma {
   export type usersSumOrderByAggregateInput = {
     user_id?: SortOrder
     role_id?: SortOrder
+    province_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_id?: SortOrder
     zip_code?: SortOrder
+  }
+
+  export type DistrictListRelationFilter = {
+    every?: DistrictWhereInput
+    some?: DistrictWhereInput
+    none?: DistrictWhereInput
+  }
+
+  export type DistrictOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProvinceCountOrderByAggregateInput = {
+    province_id?: SortOrder
+    province_name?: SortOrder
+  }
+
+  export type ProvinceAvgOrderByAggregateInput = {
+    province_id?: SortOrder
+  }
+
+  export type ProvinceMaxOrderByAggregateInput = {
+    province_id?: SortOrder
+    province_name?: SortOrder
+  }
+
+  export type ProvinceMinOrderByAggregateInput = {
+    province_id?: SortOrder
+    province_name?: SortOrder
+  }
+
+  export type ProvinceSumOrderByAggregateInput = {
+    province_id?: SortOrder
+  }
+
+  export type ProvinceScalarRelationFilter = {
+    is?: ProvinceWhereInput
+    isNot?: ProvinceWhereInput
+  }
+
+  export type SubdistrictListRelationFilter = {
+    every?: SubdistrictWhereInput
+    some?: SubdistrictWhereInput
+    none?: SubdistrictWhereInput
+  }
+
+  export type SubdistrictOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DistrictCountOrderByAggregateInput = {
+    district_id?: SortOrder
+    province_id?: SortOrder
+    district_name?: SortOrder
+  }
+
+  export type DistrictAvgOrderByAggregateInput = {
+    district_id?: SortOrder
+    province_id?: SortOrder
+  }
+
+  export type DistrictMaxOrderByAggregateInput = {
+    district_id?: SortOrder
+    province_id?: SortOrder
+    district_name?: SortOrder
+  }
+
+  export type DistrictMinOrderByAggregateInput = {
+    district_id?: SortOrder
+    province_id?: SortOrder
+    district_name?: SortOrder
+  }
+
+  export type DistrictSumOrderByAggregateInput = {
+    district_id?: SortOrder
+    province_id?: SortOrder
+  }
+
+  export type DistrictScalarRelationFilter = {
+    is?: DistrictWhereInput
+    isNot?: DistrictWhereInput
+  }
+
+  export type SubdistrictCountOrderByAggregateInput = {
+    subdistrict_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_name?: SortOrder
+    zip_code?: SortOrder
+  }
+
+  export type SubdistrictAvgOrderByAggregateInput = {
+    subdistrict_id?: SortOrder
+    district_id?: SortOrder
+  }
+
+  export type SubdistrictMaxOrderByAggregateInput = {
+    subdistrict_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_name?: SortOrder
+    zip_code?: SortOrder
+  }
+
+  export type SubdistrictMinOrderByAggregateInput = {
+    subdistrict_id?: SortOrder
+    district_id?: SortOrder
+    subdistrict_name?: SortOrder
+    zip_code?: SortOrder
+  }
+
+  export type SubdistrictSumOrderByAggregateInput = {
+    subdistrict_id?: SortOrder
+    district_id?: SortOrder
   }
 
   export type rolesCreateNestedOneWithoutAdminInput = {
     create?: XOR<rolesCreateWithoutAdminInput, rolesUncheckedCreateWithoutAdminInput>
     connectOrCreate?: rolesCreateOrConnectWithoutAdminInput
     connect?: rolesWhereUniqueInput
+  }
+
+  export type ProvinceCreateNestedOneWithoutAdminInput = {
+    create?: XOR<ProvinceCreateWithoutAdminInput, ProvinceUncheckedCreateWithoutAdminInput>
+    connectOrCreate?: ProvinceCreateOrConnectWithoutAdminInput
+    connect?: ProvinceWhereUniqueInput
+  }
+
+  export type DistrictCreateNestedOneWithoutAdminInput = {
+    create?: XOR<DistrictCreateWithoutAdminInput, DistrictUncheckedCreateWithoutAdminInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutAdminInput
+    connect?: DistrictWhereUniqueInput
+  }
+
+  export type SubdistrictCreateNestedOneWithoutAdminInput = {
+    create?: XOR<SubdistrictCreateWithoutAdminInput, SubdistrictUncheckedCreateWithoutAdminInput>
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutAdminInput
+    connect?: SubdistrictWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -15308,6 +20679,36 @@ export namespace Prisma {
     upsert?: rolesUpsertWithoutAdminInput
     connect?: rolesWhereUniqueInput
     update?: XOR<XOR<rolesUpdateToOneWithWhereWithoutAdminInput, rolesUpdateWithoutAdminInput>, rolesUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type ProvinceUpdateOneWithoutAdminNestedInput = {
+    create?: XOR<ProvinceCreateWithoutAdminInput, ProvinceUncheckedCreateWithoutAdminInput>
+    connectOrCreate?: ProvinceCreateOrConnectWithoutAdminInput
+    upsert?: ProvinceUpsertWithoutAdminInput
+    disconnect?: ProvinceWhereInput | boolean
+    delete?: ProvinceWhereInput | boolean
+    connect?: ProvinceWhereUniqueInput
+    update?: XOR<XOR<ProvinceUpdateToOneWithWhereWithoutAdminInput, ProvinceUpdateWithoutAdminInput>, ProvinceUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type DistrictUpdateOneWithoutAdminNestedInput = {
+    create?: XOR<DistrictCreateWithoutAdminInput, DistrictUncheckedCreateWithoutAdminInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutAdminInput
+    upsert?: DistrictUpsertWithoutAdminInput
+    disconnect?: DistrictWhereInput | boolean
+    delete?: DistrictWhereInput | boolean
+    connect?: DistrictWhereUniqueInput
+    update?: XOR<XOR<DistrictUpdateToOneWithWhereWithoutAdminInput, DistrictUpdateWithoutAdminInput>, DistrictUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type SubdistrictUpdateOneWithoutAdminNestedInput = {
+    create?: XOR<SubdistrictCreateWithoutAdminInput, SubdistrictUncheckedCreateWithoutAdminInput>
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutAdminInput
+    upsert?: SubdistrictUpsertWithoutAdminInput
+    disconnect?: SubdistrictWhereInput | boolean
+    delete?: SubdistrictWhereInput | boolean
+    connect?: SubdistrictWhereUniqueInput
+    update?: XOR<XOR<SubdistrictUpdateToOneWithWhereWithoutAdminInput, SubdistrictUpdateWithoutAdminInput>, SubdistrictUncheckedUpdateWithoutAdminInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -15464,6 +20865,24 @@ export namespace Prisma {
     connect?: rolesWhereUniqueInput
   }
 
+  export type ProvinceCreateNestedOneWithoutOfficerInput = {
+    create?: XOR<ProvinceCreateWithoutOfficerInput, ProvinceUncheckedCreateWithoutOfficerInput>
+    connectOrCreate?: ProvinceCreateOrConnectWithoutOfficerInput
+    connect?: ProvinceWhereUniqueInput
+  }
+
+  export type DistrictCreateNestedOneWithoutOfficerInput = {
+    create?: XOR<DistrictCreateWithoutOfficerInput, DistrictUncheckedCreateWithoutOfficerInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutOfficerInput
+    connect?: DistrictWhereUniqueInput
+  }
+
+  export type SubdistrictCreateNestedOneWithoutOfficerInput = {
+    create?: XOR<SubdistrictCreateWithoutOfficerInput, SubdistrictUncheckedCreateWithoutOfficerInput>
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutOfficerInput
+    connect?: SubdistrictWhereUniqueInput
+  }
+
   export type reservationCreateNestedManyWithoutOfficerInput = {
     create?: XOR<reservationCreateWithoutOfficerInput, reservationUncheckedCreateWithoutOfficerInput> | reservationCreateWithoutOfficerInput[] | reservationUncheckedCreateWithoutOfficerInput[]
     connectOrCreate?: reservationCreateOrConnectWithoutOfficerInput | reservationCreateOrConnectWithoutOfficerInput[]
@@ -15484,6 +20903,36 @@ export namespace Prisma {
     upsert?: rolesUpsertWithoutOfficerInput
     connect?: rolesWhereUniqueInput
     update?: XOR<XOR<rolesUpdateToOneWithWhereWithoutOfficerInput, rolesUpdateWithoutOfficerInput>, rolesUncheckedUpdateWithoutOfficerInput>
+  }
+
+  export type ProvinceUpdateOneWithoutOfficerNestedInput = {
+    create?: XOR<ProvinceCreateWithoutOfficerInput, ProvinceUncheckedCreateWithoutOfficerInput>
+    connectOrCreate?: ProvinceCreateOrConnectWithoutOfficerInput
+    upsert?: ProvinceUpsertWithoutOfficerInput
+    disconnect?: ProvinceWhereInput | boolean
+    delete?: ProvinceWhereInput | boolean
+    connect?: ProvinceWhereUniqueInput
+    update?: XOR<XOR<ProvinceUpdateToOneWithWhereWithoutOfficerInput, ProvinceUpdateWithoutOfficerInput>, ProvinceUncheckedUpdateWithoutOfficerInput>
+  }
+
+  export type DistrictUpdateOneWithoutOfficerNestedInput = {
+    create?: XOR<DistrictCreateWithoutOfficerInput, DistrictUncheckedCreateWithoutOfficerInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutOfficerInput
+    upsert?: DistrictUpsertWithoutOfficerInput
+    disconnect?: DistrictWhereInput | boolean
+    delete?: DistrictWhereInput | boolean
+    connect?: DistrictWhereUniqueInput
+    update?: XOR<XOR<DistrictUpdateToOneWithWhereWithoutOfficerInput, DistrictUpdateWithoutOfficerInput>, DistrictUncheckedUpdateWithoutOfficerInput>
+  }
+
+  export type SubdistrictUpdateOneWithoutOfficerNestedInput = {
+    create?: XOR<SubdistrictCreateWithoutOfficerInput, SubdistrictUncheckedCreateWithoutOfficerInput>
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutOfficerInput
+    upsert?: SubdistrictUpsertWithoutOfficerInput
+    disconnect?: SubdistrictWhereInput | boolean
+    delete?: SubdistrictWhereInput | boolean
+    connect?: SubdistrictWhereUniqueInput
+    update?: XOR<XOR<SubdistrictUpdateToOneWithWhereWithoutOfficerInput, SubdistrictUpdateWithoutOfficerInput>, SubdistrictUncheckedUpdateWithoutOfficerInput>
   }
 
   export type reservationUpdateManyWithoutOfficerNestedInput = {
@@ -15776,12 +21225,60 @@ export namespace Prisma {
     connect?: rolesWhereUniqueInput
   }
 
+  export type ProvinceCreateNestedOneWithoutExecutiveInput = {
+    create?: XOR<ProvinceCreateWithoutExecutiveInput, ProvinceUncheckedCreateWithoutExecutiveInput>
+    connectOrCreate?: ProvinceCreateOrConnectWithoutExecutiveInput
+    connect?: ProvinceWhereUniqueInput
+  }
+
+  export type DistrictCreateNestedOneWithoutExecutiveInput = {
+    create?: XOR<DistrictCreateWithoutExecutiveInput, DistrictUncheckedCreateWithoutExecutiveInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutExecutiveInput
+    connect?: DistrictWhereUniqueInput
+  }
+
+  export type SubdistrictCreateNestedOneWithoutExecutiveInput = {
+    create?: XOR<SubdistrictCreateWithoutExecutiveInput, SubdistrictUncheckedCreateWithoutExecutiveInput>
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutExecutiveInput
+    connect?: SubdistrictWhereUniqueInput
+  }
+
   export type rolesUpdateOneRequiredWithoutExecutiveNestedInput = {
     create?: XOR<rolesCreateWithoutExecutiveInput, rolesUncheckedCreateWithoutExecutiveInput>
     connectOrCreate?: rolesCreateOrConnectWithoutExecutiveInput
     upsert?: rolesUpsertWithoutExecutiveInput
     connect?: rolesWhereUniqueInput
     update?: XOR<XOR<rolesUpdateToOneWithWhereWithoutExecutiveInput, rolesUpdateWithoutExecutiveInput>, rolesUncheckedUpdateWithoutExecutiveInput>
+  }
+
+  export type ProvinceUpdateOneWithoutExecutiveNestedInput = {
+    create?: XOR<ProvinceCreateWithoutExecutiveInput, ProvinceUncheckedCreateWithoutExecutiveInput>
+    connectOrCreate?: ProvinceCreateOrConnectWithoutExecutiveInput
+    upsert?: ProvinceUpsertWithoutExecutiveInput
+    disconnect?: ProvinceWhereInput | boolean
+    delete?: ProvinceWhereInput | boolean
+    connect?: ProvinceWhereUniqueInput
+    update?: XOR<XOR<ProvinceUpdateToOneWithWhereWithoutExecutiveInput, ProvinceUpdateWithoutExecutiveInput>, ProvinceUncheckedUpdateWithoutExecutiveInput>
+  }
+
+  export type DistrictUpdateOneWithoutExecutiveNestedInput = {
+    create?: XOR<DistrictCreateWithoutExecutiveInput, DistrictUncheckedCreateWithoutExecutiveInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutExecutiveInput
+    upsert?: DistrictUpsertWithoutExecutiveInput
+    disconnect?: DistrictWhereInput | boolean
+    delete?: DistrictWhereInput | boolean
+    connect?: DistrictWhereUniqueInput
+    update?: XOR<XOR<DistrictUpdateToOneWithWhereWithoutExecutiveInput, DistrictUpdateWithoutExecutiveInput>, DistrictUncheckedUpdateWithoutExecutiveInput>
+  }
+
+  export type SubdistrictUpdateOneWithoutExecutiveNestedInput = {
+    create?: XOR<SubdistrictCreateWithoutExecutiveInput, SubdistrictUncheckedCreateWithoutExecutiveInput>
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutExecutiveInput
+    upsert?: SubdistrictUpsertWithoutExecutiveInput
+    disconnect?: SubdistrictWhereInput | boolean
+    delete?: SubdistrictWhereInput | boolean
+    connect?: SubdistrictWhereUniqueInput
+    update?: XOR<XOR<SubdistrictUpdateToOneWithWhereWithoutExecutiveInput, SubdistrictUpdateWithoutExecutiveInput>, SubdistrictUncheckedUpdateWithoutExecutiveInput>
   }
 
   export type reservationCreateNestedManyWithoutUsersInput = {
@@ -15802,6 +21299,24 @@ export namespace Prisma {
     create?: XOR<rolesCreateWithoutUsersInput, rolesUncheckedCreateWithoutUsersInput>
     connectOrCreate?: rolesCreateOrConnectWithoutUsersInput
     connect?: rolesWhereUniqueInput
+  }
+
+  export type ProvinceCreateNestedOneWithoutUsersInput = {
+    create?: XOR<ProvinceCreateWithoutUsersInput, ProvinceUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: ProvinceCreateOrConnectWithoutUsersInput
+    connect?: ProvinceWhereUniqueInput
+  }
+
+  export type DistrictCreateNestedOneWithoutUsersInput = {
+    create?: XOR<DistrictCreateWithoutUsersInput, DistrictUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutUsersInput
+    connect?: DistrictWhereUniqueInput
+  }
+
+  export type SubdistrictCreateNestedOneWithoutUsersInput = {
+    create?: XOR<SubdistrictCreateWithoutUsersInput, SubdistrictUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutUsersInput
+    connect?: SubdistrictWhereUniqueInput
   }
 
   export type reservationUncheckedCreateNestedManyWithoutUsersInput = {
@@ -15854,6 +21369,36 @@ export namespace Prisma {
     update?: XOR<XOR<rolesUpdateToOneWithWhereWithoutUsersInput, rolesUpdateWithoutUsersInput>, rolesUncheckedUpdateWithoutUsersInput>
   }
 
+  export type ProvinceUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<ProvinceCreateWithoutUsersInput, ProvinceUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: ProvinceCreateOrConnectWithoutUsersInput
+    upsert?: ProvinceUpsertWithoutUsersInput
+    disconnect?: ProvinceWhereInput | boolean
+    delete?: ProvinceWhereInput | boolean
+    connect?: ProvinceWhereUniqueInput
+    update?: XOR<XOR<ProvinceUpdateToOneWithWhereWithoutUsersInput, ProvinceUpdateWithoutUsersInput>, ProvinceUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type DistrictUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<DistrictCreateWithoutUsersInput, DistrictUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutUsersInput
+    upsert?: DistrictUpsertWithoutUsersInput
+    disconnect?: DistrictWhereInput | boolean
+    delete?: DistrictWhereInput | boolean
+    connect?: DistrictWhereUniqueInput
+    update?: XOR<XOR<DistrictUpdateToOneWithWhereWithoutUsersInput, DistrictUpdateWithoutUsersInput>, DistrictUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type SubdistrictUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<SubdistrictCreateWithoutUsersInput, SubdistrictUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutUsersInput
+    upsert?: SubdistrictUpsertWithoutUsersInput
+    disconnect?: SubdistrictWhereInput | boolean
+    delete?: SubdistrictWhereInput | boolean
+    connect?: SubdistrictWhereUniqueInput
+    update?: XOR<XOR<SubdistrictUpdateToOneWithWhereWithoutUsersInput, SubdistrictUpdateWithoutUsersInput>, SubdistrictUncheckedUpdateWithoutUsersInput>
+  }
+
   export type reservationUncheckedUpdateManyWithoutUsersNestedInput = {
     create?: XOR<reservationCreateWithoutUsersInput, reservationUncheckedCreateWithoutUsersInput> | reservationCreateWithoutUsersInput[] | reservationUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: reservationCreateOrConnectWithoutUsersInput | reservationCreateOrConnectWithoutUsersInput[]
@@ -15880,6 +21425,622 @@ export namespace Prisma {
     update?: reviewUpdateWithWhereUniqueWithoutUsersInput | reviewUpdateWithWhereUniqueWithoutUsersInput[]
     updateMany?: reviewUpdateManyWithWhereWithoutUsersInput | reviewUpdateManyWithWhereWithoutUsersInput[]
     deleteMany?: reviewScalarWhereInput | reviewScalarWhereInput[]
+  }
+
+  export type DistrictCreateNestedManyWithoutProvinceInput = {
+    create?: XOR<DistrictCreateWithoutProvinceInput, DistrictUncheckedCreateWithoutProvinceInput> | DistrictCreateWithoutProvinceInput[] | DistrictUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: DistrictCreateOrConnectWithoutProvinceInput | DistrictCreateOrConnectWithoutProvinceInput[]
+    createMany?: DistrictCreateManyProvinceInputEnvelope
+    connect?: DistrictWhereUniqueInput | DistrictWhereUniqueInput[]
+  }
+
+  export type usersCreateNestedManyWithoutProvinceInput = {
+    create?: XOR<usersCreateWithoutProvinceInput, usersUncheckedCreateWithoutProvinceInput> | usersCreateWithoutProvinceInput[] | usersUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutProvinceInput | usersCreateOrConnectWithoutProvinceInput[]
+    createMany?: usersCreateManyProvinceInputEnvelope
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+  }
+
+  export type adminCreateNestedManyWithoutProvinceInput = {
+    create?: XOR<adminCreateWithoutProvinceInput, adminUncheckedCreateWithoutProvinceInput> | adminCreateWithoutProvinceInput[] | adminUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutProvinceInput | adminCreateOrConnectWithoutProvinceInput[]
+    createMany?: adminCreateManyProvinceInputEnvelope
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+  }
+
+  export type officerCreateNestedManyWithoutProvinceInput = {
+    create?: XOR<officerCreateWithoutProvinceInput, officerUncheckedCreateWithoutProvinceInput> | officerCreateWithoutProvinceInput[] | officerUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutProvinceInput | officerCreateOrConnectWithoutProvinceInput[]
+    createMany?: officerCreateManyProvinceInputEnvelope
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+  }
+
+  export type executiveCreateNestedManyWithoutProvinceInput = {
+    create?: XOR<executiveCreateWithoutProvinceInput, executiveUncheckedCreateWithoutProvinceInput> | executiveCreateWithoutProvinceInput[] | executiveUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutProvinceInput | executiveCreateOrConnectWithoutProvinceInput[]
+    createMany?: executiveCreateManyProvinceInputEnvelope
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+  }
+
+  export type DistrictUncheckedCreateNestedManyWithoutProvinceInput = {
+    create?: XOR<DistrictCreateWithoutProvinceInput, DistrictUncheckedCreateWithoutProvinceInput> | DistrictCreateWithoutProvinceInput[] | DistrictUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: DistrictCreateOrConnectWithoutProvinceInput | DistrictCreateOrConnectWithoutProvinceInput[]
+    createMany?: DistrictCreateManyProvinceInputEnvelope
+    connect?: DistrictWhereUniqueInput | DistrictWhereUniqueInput[]
+  }
+
+  export type usersUncheckedCreateNestedManyWithoutProvinceInput = {
+    create?: XOR<usersCreateWithoutProvinceInput, usersUncheckedCreateWithoutProvinceInput> | usersCreateWithoutProvinceInput[] | usersUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutProvinceInput | usersCreateOrConnectWithoutProvinceInput[]
+    createMany?: usersCreateManyProvinceInputEnvelope
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+  }
+
+  export type adminUncheckedCreateNestedManyWithoutProvinceInput = {
+    create?: XOR<adminCreateWithoutProvinceInput, adminUncheckedCreateWithoutProvinceInput> | adminCreateWithoutProvinceInput[] | adminUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutProvinceInput | adminCreateOrConnectWithoutProvinceInput[]
+    createMany?: adminCreateManyProvinceInputEnvelope
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+  }
+
+  export type officerUncheckedCreateNestedManyWithoutProvinceInput = {
+    create?: XOR<officerCreateWithoutProvinceInput, officerUncheckedCreateWithoutProvinceInput> | officerCreateWithoutProvinceInput[] | officerUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutProvinceInput | officerCreateOrConnectWithoutProvinceInput[]
+    createMany?: officerCreateManyProvinceInputEnvelope
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+  }
+
+  export type executiveUncheckedCreateNestedManyWithoutProvinceInput = {
+    create?: XOR<executiveCreateWithoutProvinceInput, executiveUncheckedCreateWithoutProvinceInput> | executiveCreateWithoutProvinceInput[] | executiveUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutProvinceInput | executiveCreateOrConnectWithoutProvinceInput[]
+    createMany?: executiveCreateManyProvinceInputEnvelope
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+  }
+
+  export type DistrictUpdateManyWithoutProvinceNestedInput = {
+    create?: XOR<DistrictCreateWithoutProvinceInput, DistrictUncheckedCreateWithoutProvinceInput> | DistrictCreateWithoutProvinceInput[] | DistrictUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: DistrictCreateOrConnectWithoutProvinceInput | DistrictCreateOrConnectWithoutProvinceInput[]
+    upsert?: DistrictUpsertWithWhereUniqueWithoutProvinceInput | DistrictUpsertWithWhereUniqueWithoutProvinceInput[]
+    createMany?: DistrictCreateManyProvinceInputEnvelope
+    set?: DistrictWhereUniqueInput | DistrictWhereUniqueInput[]
+    disconnect?: DistrictWhereUniqueInput | DistrictWhereUniqueInput[]
+    delete?: DistrictWhereUniqueInput | DistrictWhereUniqueInput[]
+    connect?: DistrictWhereUniqueInput | DistrictWhereUniqueInput[]
+    update?: DistrictUpdateWithWhereUniqueWithoutProvinceInput | DistrictUpdateWithWhereUniqueWithoutProvinceInput[]
+    updateMany?: DistrictUpdateManyWithWhereWithoutProvinceInput | DistrictUpdateManyWithWhereWithoutProvinceInput[]
+    deleteMany?: DistrictScalarWhereInput | DistrictScalarWhereInput[]
+  }
+
+  export type usersUpdateManyWithoutProvinceNestedInput = {
+    create?: XOR<usersCreateWithoutProvinceInput, usersUncheckedCreateWithoutProvinceInput> | usersCreateWithoutProvinceInput[] | usersUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutProvinceInput | usersCreateOrConnectWithoutProvinceInput[]
+    upsert?: usersUpsertWithWhereUniqueWithoutProvinceInput | usersUpsertWithWhereUniqueWithoutProvinceInput[]
+    createMany?: usersCreateManyProvinceInputEnvelope
+    set?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    disconnect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    delete?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    update?: usersUpdateWithWhereUniqueWithoutProvinceInput | usersUpdateWithWhereUniqueWithoutProvinceInput[]
+    updateMany?: usersUpdateManyWithWhereWithoutProvinceInput | usersUpdateManyWithWhereWithoutProvinceInput[]
+    deleteMany?: usersScalarWhereInput | usersScalarWhereInput[]
+  }
+
+  export type adminUpdateManyWithoutProvinceNestedInput = {
+    create?: XOR<adminCreateWithoutProvinceInput, adminUncheckedCreateWithoutProvinceInput> | adminCreateWithoutProvinceInput[] | adminUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutProvinceInput | adminCreateOrConnectWithoutProvinceInput[]
+    upsert?: adminUpsertWithWhereUniqueWithoutProvinceInput | adminUpsertWithWhereUniqueWithoutProvinceInput[]
+    createMany?: adminCreateManyProvinceInputEnvelope
+    set?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    disconnect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    delete?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    update?: adminUpdateWithWhereUniqueWithoutProvinceInput | adminUpdateWithWhereUniqueWithoutProvinceInput[]
+    updateMany?: adminUpdateManyWithWhereWithoutProvinceInput | adminUpdateManyWithWhereWithoutProvinceInput[]
+    deleteMany?: adminScalarWhereInput | adminScalarWhereInput[]
+  }
+
+  export type officerUpdateManyWithoutProvinceNestedInput = {
+    create?: XOR<officerCreateWithoutProvinceInput, officerUncheckedCreateWithoutProvinceInput> | officerCreateWithoutProvinceInput[] | officerUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutProvinceInput | officerCreateOrConnectWithoutProvinceInput[]
+    upsert?: officerUpsertWithWhereUniqueWithoutProvinceInput | officerUpsertWithWhereUniqueWithoutProvinceInput[]
+    createMany?: officerCreateManyProvinceInputEnvelope
+    set?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    disconnect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    delete?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    update?: officerUpdateWithWhereUniqueWithoutProvinceInput | officerUpdateWithWhereUniqueWithoutProvinceInput[]
+    updateMany?: officerUpdateManyWithWhereWithoutProvinceInput | officerUpdateManyWithWhereWithoutProvinceInput[]
+    deleteMany?: officerScalarWhereInput | officerScalarWhereInput[]
+  }
+
+  export type executiveUpdateManyWithoutProvinceNestedInput = {
+    create?: XOR<executiveCreateWithoutProvinceInput, executiveUncheckedCreateWithoutProvinceInput> | executiveCreateWithoutProvinceInput[] | executiveUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutProvinceInput | executiveCreateOrConnectWithoutProvinceInput[]
+    upsert?: executiveUpsertWithWhereUniqueWithoutProvinceInput | executiveUpsertWithWhereUniqueWithoutProvinceInput[]
+    createMany?: executiveCreateManyProvinceInputEnvelope
+    set?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    disconnect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    delete?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    update?: executiveUpdateWithWhereUniqueWithoutProvinceInput | executiveUpdateWithWhereUniqueWithoutProvinceInput[]
+    updateMany?: executiveUpdateManyWithWhereWithoutProvinceInput | executiveUpdateManyWithWhereWithoutProvinceInput[]
+    deleteMany?: executiveScalarWhereInput | executiveScalarWhereInput[]
+  }
+
+  export type DistrictUncheckedUpdateManyWithoutProvinceNestedInput = {
+    create?: XOR<DistrictCreateWithoutProvinceInput, DistrictUncheckedCreateWithoutProvinceInput> | DistrictCreateWithoutProvinceInput[] | DistrictUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: DistrictCreateOrConnectWithoutProvinceInput | DistrictCreateOrConnectWithoutProvinceInput[]
+    upsert?: DistrictUpsertWithWhereUniqueWithoutProvinceInput | DistrictUpsertWithWhereUniqueWithoutProvinceInput[]
+    createMany?: DistrictCreateManyProvinceInputEnvelope
+    set?: DistrictWhereUniqueInput | DistrictWhereUniqueInput[]
+    disconnect?: DistrictWhereUniqueInput | DistrictWhereUniqueInput[]
+    delete?: DistrictWhereUniqueInput | DistrictWhereUniqueInput[]
+    connect?: DistrictWhereUniqueInput | DistrictWhereUniqueInput[]
+    update?: DistrictUpdateWithWhereUniqueWithoutProvinceInput | DistrictUpdateWithWhereUniqueWithoutProvinceInput[]
+    updateMany?: DistrictUpdateManyWithWhereWithoutProvinceInput | DistrictUpdateManyWithWhereWithoutProvinceInput[]
+    deleteMany?: DistrictScalarWhereInput | DistrictScalarWhereInput[]
+  }
+
+  export type usersUncheckedUpdateManyWithoutProvinceNestedInput = {
+    create?: XOR<usersCreateWithoutProvinceInput, usersUncheckedCreateWithoutProvinceInput> | usersCreateWithoutProvinceInput[] | usersUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutProvinceInput | usersCreateOrConnectWithoutProvinceInput[]
+    upsert?: usersUpsertWithWhereUniqueWithoutProvinceInput | usersUpsertWithWhereUniqueWithoutProvinceInput[]
+    createMany?: usersCreateManyProvinceInputEnvelope
+    set?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    disconnect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    delete?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    update?: usersUpdateWithWhereUniqueWithoutProvinceInput | usersUpdateWithWhereUniqueWithoutProvinceInput[]
+    updateMany?: usersUpdateManyWithWhereWithoutProvinceInput | usersUpdateManyWithWhereWithoutProvinceInput[]
+    deleteMany?: usersScalarWhereInput | usersScalarWhereInput[]
+  }
+
+  export type adminUncheckedUpdateManyWithoutProvinceNestedInput = {
+    create?: XOR<adminCreateWithoutProvinceInput, adminUncheckedCreateWithoutProvinceInput> | adminCreateWithoutProvinceInput[] | adminUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutProvinceInput | adminCreateOrConnectWithoutProvinceInput[]
+    upsert?: adminUpsertWithWhereUniqueWithoutProvinceInput | adminUpsertWithWhereUniqueWithoutProvinceInput[]
+    createMany?: adminCreateManyProvinceInputEnvelope
+    set?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    disconnect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    delete?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    update?: adminUpdateWithWhereUniqueWithoutProvinceInput | adminUpdateWithWhereUniqueWithoutProvinceInput[]
+    updateMany?: adminUpdateManyWithWhereWithoutProvinceInput | adminUpdateManyWithWhereWithoutProvinceInput[]
+    deleteMany?: adminScalarWhereInput | adminScalarWhereInput[]
+  }
+
+  export type officerUncheckedUpdateManyWithoutProvinceNestedInput = {
+    create?: XOR<officerCreateWithoutProvinceInput, officerUncheckedCreateWithoutProvinceInput> | officerCreateWithoutProvinceInput[] | officerUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutProvinceInput | officerCreateOrConnectWithoutProvinceInput[]
+    upsert?: officerUpsertWithWhereUniqueWithoutProvinceInput | officerUpsertWithWhereUniqueWithoutProvinceInput[]
+    createMany?: officerCreateManyProvinceInputEnvelope
+    set?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    disconnect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    delete?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    update?: officerUpdateWithWhereUniqueWithoutProvinceInput | officerUpdateWithWhereUniqueWithoutProvinceInput[]
+    updateMany?: officerUpdateManyWithWhereWithoutProvinceInput | officerUpdateManyWithWhereWithoutProvinceInput[]
+    deleteMany?: officerScalarWhereInput | officerScalarWhereInput[]
+  }
+
+  export type executiveUncheckedUpdateManyWithoutProvinceNestedInput = {
+    create?: XOR<executiveCreateWithoutProvinceInput, executiveUncheckedCreateWithoutProvinceInput> | executiveCreateWithoutProvinceInput[] | executiveUncheckedCreateWithoutProvinceInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutProvinceInput | executiveCreateOrConnectWithoutProvinceInput[]
+    upsert?: executiveUpsertWithWhereUniqueWithoutProvinceInput | executiveUpsertWithWhereUniqueWithoutProvinceInput[]
+    createMany?: executiveCreateManyProvinceInputEnvelope
+    set?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    disconnect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    delete?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    update?: executiveUpdateWithWhereUniqueWithoutProvinceInput | executiveUpdateWithWhereUniqueWithoutProvinceInput[]
+    updateMany?: executiveUpdateManyWithWhereWithoutProvinceInput | executiveUpdateManyWithWhereWithoutProvinceInput[]
+    deleteMany?: executiveScalarWhereInput | executiveScalarWhereInput[]
+  }
+
+  export type ProvinceCreateNestedOneWithoutDistrictsInput = {
+    create?: XOR<ProvinceCreateWithoutDistrictsInput, ProvinceUncheckedCreateWithoutDistrictsInput>
+    connectOrCreate?: ProvinceCreateOrConnectWithoutDistrictsInput
+    connect?: ProvinceWhereUniqueInput
+  }
+
+  export type SubdistrictCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<SubdistrictCreateWithoutDistrictInput, SubdistrictUncheckedCreateWithoutDistrictInput> | SubdistrictCreateWithoutDistrictInput[] | SubdistrictUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutDistrictInput | SubdistrictCreateOrConnectWithoutDistrictInput[]
+    createMany?: SubdistrictCreateManyDistrictInputEnvelope
+    connect?: SubdistrictWhereUniqueInput | SubdistrictWhereUniqueInput[]
+  }
+
+  export type usersCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<usersCreateWithoutDistrictInput, usersUncheckedCreateWithoutDistrictInput> | usersCreateWithoutDistrictInput[] | usersUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutDistrictInput | usersCreateOrConnectWithoutDistrictInput[]
+    createMany?: usersCreateManyDistrictInputEnvelope
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+  }
+
+  export type adminCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<adminCreateWithoutDistrictInput, adminUncheckedCreateWithoutDistrictInput> | adminCreateWithoutDistrictInput[] | adminUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutDistrictInput | adminCreateOrConnectWithoutDistrictInput[]
+    createMany?: adminCreateManyDistrictInputEnvelope
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+  }
+
+  export type officerCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<officerCreateWithoutDistrictInput, officerUncheckedCreateWithoutDistrictInput> | officerCreateWithoutDistrictInput[] | officerUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutDistrictInput | officerCreateOrConnectWithoutDistrictInput[]
+    createMany?: officerCreateManyDistrictInputEnvelope
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+  }
+
+  export type executiveCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<executiveCreateWithoutDistrictInput, executiveUncheckedCreateWithoutDistrictInput> | executiveCreateWithoutDistrictInput[] | executiveUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutDistrictInput | executiveCreateOrConnectWithoutDistrictInput[]
+    createMany?: executiveCreateManyDistrictInputEnvelope
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+  }
+
+  export type SubdistrictUncheckedCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<SubdistrictCreateWithoutDistrictInput, SubdistrictUncheckedCreateWithoutDistrictInput> | SubdistrictCreateWithoutDistrictInput[] | SubdistrictUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutDistrictInput | SubdistrictCreateOrConnectWithoutDistrictInput[]
+    createMany?: SubdistrictCreateManyDistrictInputEnvelope
+    connect?: SubdistrictWhereUniqueInput | SubdistrictWhereUniqueInput[]
+  }
+
+  export type usersUncheckedCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<usersCreateWithoutDistrictInput, usersUncheckedCreateWithoutDistrictInput> | usersCreateWithoutDistrictInput[] | usersUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutDistrictInput | usersCreateOrConnectWithoutDistrictInput[]
+    createMany?: usersCreateManyDistrictInputEnvelope
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+  }
+
+  export type adminUncheckedCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<adminCreateWithoutDistrictInput, adminUncheckedCreateWithoutDistrictInput> | adminCreateWithoutDistrictInput[] | adminUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutDistrictInput | adminCreateOrConnectWithoutDistrictInput[]
+    createMany?: adminCreateManyDistrictInputEnvelope
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+  }
+
+  export type officerUncheckedCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<officerCreateWithoutDistrictInput, officerUncheckedCreateWithoutDistrictInput> | officerCreateWithoutDistrictInput[] | officerUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutDistrictInput | officerCreateOrConnectWithoutDistrictInput[]
+    createMany?: officerCreateManyDistrictInputEnvelope
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+  }
+
+  export type executiveUncheckedCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<executiveCreateWithoutDistrictInput, executiveUncheckedCreateWithoutDistrictInput> | executiveCreateWithoutDistrictInput[] | executiveUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutDistrictInput | executiveCreateOrConnectWithoutDistrictInput[]
+    createMany?: executiveCreateManyDistrictInputEnvelope
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+  }
+
+  export type ProvinceUpdateOneRequiredWithoutDistrictsNestedInput = {
+    create?: XOR<ProvinceCreateWithoutDistrictsInput, ProvinceUncheckedCreateWithoutDistrictsInput>
+    connectOrCreate?: ProvinceCreateOrConnectWithoutDistrictsInput
+    upsert?: ProvinceUpsertWithoutDistrictsInput
+    connect?: ProvinceWhereUniqueInput
+    update?: XOR<XOR<ProvinceUpdateToOneWithWhereWithoutDistrictsInput, ProvinceUpdateWithoutDistrictsInput>, ProvinceUncheckedUpdateWithoutDistrictsInput>
+  }
+
+  export type SubdistrictUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<SubdistrictCreateWithoutDistrictInput, SubdistrictUncheckedCreateWithoutDistrictInput> | SubdistrictCreateWithoutDistrictInput[] | SubdistrictUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutDistrictInput | SubdistrictCreateOrConnectWithoutDistrictInput[]
+    upsert?: SubdistrictUpsertWithWhereUniqueWithoutDistrictInput | SubdistrictUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: SubdistrictCreateManyDistrictInputEnvelope
+    set?: SubdistrictWhereUniqueInput | SubdistrictWhereUniqueInput[]
+    disconnect?: SubdistrictWhereUniqueInput | SubdistrictWhereUniqueInput[]
+    delete?: SubdistrictWhereUniqueInput | SubdistrictWhereUniqueInput[]
+    connect?: SubdistrictWhereUniqueInput | SubdistrictWhereUniqueInput[]
+    update?: SubdistrictUpdateWithWhereUniqueWithoutDistrictInput | SubdistrictUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: SubdistrictUpdateManyWithWhereWithoutDistrictInput | SubdistrictUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: SubdistrictScalarWhereInput | SubdistrictScalarWhereInput[]
+  }
+
+  export type usersUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<usersCreateWithoutDistrictInput, usersUncheckedCreateWithoutDistrictInput> | usersCreateWithoutDistrictInput[] | usersUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutDistrictInput | usersCreateOrConnectWithoutDistrictInput[]
+    upsert?: usersUpsertWithWhereUniqueWithoutDistrictInput | usersUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: usersCreateManyDistrictInputEnvelope
+    set?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    disconnect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    delete?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    update?: usersUpdateWithWhereUniqueWithoutDistrictInput | usersUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: usersUpdateManyWithWhereWithoutDistrictInput | usersUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: usersScalarWhereInput | usersScalarWhereInput[]
+  }
+
+  export type adminUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<adminCreateWithoutDistrictInput, adminUncheckedCreateWithoutDistrictInput> | adminCreateWithoutDistrictInput[] | adminUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutDistrictInput | adminCreateOrConnectWithoutDistrictInput[]
+    upsert?: adminUpsertWithWhereUniqueWithoutDistrictInput | adminUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: adminCreateManyDistrictInputEnvelope
+    set?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    disconnect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    delete?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    update?: adminUpdateWithWhereUniqueWithoutDistrictInput | adminUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: adminUpdateManyWithWhereWithoutDistrictInput | adminUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: adminScalarWhereInput | adminScalarWhereInput[]
+  }
+
+  export type officerUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<officerCreateWithoutDistrictInput, officerUncheckedCreateWithoutDistrictInput> | officerCreateWithoutDistrictInput[] | officerUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutDistrictInput | officerCreateOrConnectWithoutDistrictInput[]
+    upsert?: officerUpsertWithWhereUniqueWithoutDistrictInput | officerUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: officerCreateManyDistrictInputEnvelope
+    set?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    disconnect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    delete?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    update?: officerUpdateWithWhereUniqueWithoutDistrictInput | officerUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: officerUpdateManyWithWhereWithoutDistrictInput | officerUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: officerScalarWhereInput | officerScalarWhereInput[]
+  }
+
+  export type executiveUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<executiveCreateWithoutDistrictInput, executiveUncheckedCreateWithoutDistrictInput> | executiveCreateWithoutDistrictInput[] | executiveUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutDistrictInput | executiveCreateOrConnectWithoutDistrictInput[]
+    upsert?: executiveUpsertWithWhereUniqueWithoutDistrictInput | executiveUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: executiveCreateManyDistrictInputEnvelope
+    set?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    disconnect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    delete?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    update?: executiveUpdateWithWhereUniqueWithoutDistrictInput | executiveUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: executiveUpdateManyWithWhereWithoutDistrictInput | executiveUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: executiveScalarWhereInput | executiveScalarWhereInput[]
+  }
+
+  export type SubdistrictUncheckedUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<SubdistrictCreateWithoutDistrictInput, SubdistrictUncheckedCreateWithoutDistrictInput> | SubdistrictCreateWithoutDistrictInput[] | SubdistrictUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: SubdistrictCreateOrConnectWithoutDistrictInput | SubdistrictCreateOrConnectWithoutDistrictInput[]
+    upsert?: SubdistrictUpsertWithWhereUniqueWithoutDistrictInput | SubdistrictUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: SubdistrictCreateManyDistrictInputEnvelope
+    set?: SubdistrictWhereUniqueInput | SubdistrictWhereUniqueInput[]
+    disconnect?: SubdistrictWhereUniqueInput | SubdistrictWhereUniqueInput[]
+    delete?: SubdistrictWhereUniqueInput | SubdistrictWhereUniqueInput[]
+    connect?: SubdistrictWhereUniqueInput | SubdistrictWhereUniqueInput[]
+    update?: SubdistrictUpdateWithWhereUniqueWithoutDistrictInput | SubdistrictUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: SubdistrictUpdateManyWithWhereWithoutDistrictInput | SubdistrictUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: SubdistrictScalarWhereInput | SubdistrictScalarWhereInput[]
+  }
+
+  export type usersUncheckedUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<usersCreateWithoutDistrictInput, usersUncheckedCreateWithoutDistrictInput> | usersCreateWithoutDistrictInput[] | usersUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutDistrictInput | usersCreateOrConnectWithoutDistrictInput[]
+    upsert?: usersUpsertWithWhereUniqueWithoutDistrictInput | usersUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: usersCreateManyDistrictInputEnvelope
+    set?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    disconnect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    delete?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    update?: usersUpdateWithWhereUniqueWithoutDistrictInput | usersUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: usersUpdateManyWithWhereWithoutDistrictInput | usersUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: usersScalarWhereInput | usersScalarWhereInput[]
+  }
+
+  export type adminUncheckedUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<adminCreateWithoutDistrictInput, adminUncheckedCreateWithoutDistrictInput> | adminCreateWithoutDistrictInput[] | adminUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutDistrictInput | adminCreateOrConnectWithoutDistrictInput[]
+    upsert?: adminUpsertWithWhereUniqueWithoutDistrictInput | adminUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: adminCreateManyDistrictInputEnvelope
+    set?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    disconnect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    delete?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    update?: adminUpdateWithWhereUniqueWithoutDistrictInput | adminUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: adminUpdateManyWithWhereWithoutDistrictInput | adminUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: adminScalarWhereInput | adminScalarWhereInput[]
+  }
+
+  export type officerUncheckedUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<officerCreateWithoutDistrictInput, officerUncheckedCreateWithoutDistrictInput> | officerCreateWithoutDistrictInput[] | officerUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutDistrictInput | officerCreateOrConnectWithoutDistrictInput[]
+    upsert?: officerUpsertWithWhereUniqueWithoutDistrictInput | officerUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: officerCreateManyDistrictInputEnvelope
+    set?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    disconnect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    delete?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    update?: officerUpdateWithWhereUniqueWithoutDistrictInput | officerUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: officerUpdateManyWithWhereWithoutDistrictInput | officerUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: officerScalarWhereInput | officerScalarWhereInput[]
+  }
+
+  export type executiveUncheckedUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<executiveCreateWithoutDistrictInput, executiveUncheckedCreateWithoutDistrictInput> | executiveCreateWithoutDistrictInput[] | executiveUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutDistrictInput | executiveCreateOrConnectWithoutDistrictInput[]
+    upsert?: executiveUpsertWithWhereUniqueWithoutDistrictInput | executiveUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: executiveCreateManyDistrictInputEnvelope
+    set?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    disconnect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    delete?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    update?: executiveUpdateWithWhereUniqueWithoutDistrictInput | executiveUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: executiveUpdateManyWithWhereWithoutDistrictInput | executiveUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: executiveScalarWhereInput | executiveScalarWhereInput[]
+  }
+
+  export type DistrictCreateNestedOneWithoutSubdistrictsInput = {
+    create?: XOR<DistrictCreateWithoutSubdistrictsInput, DistrictUncheckedCreateWithoutSubdistrictsInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutSubdistrictsInput
+    connect?: DistrictWhereUniqueInput
+  }
+
+  export type usersCreateNestedManyWithoutSubdistrictInput = {
+    create?: XOR<usersCreateWithoutSubdistrictInput, usersUncheckedCreateWithoutSubdistrictInput> | usersCreateWithoutSubdistrictInput[] | usersUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutSubdistrictInput | usersCreateOrConnectWithoutSubdistrictInput[]
+    createMany?: usersCreateManySubdistrictInputEnvelope
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+  }
+
+  export type adminCreateNestedManyWithoutSubdistrictInput = {
+    create?: XOR<adminCreateWithoutSubdistrictInput, adminUncheckedCreateWithoutSubdistrictInput> | adminCreateWithoutSubdistrictInput[] | adminUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutSubdistrictInput | adminCreateOrConnectWithoutSubdistrictInput[]
+    createMany?: adminCreateManySubdistrictInputEnvelope
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+  }
+
+  export type officerCreateNestedManyWithoutSubdistrictInput = {
+    create?: XOR<officerCreateWithoutSubdistrictInput, officerUncheckedCreateWithoutSubdistrictInput> | officerCreateWithoutSubdistrictInput[] | officerUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutSubdistrictInput | officerCreateOrConnectWithoutSubdistrictInput[]
+    createMany?: officerCreateManySubdistrictInputEnvelope
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+  }
+
+  export type executiveCreateNestedManyWithoutSubdistrictInput = {
+    create?: XOR<executiveCreateWithoutSubdistrictInput, executiveUncheckedCreateWithoutSubdistrictInput> | executiveCreateWithoutSubdistrictInput[] | executiveUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutSubdistrictInput | executiveCreateOrConnectWithoutSubdistrictInput[]
+    createMany?: executiveCreateManySubdistrictInputEnvelope
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+  }
+
+  export type usersUncheckedCreateNestedManyWithoutSubdistrictInput = {
+    create?: XOR<usersCreateWithoutSubdistrictInput, usersUncheckedCreateWithoutSubdistrictInput> | usersCreateWithoutSubdistrictInput[] | usersUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutSubdistrictInput | usersCreateOrConnectWithoutSubdistrictInput[]
+    createMany?: usersCreateManySubdistrictInputEnvelope
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+  }
+
+  export type adminUncheckedCreateNestedManyWithoutSubdistrictInput = {
+    create?: XOR<adminCreateWithoutSubdistrictInput, adminUncheckedCreateWithoutSubdistrictInput> | adminCreateWithoutSubdistrictInput[] | adminUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutSubdistrictInput | adminCreateOrConnectWithoutSubdistrictInput[]
+    createMany?: adminCreateManySubdistrictInputEnvelope
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+  }
+
+  export type officerUncheckedCreateNestedManyWithoutSubdistrictInput = {
+    create?: XOR<officerCreateWithoutSubdistrictInput, officerUncheckedCreateWithoutSubdistrictInput> | officerCreateWithoutSubdistrictInput[] | officerUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutSubdistrictInput | officerCreateOrConnectWithoutSubdistrictInput[]
+    createMany?: officerCreateManySubdistrictInputEnvelope
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+  }
+
+  export type executiveUncheckedCreateNestedManyWithoutSubdistrictInput = {
+    create?: XOR<executiveCreateWithoutSubdistrictInput, executiveUncheckedCreateWithoutSubdistrictInput> | executiveCreateWithoutSubdistrictInput[] | executiveUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutSubdistrictInput | executiveCreateOrConnectWithoutSubdistrictInput[]
+    createMany?: executiveCreateManySubdistrictInputEnvelope
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+  }
+
+  export type DistrictUpdateOneRequiredWithoutSubdistrictsNestedInput = {
+    create?: XOR<DistrictCreateWithoutSubdistrictsInput, DistrictUncheckedCreateWithoutSubdistrictsInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutSubdistrictsInput
+    upsert?: DistrictUpsertWithoutSubdistrictsInput
+    connect?: DistrictWhereUniqueInput
+    update?: XOR<XOR<DistrictUpdateToOneWithWhereWithoutSubdistrictsInput, DistrictUpdateWithoutSubdistrictsInput>, DistrictUncheckedUpdateWithoutSubdistrictsInput>
+  }
+
+  export type usersUpdateManyWithoutSubdistrictNestedInput = {
+    create?: XOR<usersCreateWithoutSubdistrictInput, usersUncheckedCreateWithoutSubdistrictInput> | usersCreateWithoutSubdistrictInput[] | usersUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutSubdistrictInput | usersCreateOrConnectWithoutSubdistrictInput[]
+    upsert?: usersUpsertWithWhereUniqueWithoutSubdistrictInput | usersUpsertWithWhereUniqueWithoutSubdistrictInput[]
+    createMany?: usersCreateManySubdistrictInputEnvelope
+    set?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    disconnect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    delete?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    update?: usersUpdateWithWhereUniqueWithoutSubdistrictInput | usersUpdateWithWhereUniqueWithoutSubdistrictInput[]
+    updateMany?: usersUpdateManyWithWhereWithoutSubdistrictInput | usersUpdateManyWithWhereWithoutSubdistrictInput[]
+    deleteMany?: usersScalarWhereInput | usersScalarWhereInput[]
+  }
+
+  export type adminUpdateManyWithoutSubdistrictNestedInput = {
+    create?: XOR<adminCreateWithoutSubdistrictInput, adminUncheckedCreateWithoutSubdistrictInput> | adminCreateWithoutSubdistrictInput[] | adminUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutSubdistrictInput | adminCreateOrConnectWithoutSubdistrictInput[]
+    upsert?: adminUpsertWithWhereUniqueWithoutSubdistrictInput | adminUpsertWithWhereUniqueWithoutSubdistrictInput[]
+    createMany?: adminCreateManySubdistrictInputEnvelope
+    set?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    disconnect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    delete?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    update?: adminUpdateWithWhereUniqueWithoutSubdistrictInput | adminUpdateWithWhereUniqueWithoutSubdistrictInput[]
+    updateMany?: adminUpdateManyWithWhereWithoutSubdistrictInput | adminUpdateManyWithWhereWithoutSubdistrictInput[]
+    deleteMany?: adminScalarWhereInput | adminScalarWhereInput[]
+  }
+
+  export type officerUpdateManyWithoutSubdistrictNestedInput = {
+    create?: XOR<officerCreateWithoutSubdistrictInput, officerUncheckedCreateWithoutSubdistrictInput> | officerCreateWithoutSubdistrictInput[] | officerUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutSubdistrictInput | officerCreateOrConnectWithoutSubdistrictInput[]
+    upsert?: officerUpsertWithWhereUniqueWithoutSubdistrictInput | officerUpsertWithWhereUniqueWithoutSubdistrictInput[]
+    createMany?: officerCreateManySubdistrictInputEnvelope
+    set?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    disconnect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    delete?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    update?: officerUpdateWithWhereUniqueWithoutSubdistrictInput | officerUpdateWithWhereUniqueWithoutSubdistrictInput[]
+    updateMany?: officerUpdateManyWithWhereWithoutSubdistrictInput | officerUpdateManyWithWhereWithoutSubdistrictInput[]
+    deleteMany?: officerScalarWhereInput | officerScalarWhereInput[]
+  }
+
+  export type executiveUpdateManyWithoutSubdistrictNestedInput = {
+    create?: XOR<executiveCreateWithoutSubdistrictInput, executiveUncheckedCreateWithoutSubdistrictInput> | executiveCreateWithoutSubdistrictInput[] | executiveUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutSubdistrictInput | executiveCreateOrConnectWithoutSubdistrictInput[]
+    upsert?: executiveUpsertWithWhereUniqueWithoutSubdistrictInput | executiveUpsertWithWhereUniqueWithoutSubdistrictInput[]
+    createMany?: executiveCreateManySubdistrictInputEnvelope
+    set?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    disconnect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    delete?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    update?: executiveUpdateWithWhereUniqueWithoutSubdistrictInput | executiveUpdateWithWhereUniqueWithoutSubdistrictInput[]
+    updateMany?: executiveUpdateManyWithWhereWithoutSubdistrictInput | executiveUpdateManyWithWhereWithoutSubdistrictInput[]
+    deleteMany?: executiveScalarWhereInput | executiveScalarWhereInput[]
+  }
+
+  export type usersUncheckedUpdateManyWithoutSubdistrictNestedInput = {
+    create?: XOR<usersCreateWithoutSubdistrictInput, usersUncheckedCreateWithoutSubdistrictInput> | usersCreateWithoutSubdistrictInput[] | usersUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: usersCreateOrConnectWithoutSubdistrictInput | usersCreateOrConnectWithoutSubdistrictInput[]
+    upsert?: usersUpsertWithWhereUniqueWithoutSubdistrictInput | usersUpsertWithWhereUniqueWithoutSubdistrictInput[]
+    createMany?: usersCreateManySubdistrictInputEnvelope
+    set?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    disconnect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    delete?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    connect?: usersWhereUniqueInput | usersWhereUniqueInput[]
+    update?: usersUpdateWithWhereUniqueWithoutSubdistrictInput | usersUpdateWithWhereUniqueWithoutSubdistrictInput[]
+    updateMany?: usersUpdateManyWithWhereWithoutSubdistrictInput | usersUpdateManyWithWhereWithoutSubdistrictInput[]
+    deleteMany?: usersScalarWhereInput | usersScalarWhereInput[]
+  }
+
+  export type adminUncheckedUpdateManyWithoutSubdistrictNestedInput = {
+    create?: XOR<adminCreateWithoutSubdistrictInput, adminUncheckedCreateWithoutSubdistrictInput> | adminCreateWithoutSubdistrictInput[] | adminUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: adminCreateOrConnectWithoutSubdistrictInput | adminCreateOrConnectWithoutSubdistrictInput[]
+    upsert?: adminUpsertWithWhereUniqueWithoutSubdistrictInput | adminUpsertWithWhereUniqueWithoutSubdistrictInput[]
+    createMany?: adminCreateManySubdistrictInputEnvelope
+    set?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    disconnect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    delete?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    connect?: adminWhereUniqueInput | adminWhereUniqueInput[]
+    update?: adminUpdateWithWhereUniqueWithoutSubdistrictInput | adminUpdateWithWhereUniqueWithoutSubdistrictInput[]
+    updateMany?: adminUpdateManyWithWhereWithoutSubdistrictInput | adminUpdateManyWithWhereWithoutSubdistrictInput[]
+    deleteMany?: adminScalarWhereInput | adminScalarWhereInput[]
+  }
+
+  export type officerUncheckedUpdateManyWithoutSubdistrictNestedInput = {
+    create?: XOR<officerCreateWithoutSubdistrictInput, officerUncheckedCreateWithoutSubdistrictInput> | officerCreateWithoutSubdistrictInput[] | officerUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: officerCreateOrConnectWithoutSubdistrictInput | officerCreateOrConnectWithoutSubdistrictInput[]
+    upsert?: officerUpsertWithWhereUniqueWithoutSubdistrictInput | officerUpsertWithWhereUniqueWithoutSubdistrictInput[]
+    createMany?: officerCreateManySubdistrictInputEnvelope
+    set?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    disconnect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    delete?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    connect?: officerWhereUniqueInput | officerWhereUniqueInput[]
+    update?: officerUpdateWithWhereUniqueWithoutSubdistrictInput | officerUpdateWithWhereUniqueWithoutSubdistrictInput[]
+    updateMany?: officerUpdateManyWithWhereWithoutSubdistrictInput | officerUpdateManyWithWhereWithoutSubdistrictInput[]
+    deleteMany?: officerScalarWhereInput | officerScalarWhereInput[]
+  }
+
+  export type executiveUncheckedUpdateManyWithoutSubdistrictNestedInput = {
+    create?: XOR<executiveCreateWithoutSubdistrictInput, executiveUncheckedCreateWithoutSubdistrictInput> | executiveCreateWithoutSubdistrictInput[] | executiveUncheckedCreateWithoutSubdistrictInput[]
+    connectOrCreate?: executiveCreateOrConnectWithoutSubdistrictInput | executiveCreateOrConnectWithoutSubdistrictInput[]
+    upsert?: executiveUpsertWithWhereUniqueWithoutSubdistrictInput | executiveUpsertWithWhereUniqueWithoutSubdistrictInput[]
+    createMany?: executiveCreateManySubdistrictInputEnvelope
+    set?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    disconnect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    delete?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    connect?: executiveWhereUniqueInput | executiveWhereUniqueInput[]
+    update?: executiveUpdateWithWhereUniqueWithoutSubdistrictInput | executiveUpdateWithWhereUniqueWithoutSubdistrictInput[]
+    updateMany?: executiveUpdateManyWithWhereWithoutSubdistrictInput | executiveUpdateManyWithWhereWithoutSubdistrictInput[]
+    deleteMany?: executiveScalarWhereInput | executiveScalarWhereInput[]
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -16122,6 +22283,76 @@ export namespace Prisma {
     create: XOR<rolesCreateWithoutAdminInput, rolesUncheckedCreateWithoutAdminInput>
   }
 
+  export type ProvinceCreateWithoutAdminInput = {
+    province_name: string
+    districts?: DistrictCreateNestedManyWithoutProvinceInput
+    users?: usersCreateNestedManyWithoutProvinceInput
+    officer?: officerCreateNestedManyWithoutProvinceInput
+    executive?: executiveCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceUncheckedCreateWithoutAdminInput = {
+    province_id?: number
+    province_name: string
+    districts?: DistrictUncheckedCreateNestedManyWithoutProvinceInput
+    users?: usersUncheckedCreateNestedManyWithoutProvinceInput
+    officer?: officerUncheckedCreateNestedManyWithoutProvinceInput
+    executive?: executiveUncheckedCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceCreateOrConnectWithoutAdminInput = {
+    where: ProvinceWhereUniqueInput
+    create: XOR<ProvinceCreateWithoutAdminInput, ProvinceUncheckedCreateWithoutAdminInput>
+  }
+
+  export type DistrictCreateWithoutAdminInput = {
+    district_name: string
+    province: ProvinceCreateNestedOneWithoutDistrictsInput
+    subdistricts?: SubdistrictCreateNestedManyWithoutDistrictInput
+    users?: usersCreateNestedManyWithoutDistrictInput
+    officer?: officerCreateNestedManyWithoutDistrictInput
+    executive?: executiveCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictUncheckedCreateWithoutAdminInput = {
+    district_id?: number
+    province_id: number
+    district_name: string
+    subdistricts?: SubdistrictUncheckedCreateNestedManyWithoutDistrictInput
+    users?: usersUncheckedCreateNestedManyWithoutDistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutDistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictCreateOrConnectWithoutAdminInput = {
+    where: DistrictWhereUniqueInput
+    create: XOR<DistrictCreateWithoutAdminInput, DistrictUncheckedCreateWithoutAdminInput>
+  }
+
+  export type SubdistrictCreateWithoutAdminInput = {
+    subdistrict_name: string
+    zip_code?: string | null
+    district: DistrictCreateNestedOneWithoutSubdistrictsInput
+    users?: usersCreateNestedManyWithoutSubdistrictInput
+    officer?: officerCreateNestedManyWithoutSubdistrictInput
+    executive?: executiveCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictUncheckedCreateWithoutAdminInput = {
+    subdistrict_id?: number
+    district_id: number
+    subdistrict_name: string
+    zip_code?: string | null
+    users?: usersUncheckedCreateNestedManyWithoutSubdistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutSubdistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictCreateOrConnectWithoutAdminInput = {
+    where: SubdistrictWhereUniqueInput
+    create: XOR<SubdistrictCreateWithoutAdminInput, SubdistrictUncheckedCreateWithoutAdminInput>
+  }
+
   export type rolesUpsertWithoutAdminInput = {
     update: XOR<rolesUpdateWithoutAdminInput, rolesUncheckedUpdateWithoutAdminInput>
     create: XOR<rolesCreateWithoutAdminInput, rolesUncheckedCreateWithoutAdminInput>
@@ -16148,6 +22379,94 @@ export namespace Prisma {
     officer?: officerUncheckedUpdateManyWithoutRolesNestedInput
     users?: usersUncheckedUpdateManyWithoutRolesNestedInput
     executive?: executiveUncheckedUpdateManyWithoutRolesNestedInput
+  }
+
+  export type ProvinceUpsertWithoutAdminInput = {
+    update: XOR<ProvinceUpdateWithoutAdminInput, ProvinceUncheckedUpdateWithoutAdminInput>
+    create: XOR<ProvinceCreateWithoutAdminInput, ProvinceUncheckedCreateWithoutAdminInput>
+    where?: ProvinceWhereInput
+  }
+
+  export type ProvinceUpdateToOneWithWhereWithoutAdminInput = {
+    where?: ProvinceWhereInput
+    data: XOR<ProvinceUpdateWithoutAdminInput, ProvinceUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type ProvinceUpdateWithoutAdminInput = {
+    province_name?: StringFieldUpdateOperationsInput | string
+    districts?: DistrictUpdateManyWithoutProvinceNestedInput
+    users?: usersUpdateManyWithoutProvinceNestedInput
+    officer?: officerUpdateManyWithoutProvinceNestedInput
+    executive?: executiveUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type ProvinceUncheckedUpdateWithoutAdminInput = {
+    province_id?: IntFieldUpdateOperationsInput | number
+    province_name?: StringFieldUpdateOperationsInput | string
+    districts?: DistrictUncheckedUpdateManyWithoutProvinceNestedInput
+    users?: usersUncheckedUpdateManyWithoutProvinceNestedInput
+    officer?: officerUncheckedUpdateManyWithoutProvinceNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type DistrictUpsertWithoutAdminInput = {
+    update: XOR<DistrictUpdateWithoutAdminInput, DistrictUncheckedUpdateWithoutAdminInput>
+    create: XOR<DistrictCreateWithoutAdminInput, DistrictUncheckedCreateWithoutAdminInput>
+    where?: DistrictWhereInput
+  }
+
+  export type DistrictUpdateToOneWithWhereWithoutAdminInput = {
+    where?: DistrictWhereInput
+    data: XOR<DistrictUpdateWithoutAdminInput, DistrictUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type DistrictUpdateWithoutAdminInput = {
+    district_name?: StringFieldUpdateOperationsInput | string
+    province?: ProvinceUpdateOneRequiredWithoutDistrictsNestedInput
+    subdistricts?: SubdistrictUpdateManyWithoutDistrictNestedInput
+    users?: usersUpdateManyWithoutDistrictNestedInput
+    officer?: officerUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type DistrictUncheckedUpdateWithoutAdminInput = {
+    district_id?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    district_name?: StringFieldUpdateOperationsInput | string
+    subdistricts?: SubdistrictUncheckedUpdateManyWithoutDistrictNestedInput
+    users?: usersUncheckedUpdateManyWithoutDistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type SubdistrictUpsertWithoutAdminInput = {
+    update: XOR<SubdistrictUpdateWithoutAdminInput, SubdistrictUncheckedUpdateWithoutAdminInput>
+    create: XOR<SubdistrictCreateWithoutAdminInput, SubdistrictUncheckedCreateWithoutAdminInput>
+    where?: SubdistrictWhereInput
+  }
+
+  export type SubdistrictUpdateToOneWithWhereWithoutAdminInput = {
+    where?: SubdistrictWhereInput
+    data: XOR<SubdistrictUpdateWithoutAdminInput, SubdistrictUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type SubdistrictUpdateWithoutAdminInput = {
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: DistrictUpdateOneRequiredWithoutSubdistrictsNestedInput
+    users?: usersUpdateManyWithoutSubdistrictNestedInput
+    officer?: officerUpdateManyWithoutSubdistrictNestedInput
+    executive?: executiveUpdateManyWithoutSubdistrictNestedInput
+  }
+
+  export type SubdistrictUncheckedUpdateWithoutAdminInput = {
+    subdistrict_id?: IntFieldUpdateOperationsInput | number
+    district_id?: IntFieldUpdateOperationsInput | number
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    users?: usersUncheckedUpdateManyWithoutSubdistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutSubdistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutSubdistrictNestedInput
   }
 
   export type meeting_roomCreateWithoutEquipmentInput = {
@@ -16256,6 +22575,7 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -16274,6 +22594,7 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -16373,6 +22694,7 @@ export namespace Prisma {
     status_r?: StringNullableFilter<"reservation"> | string | null
     officer_id?: IntNullableFilter<"reservation"> | number | null
     details_r?: StringNullableFilter<"reservation"> | string | null
+    rejected_reason?: StringNullableFilter<"reservation"> | string | null
     booking_dates?: StringNullableFilter<"reservation"> | string | null
     is_multi_day?: BoolNullableFilter<"reservation"> | boolean | null
     created_at?: DateTimeNullableFilter<"reservation"> | Date | string | null
@@ -16429,6 +22751,76 @@ export namespace Prisma {
     create: XOR<rolesCreateWithoutOfficerInput, rolesUncheckedCreateWithoutOfficerInput>
   }
 
+  export type ProvinceCreateWithoutOfficerInput = {
+    province_name: string
+    districts?: DistrictCreateNestedManyWithoutProvinceInput
+    users?: usersCreateNestedManyWithoutProvinceInput
+    admin?: adminCreateNestedManyWithoutProvinceInput
+    executive?: executiveCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceUncheckedCreateWithoutOfficerInput = {
+    province_id?: number
+    province_name: string
+    districts?: DistrictUncheckedCreateNestedManyWithoutProvinceInput
+    users?: usersUncheckedCreateNestedManyWithoutProvinceInput
+    admin?: adminUncheckedCreateNestedManyWithoutProvinceInput
+    executive?: executiveUncheckedCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceCreateOrConnectWithoutOfficerInput = {
+    where: ProvinceWhereUniqueInput
+    create: XOR<ProvinceCreateWithoutOfficerInput, ProvinceUncheckedCreateWithoutOfficerInput>
+  }
+
+  export type DistrictCreateWithoutOfficerInput = {
+    district_name: string
+    province: ProvinceCreateNestedOneWithoutDistrictsInput
+    subdistricts?: SubdistrictCreateNestedManyWithoutDistrictInput
+    users?: usersCreateNestedManyWithoutDistrictInput
+    admin?: adminCreateNestedManyWithoutDistrictInput
+    executive?: executiveCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictUncheckedCreateWithoutOfficerInput = {
+    district_id?: number
+    province_id: number
+    district_name: string
+    subdistricts?: SubdistrictUncheckedCreateNestedManyWithoutDistrictInput
+    users?: usersUncheckedCreateNestedManyWithoutDistrictInput
+    admin?: adminUncheckedCreateNestedManyWithoutDistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictCreateOrConnectWithoutOfficerInput = {
+    where: DistrictWhereUniqueInput
+    create: XOR<DistrictCreateWithoutOfficerInput, DistrictUncheckedCreateWithoutOfficerInput>
+  }
+
+  export type SubdistrictCreateWithoutOfficerInput = {
+    subdistrict_name: string
+    zip_code?: string | null
+    district: DistrictCreateNestedOneWithoutSubdistrictsInput
+    users?: usersCreateNestedManyWithoutSubdistrictInput
+    admin?: adminCreateNestedManyWithoutSubdistrictInput
+    executive?: executiveCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictUncheckedCreateWithoutOfficerInput = {
+    subdistrict_id?: number
+    district_id: number
+    subdistrict_name: string
+    zip_code?: string | null
+    users?: usersUncheckedCreateNestedManyWithoutSubdistrictInput
+    admin?: adminUncheckedCreateNestedManyWithoutSubdistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictCreateOrConnectWithoutOfficerInput = {
+    where: SubdistrictWhereUniqueInput
+    create: XOR<SubdistrictCreateWithoutOfficerInput, SubdistrictUncheckedCreateWithoutOfficerInput>
+  }
+
   export type reservationCreateWithoutOfficerInput = {
     start_at: Date | string
     end_at: Date | string
@@ -16436,6 +22828,7 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -16454,6 +22847,7 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -16498,6 +22892,94 @@ export namespace Prisma {
     executive?: executiveUncheckedUpdateManyWithoutRolesNestedInput
   }
 
+  export type ProvinceUpsertWithoutOfficerInput = {
+    update: XOR<ProvinceUpdateWithoutOfficerInput, ProvinceUncheckedUpdateWithoutOfficerInput>
+    create: XOR<ProvinceCreateWithoutOfficerInput, ProvinceUncheckedCreateWithoutOfficerInput>
+    where?: ProvinceWhereInput
+  }
+
+  export type ProvinceUpdateToOneWithWhereWithoutOfficerInput = {
+    where?: ProvinceWhereInput
+    data: XOR<ProvinceUpdateWithoutOfficerInput, ProvinceUncheckedUpdateWithoutOfficerInput>
+  }
+
+  export type ProvinceUpdateWithoutOfficerInput = {
+    province_name?: StringFieldUpdateOperationsInput | string
+    districts?: DistrictUpdateManyWithoutProvinceNestedInput
+    users?: usersUpdateManyWithoutProvinceNestedInput
+    admin?: adminUpdateManyWithoutProvinceNestedInput
+    executive?: executiveUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type ProvinceUncheckedUpdateWithoutOfficerInput = {
+    province_id?: IntFieldUpdateOperationsInput | number
+    province_name?: StringFieldUpdateOperationsInput | string
+    districts?: DistrictUncheckedUpdateManyWithoutProvinceNestedInput
+    users?: usersUncheckedUpdateManyWithoutProvinceNestedInput
+    admin?: adminUncheckedUpdateManyWithoutProvinceNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type DistrictUpsertWithoutOfficerInput = {
+    update: XOR<DistrictUpdateWithoutOfficerInput, DistrictUncheckedUpdateWithoutOfficerInput>
+    create: XOR<DistrictCreateWithoutOfficerInput, DistrictUncheckedCreateWithoutOfficerInput>
+    where?: DistrictWhereInput
+  }
+
+  export type DistrictUpdateToOneWithWhereWithoutOfficerInput = {
+    where?: DistrictWhereInput
+    data: XOR<DistrictUpdateWithoutOfficerInput, DistrictUncheckedUpdateWithoutOfficerInput>
+  }
+
+  export type DistrictUpdateWithoutOfficerInput = {
+    district_name?: StringFieldUpdateOperationsInput | string
+    province?: ProvinceUpdateOneRequiredWithoutDistrictsNestedInput
+    subdistricts?: SubdistrictUpdateManyWithoutDistrictNestedInput
+    users?: usersUpdateManyWithoutDistrictNestedInput
+    admin?: adminUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type DistrictUncheckedUpdateWithoutOfficerInput = {
+    district_id?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    district_name?: StringFieldUpdateOperationsInput | string
+    subdistricts?: SubdistrictUncheckedUpdateManyWithoutDistrictNestedInput
+    users?: usersUncheckedUpdateManyWithoutDistrictNestedInput
+    admin?: adminUncheckedUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type SubdistrictUpsertWithoutOfficerInput = {
+    update: XOR<SubdistrictUpdateWithoutOfficerInput, SubdistrictUncheckedUpdateWithoutOfficerInput>
+    create: XOR<SubdistrictCreateWithoutOfficerInput, SubdistrictUncheckedCreateWithoutOfficerInput>
+    where?: SubdistrictWhereInput
+  }
+
+  export type SubdistrictUpdateToOneWithWhereWithoutOfficerInput = {
+    where?: SubdistrictWhereInput
+    data: XOR<SubdistrictUpdateWithoutOfficerInput, SubdistrictUncheckedUpdateWithoutOfficerInput>
+  }
+
+  export type SubdistrictUpdateWithoutOfficerInput = {
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: DistrictUpdateOneRequiredWithoutSubdistrictsNestedInput
+    users?: usersUpdateManyWithoutSubdistrictNestedInput
+    admin?: adminUpdateManyWithoutSubdistrictNestedInput
+    executive?: executiveUpdateManyWithoutSubdistrictNestedInput
+  }
+
+  export type SubdistrictUncheckedUpdateWithoutOfficerInput = {
+    subdistrict_id?: IntFieldUpdateOperationsInput | number
+    district_id?: IntFieldUpdateOperationsInput | number
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    users?: usersUncheckedUpdateManyWithoutSubdistrictNestedInput
+    admin?: adminUncheckedUpdateManyWithoutSubdistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutSubdistrictNestedInput
+  }
+
   export type reservationUpsertWithWhereUniqueWithoutOfficerInput = {
     where: reservationWhereUniqueInput
     update: XOR<reservationUpdateWithoutOfficerInput, reservationUncheckedUpdateWithoutOfficerInput>
@@ -16527,6 +23009,9 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     roles: rolesCreateNestedOneWithoutOfficerInput
+    province?: ProvinceCreateNestedOneWithoutOfficerInput
+    district?: DistrictCreateNestedOneWithoutOfficerInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutOfficerInput
   }
 
   export type officerUncheckedCreateWithoutReservationInput = {
@@ -16539,6 +23024,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -16598,6 +23086,9 @@ export namespace Prisma {
     updated_at?: Date | string | null
     review?: reviewCreateNestedManyWithoutUsersInput
     roles: rolesCreateNestedOneWithoutUsersInput
+    province?: ProvinceCreateNestedOneWithoutUsersInput
+    district?: DistrictCreateNestedOneWithoutUsersInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutReservationInput = {
@@ -16610,6 +23101,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -16646,6 +23140,9 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     roles?: rolesUpdateOneRequiredWithoutOfficerNestedInput
+    province?: ProvinceUpdateOneWithoutOfficerNestedInput
+    district?: DistrictUpdateOneWithoutOfficerNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutOfficerNestedInput
   }
 
   export type officerUncheckedUpdateWithoutReservationInput = {
@@ -16658,6 +23155,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16729,6 +23229,9 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     review?: reviewUpdateManyWithoutUsersNestedInput
     roles?: rolesUpdateOneRequiredWithoutUsersNestedInput
+    province?: ProvinceUpdateOneWithoutUsersNestedInput
+    district?: DistrictUpdateOneWithoutUsersNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutReservationInput = {
@@ -16741,6 +23244,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16796,6 +23302,9 @@ export namespace Prisma {
     updated_at?: Date | string | null
     reservation?: reservationCreateNestedManyWithoutUsersInput
     roles: rolesCreateNestedOneWithoutUsersInput
+    province?: ProvinceCreateNestedOneWithoutUsersInput
+    district?: DistrictCreateNestedOneWithoutUsersInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutReviewInput = {
@@ -16808,6 +23317,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -16885,6 +23397,9 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUpdateManyWithoutUsersNestedInput
     roles?: rolesUpdateOneRequiredWithoutUsersNestedInput
+    province?: ProvinceUpdateOneWithoutUsersNestedInput
+    district?: DistrictUpdateOneWithoutUsersNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutReviewInput = {
@@ -16897,6 +23412,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16916,6 +23434,9 @@ export namespace Prisma {
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    province?: ProvinceCreateNestedOneWithoutAdminInput
+    district?: DistrictCreateNestedOneWithoutAdminInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutAdminInput
   }
 
   export type adminUncheckedCreateWithoutRolesInput = {
@@ -16927,6 +23448,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -16955,6 +23479,9 @@ export namespace Prisma {
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    province?: ProvinceCreateNestedOneWithoutOfficerInput
+    district?: DistrictCreateNestedOneWithoutOfficerInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutOfficerInput
     reservation?: reservationCreateNestedManyWithoutOfficerInput
   }
 
@@ -16967,6 +23494,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -16998,6 +23528,9 @@ export namespace Prisma {
     updated_at?: Date | string | null
     reservation?: reservationCreateNestedManyWithoutUsersInput
     review?: reviewCreateNestedManyWithoutUsersInput
+    province?: ProvinceCreateNestedOneWithoutUsersInput
+    district?: DistrictCreateNestedOneWithoutUsersInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutRolesInput = {
@@ -17009,6 +23542,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -17039,6 +23575,9 @@ export namespace Prisma {
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    province?: ProvinceCreateNestedOneWithoutExecutiveInput
+    district?: DistrictCreateNestedOneWithoutExecutiveInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutExecutiveInput
   }
 
   export type executiveUncheckedCreateWithoutRolesInput = {
@@ -17050,6 +23589,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -17095,6 +23637,9 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"admin"> | string | null
     position?: StringNullableFilter<"admin"> | string | null
     department?: StringNullableFilter<"admin"> | string | null
+    province_id?: IntNullableFilter<"admin"> | number | null
+    district_id?: IntNullableFilter<"admin"> | number | null
+    subdistrict_id?: IntNullableFilter<"admin"> | number | null
     zip_code?: IntNullableFilter<"admin"> | number | null
     profile_image?: BytesNullableFilter<"admin"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"admin"> | Date | string | null
@@ -17130,6 +23675,9 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"officer"> | string | null
     position?: StringNullableFilter<"officer"> | string | null
     department?: StringNullableFilter<"officer"> | string | null
+    province_id?: IntNullableFilter<"officer"> | number | null
+    district_id?: IntNullableFilter<"officer"> | number | null
+    subdistrict_id?: IntNullableFilter<"officer"> | number | null
     zip_code?: IntNullableFilter<"officer"> | number | null
     profile_image?: BytesNullableFilter<"officer"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"officer"> | Date | string | null
@@ -17165,6 +23713,9 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"users"> | string | null
     position?: StringNullableFilter<"users"> | string | null
     department?: StringNullableFilter<"users"> | string | null
+    province_id?: IntNullableFilter<"users"> | number | null
+    district_id?: IntNullableFilter<"users"> | number | null
+    subdistrict_id?: IntNullableFilter<"users"> | number | null
     zip_code?: IntNullableFilter<"users"> | number | null
     profile_image?: BytesNullableFilter<"users"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"users"> | Date | string | null
@@ -17200,6 +23751,9 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"executive"> | string | null
     position?: StringFilter<"executive"> | string
     department?: StringFilter<"executive"> | string
+    province_id?: IntNullableFilter<"executive"> | number | null
+    district_id?: IntNullableFilter<"executive"> | number | null
+    subdistrict_id?: IntNullableFilter<"executive"> | number | null
     zip_code?: IntNullableFilter<"executive"> | number | null
     profile_image?: BytesNullableFilter<"executive"> | Uint8Array | null
     created_at?: DateTimeNullableFilter<"executive"> | Date | string | null
@@ -17226,6 +23780,76 @@ export namespace Prisma {
   export type rolesCreateOrConnectWithoutExecutiveInput = {
     where: rolesWhereUniqueInput
     create: XOR<rolesCreateWithoutExecutiveInput, rolesUncheckedCreateWithoutExecutiveInput>
+  }
+
+  export type ProvinceCreateWithoutExecutiveInput = {
+    province_name: string
+    districts?: DistrictCreateNestedManyWithoutProvinceInput
+    users?: usersCreateNestedManyWithoutProvinceInput
+    admin?: adminCreateNestedManyWithoutProvinceInput
+    officer?: officerCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceUncheckedCreateWithoutExecutiveInput = {
+    province_id?: number
+    province_name: string
+    districts?: DistrictUncheckedCreateNestedManyWithoutProvinceInput
+    users?: usersUncheckedCreateNestedManyWithoutProvinceInput
+    admin?: adminUncheckedCreateNestedManyWithoutProvinceInput
+    officer?: officerUncheckedCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceCreateOrConnectWithoutExecutiveInput = {
+    where: ProvinceWhereUniqueInput
+    create: XOR<ProvinceCreateWithoutExecutiveInput, ProvinceUncheckedCreateWithoutExecutiveInput>
+  }
+
+  export type DistrictCreateWithoutExecutiveInput = {
+    district_name: string
+    province: ProvinceCreateNestedOneWithoutDistrictsInput
+    subdistricts?: SubdistrictCreateNestedManyWithoutDistrictInput
+    users?: usersCreateNestedManyWithoutDistrictInput
+    admin?: adminCreateNestedManyWithoutDistrictInput
+    officer?: officerCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictUncheckedCreateWithoutExecutiveInput = {
+    district_id?: number
+    province_id: number
+    district_name: string
+    subdistricts?: SubdistrictUncheckedCreateNestedManyWithoutDistrictInput
+    users?: usersUncheckedCreateNestedManyWithoutDistrictInput
+    admin?: adminUncheckedCreateNestedManyWithoutDistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictCreateOrConnectWithoutExecutiveInput = {
+    where: DistrictWhereUniqueInput
+    create: XOR<DistrictCreateWithoutExecutiveInput, DistrictUncheckedCreateWithoutExecutiveInput>
+  }
+
+  export type SubdistrictCreateWithoutExecutiveInput = {
+    subdistrict_name: string
+    zip_code?: string | null
+    district: DistrictCreateNestedOneWithoutSubdistrictsInput
+    users?: usersCreateNestedManyWithoutSubdistrictInput
+    admin?: adminCreateNestedManyWithoutSubdistrictInput
+    officer?: officerCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictUncheckedCreateWithoutExecutiveInput = {
+    subdistrict_id?: number
+    district_id: number
+    subdistrict_name: string
+    zip_code?: string | null
+    users?: usersUncheckedCreateNestedManyWithoutSubdistrictInput
+    admin?: adminUncheckedCreateNestedManyWithoutSubdistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictCreateOrConnectWithoutExecutiveInput = {
+    where: SubdistrictWhereUniqueInput
+    create: XOR<SubdistrictCreateWithoutExecutiveInput, SubdistrictUncheckedCreateWithoutExecutiveInput>
   }
 
   export type rolesUpsertWithoutExecutiveInput = {
@@ -17256,6 +23880,94 @@ export namespace Prisma {
     users?: usersUncheckedUpdateManyWithoutRolesNestedInput
   }
 
+  export type ProvinceUpsertWithoutExecutiveInput = {
+    update: XOR<ProvinceUpdateWithoutExecutiveInput, ProvinceUncheckedUpdateWithoutExecutiveInput>
+    create: XOR<ProvinceCreateWithoutExecutiveInput, ProvinceUncheckedCreateWithoutExecutiveInput>
+    where?: ProvinceWhereInput
+  }
+
+  export type ProvinceUpdateToOneWithWhereWithoutExecutiveInput = {
+    where?: ProvinceWhereInput
+    data: XOR<ProvinceUpdateWithoutExecutiveInput, ProvinceUncheckedUpdateWithoutExecutiveInput>
+  }
+
+  export type ProvinceUpdateWithoutExecutiveInput = {
+    province_name?: StringFieldUpdateOperationsInput | string
+    districts?: DistrictUpdateManyWithoutProvinceNestedInput
+    users?: usersUpdateManyWithoutProvinceNestedInput
+    admin?: adminUpdateManyWithoutProvinceNestedInput
+    officer?: officerUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type ProvinceUncheckedUpdateWithoutExecutiveInput = {
+    province_id?: IntFieldUpdateOperationsInput | number
+    province_name?: StringFieldUpdateOperationsInput | string
+    districts?: DistrictUncheckedUpdateManyWithoutProvinceNestedInput
+    users?: usersUncheckedUpdateManyWithoutProvinceNestedInput
+    admin?: adminUncheckedUpdateManyWithoutProvinceNestedInput
+    officer?: officerUncheckedUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type DistrictUpsertWithoutExecutiveInput = {
+    update: XOR<DistrictUpdateWithoutExecutiveInput, DistrictUncheckedUpdateWithoutExecutiveInput>
+    create: XOR<DistrictCreateWithoutExecutiveInput, DistrictUncheckedCreateWithoutExecutiveInput>
+    where?: DistrictWhereInput
+  }
+
+  export type DistrictUpdateToOneWithWhereWithoutExecutiveInput = {
+    where?: DistrictWhereInput
+    data: XOR<DistrictUpdateWithoutExecutiveInput, DistrictUncheckedUpdateWithoutExecutiveInput>
+  }
+
+  export type DistrictUpdateWithoutExecutiveInput = {
+    district_name?: StringFieldUpdateOperationsInput | string
+    province?: ProvinceUpdateOneRequiredWithoutDistrictsNestedInput
+    subdistricts?: SubdistrictUpdateManyWithoutDistrictNestedInput
+    users?: usersUpdateManyWithoutDistrictNestedInput
+    admin?: adminUpdateManyWithoutDistrictNestedInput
+    officer?: officerUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type DistrictUncheckedUpdateWithoutExecutiveInput = {
+    district_id?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    district_name?: StringFieldUpdateOperationsInput | string
+    subdistricts?: SubdistrictUncheckedUpdateManyWithoutDistrictNestedInput
+    users?: usersUncheckedUpdateManyWithoutDistrictNestedInput
+    admin?: adminUncheckedUpdateManyWithoutDistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type SubdistrictUpsertWithoutExecutiveInput = {
+    update: XOR<SubdistrictUpdateWithoutExecutiveInput, SubdistrictUncheckedUpdateWithoutExecutiveInput>
+    create: XOR<SubdistrictCreateWithoutExecutiveInput, SubdistrictUncheckedCreateWithoutExecutiveInput>
+    where?: SubdistrictWhereInput
+  }
+
+  export type SubdistrictUpdateToOneWithWhereWithoutExecutiveInput = {
+    where?: SubdistrictWhereInput
+    data: XOR<SubdistrictUpdateWithoutExecutiveInput, SubdistrictUncheckedUpdateWithoutExecutiveInput>
+  }
+
+  export type SubdistrictUpdateWithoutExecutiveInput = {
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: DistrictUpdateOneRequiredWithoutSubdistrictsNestedInput
+    users?: usersUpdateManyWithoutSubdistrictNestedInput
+    admin?: adminUpdateManyWithoutSubdistrictNestedInput
+    officer?: officerUpdateManyWithoutSubdistrictNestedInput
+  }
+
+  export type SubdistrictUncheckedUpdateWithoutExecutiveInput = {
+    subdistrict_id?: IntFieldUpdateOperationsInput | number
+    district_id?: IntFieldUpdateOperationsInput | number
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    users?: usersUncheckedUpdateManyWithoutSubdistrictNestedInput
+    admin?: adminUncheckedUpdateManyWithoutSubdistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutSubdistrictNestedInput
+  }
+
   export type reservationCreateWithoutUsersInput = {
     start_at: Date | string
     end_at: Date | string
@@ -17263,6 +23975,7 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -17281,6 +23994,7 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -17344,6 +24058,76 @@ export namespace Prisma {
     create: XOR<rolesCreateWithoutUsersInput, rolesUncheckedCreateWithoutUsersInput>
   }
 
+  export type ProvinceCreateWithoutUsersInput = {
+    province_name: string
+    districts?: DistrictCreateNestedManyWithoutProvinceInput
+    admin?: adminCreateNestedManyWithoutProvinceInput
+    officer?: officerCreateNestedManyWithoutProvinceInput
+    executive?: executiveCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceUncheckedCreateWithoutUsersInput = {
+    province_id?: number
+    province_name: string
+    districts?: DistrictUncheckedCreateNestedManyWithoutProvinceInput
+    admin?: adminUncheckedCreateNestedManyWithoutProvinceInput
+    officer?: officerUncheckedCreateNestedManyWithoutProvinceInput
+    executive?: executiveUncheckedCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceCreateOrConnectWithoutUsersInput = {
+    where: ProvinceWhereUniqueInput
+    create: XOR<ProvinceCreateWithoutUsersInput, ProvinceUncheckedCreateWithoutUsersInput>
+  }
+
+  export type DistrictCreateWithoutUsersInput = {
+    district_name: string
+    province: ProvinceCreateNestedOneWithoutDistrictsInput
+    subdistricts?: SubdistrictCreateNestedManyWithoutDistrictInput
+    admin?: adminCreateNestedManyWithoutDistrictInput
+    officer?: officerCreateNestedManyWithoutDistrictInput
+    executive?: executiveCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictUncheckedCreateWithoutUsersInput = {
+    district_id?: number
+    province_id: number
+    district_name: string
+    subdistricts?: SubdistrictUncheckedCreateNestedManyWithoutDistrictInput
+    admin?: adminUncheckedCreateNestedManyWithoutDistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutDistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictCreateOrConnectWithoutUsersInput = {
+    where: DistrictWhereUniqueInput
+    create: XOR<DistrictCreateWithoutUsersInput, DistrictUncheckedCreateWithoutUsersInput>
+  }
+
+  export type SubdistrictCreateWithoutUsersInput = {
+    subdistrict_name: string
+    zip_code?: string | null
+    district: DistrictCreateNestedOneWithoutSubdistrictsInput
+    admin?: adminCreateNestedManyWithoutSubdistrictInput
+    officer?: officerCreateNestedManyWithoutSubdistrictInput
+    executive?: executiveCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictUncheckedCreateWithoutUsersInput = {
+    subdistrict_id?: number
+    district_id: number
+    subdistrict_name: string
+    zip_code?: string | null
+    admin?: adminUncheckedCreateNestedManyWithoutSubdistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutSubdistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictCreateOrConnectWithoutUsersInput = {
+    where: SubdistrictWhereUniqueInput
+    create: XOR<SubdistrictCreateWithoutUsersInput, SubdistrictUncheckedCreateWithoutUsersInput>
+  }
+
   export type reservationUpsertWithWhereUniqueWithoutUsersInput = {
     where: reservationWhereUniqueInput
     update: XOR<reservationUpdateWithoutUsersInput, reservationUncheckedUpdateWithoutUsersInput>
@@ -17404,6 +24188,1057 @@ export namespace Prisma {
     executive?: executiveUncheckedUpdateManyWithoutRolesNestedInput
   }
 
+  export type ProvinceUpsertWithoutUsersInput = {
+    update: XOR<ProvinceUpdateWithoutUsersInput, ProvinceUncheckedUpdateWithoutUsersInput>
+    create: XOR<ProvinceCreateWithoutUsersInput, ProvinceUncheckedCreateWithoutUsersInput>
+    where?: ProvinceWhereInput
+  }
+
+  export type ProvinceUpdateToOneWithWhereWithoutUsersInput = {
+    where?: ProvinceWhereInput
+    data: XOR<ProvinceUpdateWithoutUsersInput, ProvinceUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type ProvinceUpdateWithoutUsersInput = {
+    province_name?: StringFieldUpdateOperationsInput | string
+    districts?: DistrictUpdateManyWithoutProvinceNestedInput
+    admin?: adminUpdateManyWithoutProvinceNestedInput
+    officer?: officerUpdateManyWithoutProvinceNestedInput
+    executive?: executiveUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type ProvinceUncheckedUpdateWithoutUsersInput = {
+    province_id?: IntFieldUpdateOperationsInput | number
+    province_name?: StringFieldUpdateOperationsInput | string
+    districts?: DistrictUncheckedUpdateManyWithoutProvinceNestedInput
+    admin?: adminUncheckedUpdateManyWithoutProvinceNestedInput
+    officer?: officerUncheckedUpdateManyWithoutProvinceNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type DistrictUpsertWithoutUsersInput = {
+    update: XOR<DistrictUpdateWithoutUsersInput, DistrictUncheckedUpdateWithoutUsersInput>
+    create: XOR<DistrictCreateWithoutUsersInput, DistrictUncheckedCreateWithoutUsersInput>
+    where?: DistrictWhereInput
+  }
+
+  export type DistrictUpdateToOneWithWhereWithoutUsersInput = {
+    where?: DistrictWhereInput
+    data: XOR<DistrictUpdateWithoutUsersInput, DistrictUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type DistrictUpdateWithoutUsersInput = {
+    district_name?: StringFieldUpdateOperationsInput | string
+    province?: ProvinceUpdateOneRequiredWithoutDistrictsNestedInput
+    subdistricts?: SubdistrictUpdateManyWithoutDistrictNestedInput
+    admin?: adminUpdateManyWithoutDistrictNestedInput
+    officer?: officerUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type DistrictUncheckedUpdateWithoutUsersInput = {
+    district_id?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    district_name?: StringFieldUpdateOperationsInput | string
+    subdistricts?: SubdistrictUncheckedUpdateManyWithoutDistrictNestedInput
+    admin?: adminUncheckedUpdateManyWithoutDistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type SubdistrictUpsertWithoutUsersInput = {
+    update: XOR<SubdistrictUpdateWithoutUsersInput, SubdistrictUncheckedUpdateWithoutUsersInput>
+    create: XOR<SubdistrictCreateWithoutUsersInput, SubdistrictUncheckedCreateWithoutUsersInput>
+    where?: SubdistrictWhereInput
+  }
+
+  export type SubdistrictUpdateToOneWithWhereWithoutUsersInput = {
+    where?: SubdistrictWhereInput
+    data: XOR<SubdistrictUpdateWithoutUsersInput, SubdistrictUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type SubdistrictUpdateWithoutUsersInput = {
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: DistrictUpdateOneRequiredWithoutSubdistrictsNestedInput
+    admin?: adminUpdateManyWithoutSubdistrictNestedInput
+    officer?: officerUpdateManyWithoutSubdistrictNestedInput
+    executive?: executiveUpdateManyWithoutSubdistrictNestedInput
+  }
+
+  export type SubdistrictUncheckedUpdateWithoutUsersInput = {
+    subdistrict_id?: IntFieldUpdateOperationsInput | number
+    district_id?: IntFieldUpdateOperationsInput | number
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    admin?: adminUncheckedUpdateManyWithoutSubdistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutSubdistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutSubdistrictNestedInput
+  }
+
+  export type DistrictCreateWithoutProvinceInput = {
+    district_name: string
+    subdistricts?: SubdistrictCreateNestedManyWithoutDistrictInput
+    users?: usersCreateNestedManyWithoutDistrictInput
+    admin?: adminCreateNestedManyWithoutDistrictInput
+    officer?: officerCreateNestedManyWithoutDistrictInput
+    executive?: executiveCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictUncheckedCreateWithoutProvinceInput = {
+    district_id?: number
+    district_name: string
+    subdistricts?: SubdistrictUncheckedCreateNestedManyWithoutDistrictInput
+    users?: usersUncheckedCreateNestedManyWithoutDistrictInput
+    admin?: adminUncheckedCreateNestedManyWithoutDistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutDistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictCreateOrConnectWithoutProvinceInput = {
+    where: DistrictWhereUniqueInput
+    create: XOR<DistrictCreateWithoutProvinceInput, DistrictUncheckedCreateWithoutProvinceInput>
+  }
+
+  export type DistrictCreateManyProvinceInputEnvelope = {
+    data: DistrictCreateManyProvinceInput | DistrictCreateManyProvinceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type usersCreateWithoutProvinceInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    reservation?: reservationCreateNestedManyWithoutUsersInput
+    review?: reviewCreateNestedManyWithoutUsersInput
+    roles: rolesCreateNestedOneWithoutUsersInput
+    district?: DistrictCreateNestedOneWithoutUsersInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutUsersInput
+  }
+
+  export type usersUncheckedCreateWithoutProvinceInput = {
+    user_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    district_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    reservation?: reservationUncheckedCreateNestedManyWithoutUsersInput
+    review?: reviewUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersCreateOrConnectWithoutProvinceInput = {
+    where: usersWhereUniqueInput
+    create: XOR<usersCreateWithoutProvinceInput, usersUncheckedCreateWithoutProvinceInput>
+  }
+
+  export type usersCreateManyProvinceInputEnvelope = {
+    data: usersCreateManyProvinceInput | usersCreateManyProvinceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type adminCreateWithoutProvinceInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    roles: rolesCreateNestedOneWithoutAdminInput
+    district?: DistrictCreateNestedOneWithoutAdminInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutAdminInput
+  }
+
+  export type adminUncheckedCreateWithoutProvinceInput = {
+    admin_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    district_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type adminCreateOrConnectWithoutProvinceInput = {
+    where: adminWhereUniqueInput
+    create: XOR<adminCreateWithoutProvinceInput, adminUncheckedCreateWithoutProvinceInput>
+  }
+
+  export type adminCreateManyProvinceInputEnvelope = {
+    data: adminCreateManyProvinceInput | adminCreateManyProvinceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type officerCreateWithoutProvinceInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    roles: rolesCreateNestedOneWithoutOfficerInput
+    district?: DistrictCreateNestedOneWithoutOfficerInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutOfficerInput
+    reservation?: reservationCreateNestedManyWithoutOfficerInput
+  }
+
+  export type officerUncheckedCreateWithoutProvinceInput = {
+    officer_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    district_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    reservation?: reservationUncheckedCreateNestedManyWithoutOfficerInput
+  }
+
+  export type officerCreateOrConnectWithoutProvinceInput = {
+    where: officerWhereUniqueInput
+    create: XOR<officerCreateWithoutProvinceInput, officerUncheckedCreateWithoutProvinceInput>
+  }
+
+  export type officerCreateManyProvinceInputEnvelope = {
+    data: officerCreateManyProvinceInput | officerCreateManyProvinceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type executiveCreateWithoutProvinceInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    roles: rolesCreateNestedOneWithoutExecutiveInput
+    district?: DistrictCreateNestedOneWithoutExecutiveInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutExecutiveInput
+  }
+
+  export type executiveUncheckedCreateWithoutProvinceInput = {
+    executive_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    district_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveCreateOrConnectWithoutProvinceInput = {
+    where: executiveWhereUniqueInput
+    create: XOR<executiveCreateWithoutProvinceInput, executiveUncheckedCreateWithoutProvinceInput>
+  }
+
+  export type executiveCreateManyProvinceInputEnvelope = {
+    data: executiveCreateManyProvinceInput | executiveCreateManyProvinceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DistrictUpsertWithWhereUniqueWithoutProvinceInput = {
+    where: DistrictWhereUniqueInput
+    update: XOR<DistrictUpdateWithoutProvinceInput, DistrictUncheckedUpdateWithoutProvinceInput>
+    create: XOR<DistrictCreateWithoutProvinceInput, DistrictUncheckedCreateWithoutProvinceInput>
+  }
+
+  export type DistrictUpdateWithWhereUniqueWithoutProvinceInput = {
+    where: DistrictWhereUniqueInput
+    data: XOR<DistrictUpdateWithoutProvinceInput, DistrictUncheckedUpdateWithoutProvinceInput>
+  }
+
+  export type DistrictUpdateManyWithWhereWithoutProvinceInput = {
+    where: DistrictScalarWhereInput
+    data: XOR<DistrictUpdateManyMutationInput, DistrictUncheckedUpdateManyWithoutProvinceInput>
+  }
+
+  export type DistrictScalarWhereInput = {
+    AND?: DistrictScalarWhereInput | DistrictScalarWhereInput[]
+    OR?: DistrictScalarWhereInput[]
+    NOT?: DistrictScalarWhereInput | DistrictScalarWhereInput[]
+    district_id?: IntFilter<"District"> | number
+    province_id?: IntFilter<"District"> | number
+    district_name?: StringFilter<"District"> | string
+  }
+
+  export type usersUpsertWithWhereUniqueWithoutProvinceInput = {
+    where: usersWhereUniqueInput
+    update: XOR<usersUpdateWithoutProvinceInput, usersUncheckedUpdateWithoutProvinceInput>
+    create: XOR<usersCreateWithoutProvinceInput, usersUncheckedCreateWithoutProvinceInput>
+  }
+
+  export type usersUpdateWithWhereUniqueWithoutProvinceInput = {
+    where: usersWhereUniqueInput
+    data: XOR<usersUpdateWithoutProvinceInput, usersUncheckedUpdateWithoutProvinceInput>
+  }
+
+  export type usersUpdateManyWithWhereWithoutProvinceInput = {
+    where: usersScalarWhereInput
+    data: XOR<usersUpdateManyMutationInput, usersUncheckedUpdateManyWithoutProvinceInput>
+  }
+
+  export type adminUpsertWithWhereUniqueWithoutProvinceInput = {
+    where: adminWhereUniqueInput
+    update: XOR<adminUpdateWithoutProvinceInput, adminUncheckedUpdateWithoutProvinceInput>
+    create: XOR<adminCreateWithoutProvinceInput, adminUncheckedCreateWithoutProvinceInput>
+  }
+
+  export type adminUpdateWithWhereUniqueWithoutProvinceInput = {
+    where: adminWhereUniqueInput
+    data: XOR<adminUpdateWithoutProvinceInput, adminUncheckedUpdateWithoutProvinceInput>
+  }
+
+  export type adminUpdateManyWithWhereWithoutProvinceInput = {
+    where: adminScalarWhereInput
+    data: XOR<adminUpdateManyMutationInput, adminUncheckedUpdateManyWithoutProvinceInput>
+  }
+
+  export type officerUpsertWithWhereUniqueWithoutProvinceInput = {
+    where: officerWhereUniqueInput
+    update: XOR<officerUpdateWithoutProvinceInput, officerUncheckedUpdateWithoutProvinceInput>
+    create: XOR<officerCreateWithoutProvinceInput, officerUncheckedCreateWithoutProvinceInput>
+  }
+
+  export type officerUpdateWithWhereUniqueWithoutProvinceInput = {
+    where: officerWhereUniqueInput
+    data: XOR<officerUpdateWithoutProvinceInput, officerUncheckedUpdateWithoutProvinceInput>
+  }
+
+  export type officerUpdateManyWithWhereWithoutProvinceInput = {
+    where: officerScalarWhereInput
+    data: XOR<officerUpdateManyMutationInput, officerUncheckedUpdateManyWithoutProvinceInput>
+  }
+
+  export type executiveUpsertWithWhereUniqueWithoutProvinceInput = {
+    where: executiveWhereUniqueInput
+    update: XOR<executiveUpdateWithoutProvinceInput, executiveUncheckedUpdateWithoutProvinceInput>
+    create: XOR<executiveCreateWithoutProvinceInput, executiveUncheckedCreateWithoutProvinceInput>
+  }
+
+  export type executiveUpdateWithWhereUniqueWithoutProvinceInput = {
+    where: executiveWhereUniqueInput
+    data: XOR<executiveUpdateWithoutProvinceInput, executiveUncheckedUpdateWithoutProvinceInput>
+  }
+
+  export type executiveUpdateManyWithWhereWithoutProvinceInput = {
+    where: executiveScalarWhereInput
+    data: XOR<executiveUpdateManyMutationInput, executiveUncheckedUpdateManyWithoutProvinceInput>
+  }
+
+  export type ProvinceCreateWithoutDistrictsInput = {
+    province_name: string
+    users?: usersCreateNestedManyWithoutProvinceInput
+    admin?: adminCreateNestedManyWithoutProvinceInput
+    officer?: officerCreateNestedManyWithoutProvinceInput
+    executive?: executiveCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceUncheckedCreateWithoutDistrictsInput = {
+    province_id?: number
+    province_name: string
+    users?: usersUncheckedCreateNestedManyWithoutProvinceInput
+    admin?: adminUncheckedCreateNestedManyWithoutProvinceInput
+    officer?: officerUncheckedCreateNestedManyWithoutProvinceInput
+    executive?: executiveUncheckedCreateNestedManyWithoutProvinceInput
+  }
+
+  export type ProvinceCreateOrConnectWithoutDistrictsInput = {
+    where: ProvinceWhereUniqueInput
+    create: XOR<ProvinceCreateWithoutDistrictsInput, ProvinceUncheckedCreateWithoutDistrictsInput>
+  }
+
+  export type SubdistrictCreateWithoutDistrictInput = {
+    subdistrict_name: string
+    zip_code?: string | null
+    users?: usersCreateNestedManyWithoutSubdistrictInput
+    admin?: adminCreateNestedManyWithoutSubdistrictInput
+    officer?: officerCreateNestedManyWithoutSubdistrictInput
+    executive?: executiveCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictUncheckedCreateWithoutDistrictInput = {
+    subdistrict_id?: number
+    subdistrict_name: string
+    zip_code?: string | null
+    users?: usersUncheckedCreateNestedManyWithoutSubdistrictInput
+    admin?: adminUncheckedCreateNestedManyWithoutSubdistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutSubdistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutSubdistrictInput
+  }
+
+  export type SubdistrictCreateOrConnectWithoutDistrictInput = {
+    where: SubdistrictWhereUniqueInput
+    create: XOR<SubdistrictCreateWithoutDistrictInput, SubdistrictUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type SubdistrictCreateManyDistrictInputEnvelope = {
+    data: SubdistrictCreateManyDistrictInput | SubdistrictCreateManyDistrictInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type usersCreateWithoutDistrictInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    reservation?: reservationCreateNestedManyWithoutUsersInput
+    review?: reviewCreateNestedManyWithoutUsersInput
+    roles: rolesCreateNestedOneWithoutUsersInput
+    province?: ProvinceCreateNestedOneWithoutUsersInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutUsersInput
+  }
+
+  export type usersUncheckedCreateWithoutDistrictInput = {
+    user_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    reservation?: reservationUncheckedCreateNestedManyWithoutUsersInput
+    review?: reviewUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersCreateOrConnectWithoutDistrictInput = {
+    where: usersWhereUniqueInput
+    create: XOR<usersCreateWithoutDistrictInput, usersUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type usersCreateManyDistrictInputEnvelope = {
+    data: usersCreateManyDistrictInput | usersCreateManyDistrictInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type adminCreateWithoutDistrictInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    roles: rolesCreateNestedOneWithoutAdminInput
+    province?: ProvinceCreateNestedOneWithoutAdminInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutAdminInput
+  }
+
+  export type adminUncheckedCreateWithoutDistrictInput = {
+    admin_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type adminCreateOrConnectWithoutDistrictInput = {
+    where: adminWhereUniqueInput
+    create: XOR<adminCreateWithoutDistrictInput, adminUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type adminCreateManyDistrictInputEnvelope = {
+    data: adminCreateManyDistrictInput | adminCreateManyDistrictInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type officerCreateWithoutDistrictInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    roles: rolesCreateNestedOneWithoutOfficerInput
+    province?: ProvinceCreateNestedOneWithoutOfficerInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutOfficerInput
+    reservation?: reservationCreateNestedManyWithoutOfficerInput
+  }
+
+  export type officerUncheckedCreateWithoutDistrictInput = {
+    officer_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    reservation?: reservationUncheckedCreateNestedManyWithoutOfficerInput
+  }
+
+  export type officerCreateOrConnectWithoutDistrictInput = {
+    where: officerWhereUniqueInput
+    create: XOR<officerCreateWithoutDistrictInput, officerUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type officerCreateManyDistrictInputEnvelope = {
+    data: officerCreateManyDistrictInput | officerCreateManyDistrictInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type executiveCreateWithoutDistrictInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    roles: rolesCreateNestedOneWithoutExecutiveInput
+    province?: ProvinceCreateNestedOneWithoutExecutiveInput
+    subdistrict?: SubdistrictCreateNestedOneWithoutExecutiveInput
+  }
+
+  export type executiveUncheckedCreateWithoutDistrictInput = {
+    executive_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    province_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveCreateOrConnectWithoutDistrictInput = {
+    where: executiveWhereUniqueInput
+    create: XOR<executiveCreateWithoutDistrictInput, executiveUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type executiveCreateManyDistrictInputEnvelope = {
+    data: executiveCreateManyDistrictInput | executiveCreateManyDistrictInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProvinceUpsertWithoutDistrictsInput = {
+    update: XOR<ProvinceUpdateWithoutDistrictsInput, ProvinceUncheckedUpdateWithoutDistrictsInput>
+    create: XOR<ProvinceCreateWithoutDistrictsInput, ProvinceUncheckedCreateWithoutDistrictsInput>
+    where?: ProvinceWhereInput
+  }
+
+  export type ProvinceUpdateToOneWithWhereWithoutDistrictsInput = {
+    where?: ProvinceWhereInput
+    data: XOR<ProvinceUpdateWithoutDistrictsInput, ProvinceUncheckedUpdateWithoutDistrictsInput>
+  }
+
+  export type ProvinceUpdateWithoutDistrictsInput = {
+    province_name?: StringFieldUpdateOperationsInput | string
+    users?: usersUpdateManyWithoutProvinceNestedInput
+    admin?: adminUpdateManyWithoutProvinceNestedInput
+    officer?: officerUpdateManyWithoutProvinceNestedInput
+    executive?: executiveUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type ProvinceUncheckedUpdateWithoutDistrictsInput = {
+    province_id?: IntFieldUpdateOperationsInput | number
+    province_name?: StringFieldUpdateOperationsInput | string
+    users?: usersUncheckedUpdateManyWithoutProvinceNestedInput
+    admin?: adminUncheckedUpdateManyWithoutProvinceNestedInput
+    officer?: officerUncheckedUpdateManyWithoutProvinceNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutProvinceNestedInput
+  }
+
+  export type SubdistrictUpsertWithWhereUniqueWithoutDistrictInput = {
+    where: SubdistrictWhereUniqueInput
+    update: XOR<SubdistrictUpdateWithoutDistrictInput, SubdistrictUncheckedUpdateWithoutDistrictInput>
+    create: XOR<SubdistrictCreateWithoutDistrictInput, SubdistrictUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type SubdistrictUpdateWithWhereUniqueWithoutDistrictInput = {
+    where: SubdistrictWhereUniqueInput
+    data: XOR<SubdistrictUpdateWithoutDistrictInput, SubdistrictUncheckedUpdateWithoutDistrictInput>
+  }
+
+  export type SubdistrictUpdateManyWithWhereWithoutDistrictInput = {
+    where: SubdistrictScalarWhereInput
+    data: XOR<SubdistrictUpdateManyMutationInput, SubdistrictUncheckedUpdateManyWithoutDistrictInput>
+  }
+
+  export type SubdistrictScalarWhereInput = {
+    AND?: SubdistrictScalarWhereInput | SubdistrictScalarWhereInput[]
+    OR?: SubdistrictScalarWhereInput[]
+    NOT?: SubdistrictScalarWhereInput | SubdistrictScalarWhereInput[]
+    subdistrict_id?: IntFilter<"Subdistrict"> | number
+    district_id?: IntFilter<"Subdistrict"> | number
+    subdistrict_name?: StringFilter<"Subdistrict"> | string
+    zip_code?: StringNullableFilter<"Subdistrict"> | string | null
+  }
+
+  export type usersUpsertWithWhereUniqueWithoutDistrictInput = {
+    where: usersWhereUniqueInput
+    update: XOR<usersUpdateWithoutDistrictInput, usersUncheckedUpdateWithoutDistrictInput>
+    create: XOR<usersCreateWithoutDistrictInput, usersUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type usersUpdateWithWhereUniqueWithoutDistrictInput = {
+    where: usersWhereUniqueInput
+    data: XOR<usersUpdateWithoutDistrictInput, usersUncheckedUpdateWithoutDistrictInput>
+  }
+
+  export type usersUpdateManyWithWhereWithoutDistrictInput = {
+    where: usersScalarWhereInput
+    data: XOR<usersUpdateManyMutationInput, usersUncheckedUpdateManyWithoutDistrictInput>
+  }
+
+  export type adminUpsertWithWhereUniqueWithoutDistrictInput = {
+    where: adminWhereUniqueInput
+    update: XOR<adminUpdateWithoutDistrictInput, adminUncheckedUpdateWithoutDistrictInput>
+    create: XOR<adminCreateWithoutDistrictInput, adminUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type adminUpdateWithWhereUniqueWithoutDistrictInput = {
+    where: adminWhereUniqueInput
+    data: XOR<adminUpdateWithoutDistrictInput, adminUncheckedUpdateWithoutDistrictInput>
+  }
+
+  export type adminUpdateManyWithWhereWithoutDistrictInput = {
+    where: adminScalarWhereInput
+    data: XOR<adminUpdateManyMutationInput, adminUncheckedUpdateManyWithoutDistrictInput>
+  }
+
+  export type officerUpsertWithWhereUniqueWithoutDistrictInput = {
+    where: officerWhereUniqueInput
+    update: XOR<officerUpdateWithoutDistrictInput, officerUncheckedUpdateWithoutDistrictInput>
+    create: XOR<officerCreateWithoutDistrictInput, officerUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type officerUpdateWithWhereUniqueWithoutDistrictInput = {
+    where: officerWhereUniqueInput
+    data: XOR<officerUpdateWithoutDistrictInput, officerUncheckedUpdateWithoutDistrictInput>
+  }
+
+  export type officerUpdateManyWithWhereWithoutDistrictInput = {
+    where: officerScalarWhereInput
+    data: XOR<officerUpdateManyMutationInput, officerUncheckedUpdateManyWithoutDistrictInput>
+  }
+
+  export type executiveUpsertWithWhereUniqueWithoutDistrictInput = {
+    where: executiveWhereUniqueInput
+    update: XOR<executiveUpdateWithoutDistrictInput, executiveUncheckedUpdateWithoutDistrictInput>
+    create: XOR<executiveCreateWithoutDistrictInput, executiveUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type executiveUpdateWithWhereUniqueWithoutDistrictInput = {
+    where: executiveWhereUniqueInput
+    data: XOR<executiveUpdateWithoutDistrictInput, executiveUncheckedUpdateWithoutDistrictInput>
+  }
+
+  export type executiveUpdateManyWithWhereWithoutDistrictInput = {
+    where: executiveScalarWhereInput
+    data: XOR<executiveUpdateManyMutationInput, executiveUncheckedUpdateManyWithoutDistrictInput>
+  }
+
+  export type DistrictCreateWithoutSubdistrictsInput = {
+    district_name: string
+    province: ProvinceCreateNestedOneWithoutDistrictsInput
+    users?: usersCreateNestedManyWithoutDistrictInput
+    admin?: adminCreateNestedManyWithoutDistrictInput
+    officer?: officerCreateNestedManyWithoutDistrictInput
+    executive?: executiveCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictUncheckedCreateWithoutSubdistrictsInput = {
+    district_id?: number
+    province_id: number
+    district_name: string
+    users?: usersUncheckedCreateNestedManyWithoutDistrictInput
+    admin?: adminUncheckedCreateNestedManyWithoutDistrictInput
+    officer?: officerUncheckedCreateNestedManyWithoutDistrictInput
+    executive?: executiveUncheckedCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictCreateOrConnectWithoutSubdistrictsInput = {
+    where: DistrictWhereUniqueInput
+    create: XOR<DistrictCreateWithoutSubdistrictsInput, DistrictUncheckedCreateWithoutSubdistrictsInput>
+  }
+
+  export type usersCreateWithoutSubdistrictInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    reservation?: reservationCreateNestedManyWithoutUsersInput
+    review?: reviewCreateNestedManyWithoutUsersInput
+    roles: rolesCreateNestedOneWithoutUsersInput
+    province?: ProvinceCreateNestedOneWithoutUsersInput
+    district?: DistrictCreateNestedOneWithoutUsersInput
+  }
+
+  export type usersUncheckedCreateWithoutSubdistrictInput = {
+    user_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    reservation?: reservationUncheckedCreateNestedManyWithoutUsersInput
+    review?: reviewUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersCreateOrConnectWithoutSubdistrictInput = {
+    where: usersWhereUniqueInput
+    create: XOR<usersCreateWithoutSubdistrictInput, usersUncheckedCreateWithoutSubdistrictInput>
+  }
+
+  export type usersCreateManySubdistrictInputEnvelope = {
+    data: usersCreateManySubdistrictInput | usersCreateManySubdistrictInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type adminCreateWithoutSubdistrictInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    roles: rolesCreateNestedOneWithoutAdminInput
+    province?: ProvinceCreateNestedOneWithoutAdminInput
+    district?: DistrictCreateNestedOneWithoutAdminInput
+  }
+
+  export type adminUncheckedCreateWithoutSubdistrictInput = {
+    admin_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type adminCreateOrConnectWithoutSubdistrictInput = {
+    where: adminWhereUniqueInput
+    create: XOR<adminCreateWithoutSubdistrictInput, adminUncheckedCreateWithoutSubdistrictInput>
+  }
+
+  export type adminCreateManySubdistrictInputEnvelope = {
+    data: adminCreateManySubdistrictInput | adminCreateManySubdistrictInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type officerCreateWithoutSubdistrictInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    roles: rolesCreateNestedOneWithoutOfficerInput
+    province?: ProvinceCreateNestedOneWithoutOfficerInput
+    district?: DistrictCreateNestedOneWithoutOfficerInput
+    reservation?: reservationCreateNestedManyWithoutOfficerInput
+  }
+
+  export type officerUncheckedCreateWithoutSubdistrictInput = {
+    officer_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    reservation?: reservationUncheckedCreateNestedManyWithoutOfficerInput
+  }
+
+  export type officerCreateOrConnectWithoutSubdistrictInput = {
+    where: officerWhereUniqueInput
+    create: XOR<officerCreateWithoutSubdistrictInput, officerUncheckedCreateWithoutSubdistrictInput>
+  }
+
+  export type officerCreateManySubdistrictInputEnvelope = {
+    data: officerCreateManySubdistrictInput | officerCreateManySubdistrictInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type executiveCreateWithoutSubdistrictInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    roles: rolesCreateNestedOneWithoutExecutiveInput
+    province?: ProvinceCreateNestedOneWithoutExecutiveInput
+    district?: DistrictCreateNestedOneWithoutExecutiveInput
+  }
+
+  export type executiveUncheckedCreateWithoutSubdistrictInput = {
+    executive_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    province_id?: number | null
+    district_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveCreateOrConnectWithoutSubdistrictInput = {
+    where: executiveWhereUniqueInput
+    create: XOR<executiveCreateWithoutSubdistrictInput, executiveUncheckedCreateWithoutSubdistrictInput>
+  }
+
+  export type executiveCreateManySubdistrictInputEnvelope = {
+    data: executiveCreateManySubdistrictInput | executiveCreateManySubdistrictInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DistrictUpsertWithoutSubdistrictsInput = {
+    update: XOR<DistrictUpdateWithoutSubdistrictsInput, DistrictUncheckedUpdateWithoutSubdistrictsInput>
+    create: XOR<DistrictCreateWithoutSubdistrictsInput, DistrictUncheckedCreateWithoutSubdistrictsInput>
+    where?: DistrictWhereInput
+  }
+
+  export type DistrictUpdateToOneWithWhereWithoutSubdistrictsInput = {
+    where?: DistrictWhereInput
+    data: XOR<DistrictUpdateWithoutSubdistrictsInput, DistrictUncheckedUpdateWithoutSubdistrictsInput>
+  }
+
+  export type DistrictUpdateWithoutSubdistrictsInput = {
+    district_name?: StringFieldUpdateOperationsInput | string
+    province?: ProvinceUpdateOneRequiredWithoutDistrictsNestedInput
+    users?: usersUpdateManyWithoutDistrictNestedInput
+    admin?: adminUpdateManyWithoutDistrictNestedInput
+    officer?: officerUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type DistrictUncheckedUpdateWithoutSubdistrictsInput = {
+    district_id?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    district_name?: StringFieldUpdateOperationsInput | string
+    users?: usersUncheckedUpdateManyWithoutDistrictNestedInput
+    admin?: adminUncheckedUpdateManyWithoutDistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type usersUpsertWithWhereUniqueWithoutSubdistrictInput = {
+    where: usersWhereUniqueInput
+    update: XOR<usersUpdateWithoutSubdistrictInput, usersUncheckedUpdateWithoutSubdistrictInput>
+    create: XOR<usersCreateWithoutSubdistrictInput, usersUncheckedCreateWithoutSubdistrictInput>
+  }
+
+  export type usersUpdateWithWhereUniqueWithoutSubdistrictInput = {
+    where: usersWhereUniqueInput
+    data: XOR<usersUpdateWithoutSubdistrictInput, usersUncheckedUpdateWithoutSubdistrictInput>
+  }
+
+  export type usersUpdateManyWithWhereWithoutSubdistrictInput = {
+    where: usersScalarWhereInput
+    data: XOR<usersUpdateManyMutationInput, usersUncheckedUpdateManyWithoutSubdistrictInput>
+  }
+
+  export type adminUpsertWithWhereUniqueWithoutSubdistrictInput = {
+    where: adminWhereUniqueInput
+    update: XOR<adminUpdateWithoutSubdistrictInput, adminUncheckedUpdateWithoutSubdistrictInput>
+    create: XOR<adminCreateWithoutSubdistrictInput, adminUncheckedCreateWithoutSubdistrictInput>
+  }
+
+  export type adminUpdateWithWhereUniqueWithoutSubdistrictInput = {
+    where: adminWhereUniqueInput
+    data: XOR<adminUpdateWithoutSubdistrictInput, adminUncheckedUpdateWithoutSubdistrictInput>
+  }
+
+  export type adminUpdateManyWithWhereWithoutSubdistrictInput = {
+    where: adminScalarWhereInput
+    data: XOR<adminUpdateManyMutationInput, adminUncheckedUpdateManyWithoutSubdistrictInput>
+  }
+
+  export type officerUpsertWithWhereUniqueWithoutSubdistrictInput = {
+    where: officerWhereUniqueInput
+    update: XOR<officerUpdateWithoutSubdistrictInput, officerUncheckedUpdateWithoutSubdistrictInput>
+    create: XOR<officerCreateWithoutSubdistrictInput, officerUncheckedCreateWithoutSubdistrictInput>
+  }
+
+  export type officerUpdateWithWhereUniqueWithoutSubdistrictInput = {
+    where: officerWhereUniqueInput
+    data: XOR<officerUpdateWithoutSubdistrictInput, officerUncheckedUpdateWithoutSubdistrictInput>
+  }
+
+  export type officerUpdateManyWithWhereWithoutSubdistrictInput = {
+    where: officerScalarWhereInput
+    data: XOR<officerUpdateManyMutationInput, officerUncheckedUpdateManyWithoutSubdistrictInput>
+  }
+
+  export type executiveUpsertWithWhereUniqueWithoutSubdistrictInput = {
+    where: executiveWhereUniqueInput
+    update: XOR<executiveUpdateWithoutSubdistrictInput, executiveUncheckedUpdateWithoutSubdistrictInput>
+    create: XOR<executiveCreateWithoutSubdistrictInput, executiveUncheckedCreateWithoutSubdistrictInput>
+  }
+
+  export type executiveUpdateWithWhereUniqueWithoutSubdistrictInput = {
+    where: executiveWhereUniqueInput
+    data: XOR<executiveUpdateWithoutSubdistrictInput, executiveUncheckedUpdateWithoutSubdistrictInput>
+  }
+
+  export type executiveUpdateManyWithWhereWithoutSubdistrictInput = {
+    where: executiveScalarWhereInput
+    data: XOR<executiveUpdateManyMutationInput, executiveUncheckedUpdateManyWithoutSubdistrictInput>
+  }
+
   export type equipmentCreateManyMeeting_roomInput = {
     equipment_id?: number
     equipment_n: string
@@ -17422,6 +25257,7 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -17466,6 +25302,7 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17484,6 +25321,7 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17500,6 +25338,7 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17539,6 +25378,7 @@ export namespace Prisma {
     end_time?: Date | string | null
     status_r?: string | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -17552,6 +25392,7 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17570,6 +25411,7 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17586,6 +25428,7 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17601,6 +25444,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -17616,6 +25462,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -17631,6 +25480,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -17646,6 +25498,9 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    province_id?: number | null
+    district_id?: number | null
+    subdistrict_id?: number | null
     zip_code?: number | null
     profile_image?: Uint8Array | null
     created_at?: Date | string | null
@@ -17664,6 +25519,9 @@ export namespace Prisma {
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    province?: ProvinceUpdateOneWithoutAdminNestedInput
+    district?: DistrictUpdateOneWithoutAdminNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutAdminNestedInput
   }
 
   export type adminUncheckedUpdateWithoutRolesInput = {
@@ -17675,6 +25533,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17690,6 +25551,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17708,6 +25572,9 @@ export namespace Prisma {
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    province?: ProvinceUpdateOneWithoutOfficerNestedInput
+    district?: DistrictUpdateOneWithoutOfficerNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutOfficerNestedInput
     reservation?: reservationUpdateManyWithoutOfficerNestedInput
   }
 
@@ -17720,6 +25587,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17736,6 +25606,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17756,6 +25629,9 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reservation?: reservationUpdateManyWithoutUsersNestedInput
     review?: reviewUpdateManyWithoutUsersNestedInput
+    province?: ProvinceUpdateOneWithoutUsersNestedInput
+    district?: DistrictUpdateOneWithoutUsersNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutRolesInput = {
@@ -17767,6 +25643,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17784,6 +25663,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17802,6 +25684,9 @@ export namespace Prisma {
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    province?: ProvinceUpdateOneWithoutExecutiveNestedInput
+    district?: DistrictUpdateOneWithoutExecutiveNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutExecutiveNestedInput
   }
 
   export type executiveUncheckedUpdateWithoutRolesInput = {
@@ -17813,6 +25698,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17828,6 +25716,9 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
     profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17844,6 +25735,7 @@ export namespace Prisma {
     status_r?: string | null
     officer_id?: number | null
     details_r?: string | null
+    rejected_reason?: string | null
     booking_dates?: string | null
     is_multi_day?: boolean | null
     created_at?: Date | string | null
@@ -17865,6 +25757,7 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17883,6 +25776,7 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17899,6 +25793,7 @@ export namespace Prisma {
     status_r?: NullableStringFieldUpdateOperationsInput | string | null
     officer_id?: NullableIntFieldUpdateOperationsInput | number | null
     details_r?: NullableStringFieldUpdateOperationsInput | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
     booking_dates?: NullableStringFieldUpdateOperationsInput | string | null
     is_multi_day?: NullableBoolFieldUpdateOperationsInput | boolean | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17926,6 +25821,936 @@ export namespace Prisma {
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DistrictCreateManyProvinceInput = {
+    district_id?: number
+    district_name: string
+  }
+
+  export type usersCreateManyProvinceInput = {
+    user_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    district_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type adminCreateManyProvinceInput = {
+    admin_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    district_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type officerCreateManyProvinceInput = {
+    officer_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    district_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveCreateManyProvinceInput = {
+    executive_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    district_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type DistrictUpdateWithoutProvinceInput = {
+    district_name?: StringFieldUpdateOperationsInput | string
+    subdistricts?: SubdistrictUpdateManyWithoutDistrictNestedInput
+    users?: usersUpdateManyWithoutDistrictNestedInput
+    admin?: adminUpdateManyWithoutDistrictNestedInput
+    officer?: officerUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type DistrictUncheckedUpdateWithoutProvinceInput = {
+    district_id?: IntFieldUpdateOperationsInput | number
+    district_name?: StringFieldUpdateOperationsInput | string
+    subdistricts?: SubdistrictUncheckedUpdateManyWithoutDistrictNestedInput
+    users?: usersUncheckedUpdateManyWithoutDistrictNestedInput
+    admin?: adminUncheckedUpdateManyWithoutDistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutDistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type DistrictUncheckedUpdateManyWithoutProvinceInput = {
+    district_id?: IntFieldUpdateOperationsInput | number
+    district_name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type usersUpdateWithoutProvinceInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reservation?: reservationUpdateManyWithoutUsersNestedInput
+    review?: reviewUpdateManyWithoutUsersNestedInput
+    roles?: rolesUpdateOneRequiredWithoutUsersNestedInput
+    district?: DistrictUpdateOneWithoutUsersNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateWithoutProvinceInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reservation?: reservationUncheckedUpdateManyWithoutUsersNestedInput
+    review?: reviewUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateManyWithoutProvinceInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type adminUpdateWithoutProvinceInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roles?: rolesUpdateOneRequiredWithoutAdminNestedInput
+    district?: DistrictUpdateOneWithoutAdminNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutAdminNestedInput
+  }
+
+  export type adminUncheckedUpdateWithoutProvinceInput = {
+    admin_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type adminUncheckedUpdateManyWithoutProvinceInput = {
+    admin_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type officerUpdateWithoutProvinceInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roles?: rolesUpdateOneRequiredWithoutOfficerNestedInput
+    district?: DistrictUpdateOneWithoutOfficerNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutOfficerNestedInput
+    reservation?: reservationUpdateManyWithoutOfficerNestedInput
+  }
+
+  export type officerUncheckedUpdateWithoutProvinceInput = {
+    officer_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reservation?: reservationUncheckedUpdateManyWithoutOfficerNestedInput
+  }
+
+  export type officerUncheckedUpdateManyWithoutProvinceInput = {
+    officer_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveUpdateWithoutProvinceInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roles?: rolesUpdateOneRequiredWithoutExecutiveNestedInput
+    district?: DistrictUpdateOneWithoutExecutiveNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutExecutiveNestedInput
+  }
+
+  export type executiveUncheckedUpdateWithoutProvinceInput = {
+    executive_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveUncheckedUpdateManyWithoutProvinceInput = {
+    executive_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SubdistrictCreateManyDistrictInput = {
+    subdistrict_id?: number
+    subdistrict_name: string
+    zip_code?: string | null
+  }
+
+  export type usersCreateManyDistrictInput = {
+    user_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type adminCreateManyDistrictInput = {
+    admin_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type officerCreateManyDistrictInput = {
+    officer_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveCreateManyDistrictInput = {
+    executive_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    province_id?: number | null
+    subdistrict_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type SubdistrictUpdateWithoutDistrictInput = {
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    users?: usersUpdateManyWithoutSubdistrictNestedInput
+    admin?: adminUpdateManyWithoutSubdistrictNestedInput
+    officer?: officerUpdateManyWithoutSubdistrictNestedInput
+    executive?: executiveUpdateManyWithoutSubdistrictNestedInput
+  }
+
+  export type SubdistrictUncheckedUpdateWithoutDistrictInput = {
+    subdistrict_id?: IntFieldUpdateOperationsInput | number
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+    users?: usersUncheckedUpdateManyWithoutSubdistrictNestedInput
+    admin?: adminUncheckedUpdateManyWithoutSubdistrictNestedInput
+    officer?: officerUncheckedUpdateManyWithoutSubdistrictNestedInput
+    executive?: executiveUncheckedUpdateManyWithoutSubdistrictNestedInput
+  }
+
+  export type SubdistrictUncheckedUpdateManyWithoutDistrictInput = {
+    subdistrict_id?: IntFieldUpdateOperationsInput | number
+    subdistrict_name?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type usersUpdateWithoutDistrictInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reservation?: reservationUpdateManyWithoutUsersNestedInput
+    review?: reviewUpdateManyWithoutUsersNestedInput
+    roles?: rolesUpdateOneRequiredWithoutUsersNestedInput
+    province?: ProvinceUpdateOneWithoutUsersNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateWithoutDistrictInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reservation?: reservationUncheckedUpdateManyWithoutUsersNestedInput
+    review?: reviewUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateManyWithoutDistrictInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type adminUpdateWithoutDistrictInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roles?: rolesUpdateOneRequiredWithoutAdminNestedInput
+    province?: ProvinceUpdateOneWithoutAdminNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutAdminNestedInput
+  }
+
+  export type adminUncheckedUpdateWithoutDistrictInput = {
+    admin_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type adminUncheckedUpdateManyWithoutDistrictInput = {
+    admin_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type officerUpdateWithoutDistrictInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roles?: rolesUpdateOneRequiredWithoutOfficerNestedInput
+    province?: ProvinceUpdateOneWithoutOfficerNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutOfficerNestedInput
+    reservation?: reservationUpdateManyWithoutOfficerNestedInput
+  }
+
+  export type officerUncheckedUpdateWithoutDistrictInput = {
+    officer_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reservation?: reservationUncheckedUpdateManyWithoutOfficerNestedInput
+  }
+
+  export type officerUncheckedUpdateManyWithoutDistrictInput = {
+    officer_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveUpdateWithoutDistrictInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roles?: rolesUpdateOneRequiredWithoutExecutiveNestedInput
+    province?: ProvinceUpdateOneWithoutExecutiveNestedInput
+    subdistrict?: SubdistrictUpdateOneWithoutExecutiveNestedInput
+  }
+
+  export type executiveUncheckedUpdateWithoutDistrictInput = {
+    executive_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveUncheckedUpdateManyWithoutDistrictInput = {
+    executive_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    subdistrict_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type usersCreateManySubdistrictInput = {
+    user_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type adminCreateManySubdistrictInput = {
+    admin_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type officerCreateManySubdistrictInput = {
+    officer_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position?: string | null
+    department?: string | null
+    province_id?: number | null
+    district_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type executiveCreateManySubdistrictInput = {
+    executive_id?: number
+    role_id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    citizen_id?: string | null
+    position: string
+    department: string
+    province_id?: number | null
+    district_id?: number | null
+    zip_code?: number | null
+    profile_image?: Uint8Array | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type usersUpdateWithoutSubdistrictInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reservation?: reservationUpdateManyWithoutUsersNestedInput
+    review?: reviewUpdateManyWithoutUsersNestedInput
+    roles?: rolesUpdateOneRequiredWithoutUsersNestedInput
+    province?: ProvinceUpdateOneWithoutUsersNestedInput
+    district?: DistrictUpdateOneWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateWithoutSubdistrictInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reservation?: reservationUncheckedUpdateManyWithoutUsersNestedInput
+    review?: reviewUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateManyWithoutSubdistrictInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type adminUpdateWithoutSubdistrictInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roles?: rolesUpdateOneRequiredWithoutAdminNestedInput
+    province?: ProvinceUpdateOneWithoutAdminNestedInput
+    district?: DistrictUpdateOneWithoutAdminNestedInput
+  }
+
+  export type adminUncheckedUpdateWithoutSubdistrictInput = {
+    admin_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type adminUncheckedUpdateManyWithoutSubdistrictInput = {
+    admin_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type officerUpdateWithoutSubdistrictInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roles?: rolesUpdateOneRequiredWithoutOfficerNestedInput
+    province?: ProvinceUpdateOneWithoutOfficerNestedInput
+    district?: DistrictUpdateOneWithoutOfficerNestedInput
+    reservation?: reservationUpdateManyWithoutOfficerNestedInput
+  }
+
+  export type officerUncheckedUpdateWithoutSubdistrictInput = {
+    officer_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reservation?: reservationUncheckedUpdateManyWithoutOfficerNestedInput
+  }
+
+  export type officerUncheckedUpdateManyWithoutSubdistrictInput = {
+    officer_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveUpdateWithoutSubdistrictInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roles?: rolesUpdateOneRequiredWithoutExecutiveNestedInput
+    province?: ProvinceUpdateOneWithoutExecutiveNestedInput
+    district?: DistrictUpdateOneWithoutExecutiveNestedInput
+  }
+
+  export type executiveUncheckedUpdateWithoutSubdistrictInput = {
+    executive_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type executiveUncheckedUpdateManyWithoutSubdistrictInput = {
+    executive_id?: IntFieldUpdateOperationsInput | number
+    role_id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: StringFieldUpdateOperationsInput | string
+    department?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableIntFieldUpdateOperationsInput | number | null
+    district_id?: NullableIntFieldUpdateOperationsInput | number | null
+    zip_code?: NullableIntFieldUpdateOperationsInput | number | null
+    profile_image?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

@@ -130,6 +130,9 @@ exports.Prisma.AdminScalarFieldEnum = {
   citizen_id: 'citizen_id',
   position: 'position',
   department: 'department',
+  province_id: 'province_id',
+  district_id: 'district_id',
+  subdistrict_id: 'subdistrict_id',
   zip_code: 'zip_code',
   profile_image: 'profile_image',
   created_at: 'created_at',
@@ -168,6 +171,9 @@ exports.Prisma.OfficerScalarFieldEnum = {
   citizen_id: 'citizen_id',
   position: 'position',
   department: 'department',
+  province_id: 'province_id',
+  district_id: 'district_id',
+  subdistrict_id: 'subdistrict_id',
   zip_code: 'zip_code',
   profile_image: 'profile_image',
   created_at: 'created_at',
@@ -185,6 +191,7 @@ exports.Prisma.ReservationScalarFieldEnum = {
   status_r: 'status_r',
   officer_id: 'officer_id',
   details_r: 'details_r',
+  rejected_reason: 'rejected_reason',
   booking_dates: 'booking_dates',
   is_multi_day: 'is_multi_day',
   created_at: 'created_at',
@@ -216,6 +223,9 @@ exports.Prisma.ExecutiveScalarFieldEnum = {
   citizen_id: 'citizen_id',
   position: 'position',
   department: 'department',
+  province_id: 'province_id',
+  district_id: 'district_id',
+  subdistrict_id: 'subdistrict_id',
   zip_code: 'zip_code',
   profile_image: 'profile_image',
   created_at: 'created_at',
@@ -232,10 +242,31 @@ exports.Prisma.UsersScalarFieldEnum = {
   citizen_id: 'citizen_id',
   position: 'position',
   department: 'department',
+  province_id: 'province_id',
+  district_id: 'district_id',
+  subdistrict_id: 'subdistrict_id',
   zip_code: 'zip_code',
   profile_image: 'profile_image',
   created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.ProvinceScalarFieldEnum = {
+  province_id: 'province_id',
+  province_name: 'province_name'
+};
+
+exports.Prisma.DistrictScalarFieldEnum = {
+  district_id: 'district_id',
+  province_id: 'province_id',
+  district_name: 'district_name'
+};
+
+exports.Prisma.SubdistrictScalarFieldEnum = {
+  subdistrict_id: 'subdistrict_id',
+  district_id: 'district_id',
+  subdistrict_name: 'subdistrict_name',
+  zip_code: 'zip_code'
 };
 
 exports.Prisma.SortOrder = {
@@ -263,7 +294,10 @@ exports.Prisma.ModelName = {
   review: 'review',
   roles: 'roles',
   executive: 'executive',
-  users: 'users'
+  users: 'users',
+  Province: 'Province',
+  District: 'District',
+  Subdistrict: 'Subdistrict'
 };
 
 /**

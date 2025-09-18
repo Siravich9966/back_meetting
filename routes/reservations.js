@@ -1048,9 +1048,13 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         }
       }
 
-      // ลบการจอง
-      await prisma.reservation.delete({
-        where: { reservation_id: parseInt(id) }
+      // อัปเดตสถานะเป็น cancelled แทนการลบ
+      await prisma.reservation.update({
+        where: { reservation_id: parseInt(id) },
+        data: { 
+          status_r: 'cancelled',
+          updated_at: new Date()
+        }
       })
 
       console.log(`✅ ยกเลิกการจอง: ${user.first_name} ยกเลิกการจอง ${existingReservation.meeting_room.room_name}`)
@@ -1596,7 +1600,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         data: {
           status_r: 'rejected',
           officer_id: user.user_id,
-          details_r: `${reservation.details_r}\n\nเหตุผลที่ปฏิเสธ: ${reason.trim()}`,
+          rejected_reason: reason.trim(),  // เก็บในฟิลด์แยก
           updated_at: new Date()
         },
         include: {

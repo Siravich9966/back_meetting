@@ -121,6 +121,10 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
             citizen_id: body.citizen_id || null,
             position: body.position,
             department: body.department || null,
+            // Address fields - รับ IDs และ zip_code
+            province_id: body.province_id ? parseInt(body.province_id) : null,
+            district_id: body.district_id ? parseInt(body.district_id) : null,
+            subdistrict_id: body.subdistrict_id ? parseInt(body.subdistrict_id) : null,
             zip_code: body.zip_code ? parseInt(body.zip_code) : null,
           }
         })
@@ -137,6 +141,10 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
             citizen_id: body.citizen_id || null,
             position: body.position,
             department: departmentFromPosition || body.department,
+            // Address fields - รับ IDs และ zip_code  
+            province_id: body.province_id ? parseInt(body.province_id) : null,
+            district_id: body.district_id ? parseInt(body.district_id) : null,
+            subdistrict_id: body.subdistrict_id ? parseInt(body.subdistrict_id) : null,
             zip_code: body.zip_code ? parseInt(body.zip_code) : null,
           }
         })
@@ -154,6 +162,10 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
             position: executiveType, // university_executive หรือ faculty_executive
             department: departmentFromPosition ||
               (executiveType === 'university_executive' ? 'สำนักงานอธิการบดี' : body.department),
+            // Address fields - รับ IDs และ zip_code
+            province_id: body.province_id ? parseInt(body.province_id) : null,
+            district_id: body.district_id ? parseInt(body.district_id) : null,
+            subdistrict_id: body.subdistrict_id ? parseInt(body.subdistrict_id) : null,
             zip_code: body.zip_code ? parseInt(body.zip_code) : null,
           }
         })
@@ -402,7 +414,11 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       console.log('🔍 ผู้ใช้:', user.email, 'Role:', user.role)
 
       // ข้อมูลที่อนุญาตให้แก้ไข
-      const allowedFields = ['first_name', 'last_name', 'email', 'citizen_id', 'position', 'department', 'zip_code']
+      const allowedFields = [
+        'first_name', 'last_name', 'email', 'citizen_id', 
+        'department', 'position', // เพิ่ม department และ position
+        'province_id', 'district_id', 'subdistrict_id', 'zip_code'
+      ]
       const updateData = {}
 
       // กรองเฉพาะข้อมูลที่อนุญาต
@@ -475,6 +491,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
           position: true,
           department: true,
           zip_code: true,
+          subdistrict_id: true,  // แก้จาก tambon_id เป็น subdistrict_id
           profile_image: true,
           created_at: true,
           updated_at: true,
