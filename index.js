@@ -162,6 +162,9 @@ async function startServer() {
   console.log(`🔍 Health Check: http://localhost:${PORT}/health`)
 }
 
+// เริ่ม Elysia server (สำหรับ Bun ให้ runtime จัดการ)
+// app.listen(PORT) // ปิดการใช้งาน - ให้ Bun runtime จัดการ
+
 // จัดการการปิดระบบอย่างสะอาด
 process.on('SIGINT', async () => {
   console.log('🛑 กำลังปิดระบบ...')
@@ -177,8 +180,5 @@ process.on('SIGINT', async () => {
 
 // เริ่มเซิร์ฟเวอร์
 startServer()
-
-// เริ่ม Elysia server ปกติ
-app.listen(PORT)
 
 export default app

@@ -115,14 +115,19 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
     }
 
     try {
+      console.log('📊 Executive Reports - User:', user.email, 'Position:', user.position)
       const { department, month, year } = query
       let whereCondition = {}
 
       // University Executive ดูได้ทุกคณะ, Faculty Executive ดูได้เฉพาะคณะตัวเอง
       if (isFacultyExecutive(user)) {
         whereCondition.meeting_room = { department: user.department }
+        console.log('🏫 Faculty Executive - Filter by department:', user.department)
       } else if (department && isUniversityExecutive(user)) {
         whereCondition.meeting_room = { department }
+        console.log('🏛️ University Executive - Filter by department:', department)
+      } else {
+        console.log('🌐 University Executive - All departments')
       }
 
       // Filter by month/year if provided
@@ -133,36 +138,68 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
           gte: startDate,
           lte: endDate
         }
+        console.log('📅 Date filter:', { startDate, endDate })
       }
 
+      console.log('🔍 Where condition:', JSON.stringify(whereCondition, null, 2))
+
+      // ดึงข้อมูลแยกส่วน เพื่อ debug ได้ง่าย
+      console.log('📊 Querying reservation_summary...')
+      const reservation_summary = await prisma.reservation.groupBy({
+        by: ['status_r'],
+        where: whereCondition,
+        _count: { reservation_id: true }
+      })
+      console.log('✅ reservation_summary:', reservation_summary)
+
+      console.log('📊 Querying room_utilization...')
+      const room_utilization = await prisma.reservation.groupBy({
+        by: ['room_id'],
+        where: whereCondition,
+        _count: { reservation_id: true }
+      })
+      console.log('✅ room_utilization:', room_utilization)
+
+      console.log('📊 Querying monthly_trends...')
+      const monthly_trends = []
+
+      // ดึงข้อมูล department_stats สำหรับ University Executive  
+      console.log('📊 Querying department_stats...')
+      let department_stats = []
+      if (isUniversityExecutive(user)) {
+        try {
+          // ใช้ raw query เพื่อดึงข้อมูล department กับจำนวนการจอง
+          const departmentReservations = await prisma.$queryRaw`
+            SELECT 
+              mr.department,
+              COUNT(r.reservation_id) as reservation_count
+            FROM reservation r
+            JOIN meeting_room mr ON r.room_id = mr.room_id
+            ${whereCondition.created_at ? 
+              Prisma.sql`WHERE r.created_at >= ${whereCondition.created_at.gte} AND r.created_at <= ${whereCondition.created_at.lte}` :
+              Prisma.sql`WHERE 1=1`
+            }
+            GROUP BY mr.department
+            ORDER BY reservation_count DESC
+          `
+
+          department_stats = departmentReservations.map(dept => ({
+            department: dept.department,
+            reservations: Number(dept.reservation_count),
+            utilization: Math.min(Math.round((Number(dept.reservation_count) / 30) * 100), 100)
+          }))
+        } catch (error) {
+          console.error('❌ Error querying department_stats:', error)
+          department_stats = []
+        }
+      }
+      console.log('✅ department_stats:', department_stats)
+
       const reports = {
-        reservation_summary: await prisma.reservation.groupBy({
-          by: ['status_r'],
-          where: whereCondition,
-          _count: { reservation_id: true }
-        }),
-
-        room_utilization: await prisma.reservation.groupBy({
-          by: ['room_id'],
-          where: whereCondition,
-          _count: { reservation_id: true }
-        }),
-
-        monthly_trends: await prisma.$queryRaw`
-          SELECT 
-            DATE_TRUNC('month', r.created_at) as month,
-            COUNT(*) as reservation_count,
-            mr.department
-          FROM reservation r
-          JOIN meeting_room mr ON r.room_id = mr.room_id
-          ${isFacultyExecutive(user) ?
-            Prisma.sql`WHERE mr.department = ${user.department}` :
-            (department ? Prisma.sql`WHERE mr.department = ${department}` : Prisma.sql``)
-          }
-          GROUP BY DATE_TRUNC('month', r.created_at), mr.department
-          ORDER BY month DESC
-          LIMIT 12
-        `
+        reservation_summary,
+        room_utilization,
+        monthly_trends,
+        department_stats
       }
 
       // Add room details to utilization data

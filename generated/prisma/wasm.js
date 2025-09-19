@@ -5,13 +5,28 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 
 const {
+  PrismaClientKnownRequestError,
+  PrismaClientUnknownRequestError,
+  PrismaClientRustPanicError,
+  PrismaClientInitializationError,
+  PrismaClientValidationError,
+  getPrismaClient,
+  sqltag,
+  empty,
+  join,
+  raw,
+  skip,
   Decimal,
+  Debug,
   objectEnumValues,
   makeStrictEnum,
+  Extensions,
+  warnOnce,
+  defineDmmfProperty,
   Public,
   getRuntime,
-  skip
-} = require('./runtime/index-browser.js')
+  createParam,
+} = require('./runtime/wasm-engine-edge.js')
 
 
 const Prisma = {}
@@ -20,79 +35,35 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.11.1
- * Query Engine version: f40f79ec31188888a2e33acda0ecc8fd10a853a9
+ * Prisma Client JS version: 6.16.0
+ * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
  */
 Prisma.prismaVersion = {
-  client: "6.11.1",
-  engine: "f40f79ec31188888a2e33acda0ecc8fd10a853a9"
+  client: "6.16.0",
+  engine: "1c57fdcd7e44b29b9313256c76699e91c3ac3c43"
 }
 
-Prisma.PrismaClientKnownRequestError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientKnownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)};
-Prisma.PrismaClientUnknownRequestError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientUnknownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.PrismaClientRustPanicError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientRustPanicError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.PrismaClientInitializationError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientInitializationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.PrismaClientValidationError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientValidationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
+Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
+Prisma.PrismaClientUnknownRequestError = PrismaClientUnknownRequestError
+Prisma.PrismaClientRustPanicError = PrismaClientRustPanicError
+Prisma.PrismaClientInitializationError = PrismaClientInitializationError
+Prisma.PrismaClientValidationError = PrismaClientValidationError
 Prisma.Decimal = Decimal
 
 /**
  * Re-export of sql-template-tag
  */
-Prisma.sql = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`sqltag is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.empty = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`empty is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.join = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`join is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.raw = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`raw is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
+Prisma.sql = sqltag
+Prisma.empty = empty
+Prisma.join = join
+Prisma.raw = raw
 Prisma.validator = Public.validator
 
 /**
 * Extensions
 */
-Prisma.getExtensionContext = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`Extensions.getExtensionContext is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.defineExtension = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`Extensions.defineExtension is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
+Prisma.getExtensionContext = Extensions.getExtensionContext
+Prisma.defineExtension = Extensions.defineExtension
 
 /**
  * Shorthand utilities for JSON filtering
@@ -109,10 +80,11 @@ Prisma.NullTypes = {
 
 
 
+
+
 /**
  * Enums
  */
-
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   ReadUncommitted: 'ReadUncommitted',
   ReadCommitted: 'ReadCommitted',
@@ -299,34 +271,82 @@ exports.Prisma.ModelName = {
   District: 'District',
   Subdistrict: 'Subdistrict'
 };
-
 /**
- * This is a stub Prisma Client that will error at runtime if called.
+ * Create the Client
  */
-class PrismaClient {
-  constructor() {
-    return new Proxy(this, {
-      get(target, prop) {
-        let message
-        const runtime = getRuntime()
-        if (runtime.isEdge) {
-          message = `PrismaClient is not configured to run in ${runtime.prettyName}. In order to run Prisma Client on edge runtime, either:
-- Use Prisma Accelerate: https://pris.ly/d/accelerate
-- Use Driver Adapters: https://pris.ly/d/driver-adapters
-`;
-        } else {
-          message = 'PrismaClient is unable to run in this browser environment, or has been bundled for the browser (running in `' + runtime.prettyName + '`).'
-        }
-
-        message += `
-If this is unexpected, please open an issue: https://pris.ly/prisma-prisma-bug-report`
-
-        throw new Error(message)
+const config = {
+  "generator": {
+    "name": "client",
+    "provider": {
+      "fromEnvVar": null,
+      "value": "prisma-client-js"
+    },
+    "output": {
+      "value": "C:\\room\\b\\generated\\prisma",
+      "fromEnvVar": null
+    },
+    "config": {
+      "engineType": "library"
+    },
+    "binaryTargets": [
+      {
+        "fromEnvVar": null,
+        "value": "windows",
+        "native": true
       }
-    })
+    ],
+    "previewFeatures": [],
+    "sourceFilePath": "C:\\room\\b\\prisma\\schema.prisma",
+    "isCustomOutput": true
+  },
+  "relativeEnvPaths": {
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../.env"
+  },
+  "relativePath": "../../prisma",
+  "clientVersion": "6.16.0",
+  "engineVersion": "1c57fdcd7e44b29b9313256c76699e91c3ac3c43",
+  "datasourceNames": [
+    "db"
+  ],
+  "activeProvider": "postgresql",
+  "inlineDatasources": {
+    "db": {
+      "url": {
+        "fromEnvVar": "DATABASE_URL",
+        "value": null
+      }
+    }
+  },
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel admin {\n  admin_id      Int       @id @default(autoincrement())\n  role_id       Int\n  first_name    String    @db.VarChar(255)\n  last_name     String    @db.VarChar(255)\n  email         String    @unique @db.VarChar(255)\n  password      String    @db.VarChar(255)\n  citizen_id    String?   @unique @db.Char(13)\n  position      String?   @db.VarChar(255)\n  department    String?   @db.VarChar(255)\n  zip_code      Int?\n  profile_image Bytes? // เก็บรูปโปรไฟล์ใน database เป็น binary data\n  created_at    DateTime? @default(now()) @db.Timestamptz(6)\n  updated_at    DateTime? @default(now()) @db.Timestamptz(6)\n  roles         roles     @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)\n}\n\nmodel equipment {\n  equipment_id Int          @id @default(autoincrement())\n  room_id      Int\n  equipment_n  String       @db.VarChar(255)\n  quantity     Int\n  created_at   DateTime?    @default(now()) @db.Timestamptz(6)\n  updated_at   DateTime?    @default(now()) @db.Timestamptz(6)\n  meeting_room meeting_room @relation(fields: [room_id], references: [room_id], onDelete: NoAction, onUpdate: NoAction)\n}\n\nmodel meeting_room {\n  room_id     Int           @id @default(autoincrement())\n  room_name   String        @db.VarChar(255)\n  capacity    Int\n  location_m  String        @db.VarChar(255)\n  department  String        @db.VarChar(255) // เพิ่ม department field\n  status_m    String?       @db.VarChar(255)\n  image       Bytes? // เก็บรูปใน database เป็น binary data\n  details_m   String?       @db.VarChar(255)\n  created_at  DateTime?     @default(now()) @db.Timestamptz(6)\n  updated_at  DateTime?     @default(now()) @db.Timestamptz(6)\n  equipment   equipment[]\n  reservation reservation[]\n  review      review[]\n}\n\nmodel officer {\n  officer_id    Int           @id @default(autoincrement())\n  role_id       Int\n  first_name    String        @db.VarChar(255)\n  last_name     String        @db.VarChar(255)\n  email         String        @unique @db.VarChar(255)\n  password      String        @db.VarChar(255)\n  citizen_id    String?       @unique @db.Char(13)\n  position      String?       @db.VarChar(255)\n  department    String?       @db.VarChar(255)\n  zip_code      Int?\n  profile_image Bytes? // เก็บรูปโปรไฟล์ใน database เป็น binary data\n  created_at    DateTime?     @default(now()) @db.Timestamptz(6)\n  updated_at    DateTime?     @default(now()) @db.Timestamptz(6)\n  roles         roles         @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)\n  reservation   reservation[]\n}\n\nmodel reservation {\n  reservation_id Int           @id @default(autoincrement())\n  user_id        Int?\n  room_id        Int?\n  start_at       DateTime      @db.Date\n  end_at         DateTime      @db.Date\n  start_time     DateTime?     @db.Timestamp(6)\n  end_time       DateTime?     @db.Timestamp(6)\n  status_r       String?       @default(\"pending\") @db.VarChar(255)\n  officer_id     Int?\n  details_r      String?       @db.VarChar(255)\n  booking_dates  String?       @db.Text // CSV string ของวันที่ทั้งหมดที่จอง เช่น \"2025-08-29,2025-08-30,2025-08-31\"\n  is_multi_day   Boolean?      @default(false) // flag บอกว่าเป็น multi-day booking หรือไม่\n  created_at     DateTime?     @default(now()) @db.Timestamp(6)\n  updated_at     DateTime?     @default(now()) @db.Timestamp(6)\n  officer        officer?      @relation(fields: [officer_id], references: [officer_id], onDelete: NoAction, onUpdate: NoAction)\n  meeting_room   meeting_room? @relation(fields: [room_id], references: [room_id], onDelete: NoAction, onUpdate: NoAction)\n  users          users?        @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)\n}\n\n/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.\nmodel review {\n  review_id    Int           @id @default(autoincrement())\n  user_id      Int?\n  room_id      Int?\n  comment      String?\n  rating       Int?\n  created_at   DateTime?     @default(now()) @db.Timestamp(6)\n  meeting_room meeting_room? @relation(fields: [room_id], references: [room_id], onDelete: NoAction, onUpdate: NoAction)\n  users        users?        @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)\n}\n\nmodel roles {\n  role_id     Int         @id @default(autoincrement())\n  role_name   String      @db.VarChar(50)\n  role_status String?     @default(\"active\") @db.VarChar(50)\n  admin       admin[]\n  officer     officer[]\n  users       users[]\n  executive   executive[]\n}\n\nmodel executive {\n  executive_id  Int       @id @default(autoincrement())\n  role_id       Int\n  first_name    String    @db.VarChar(255)\n  last_name     String    @db.VarChar(255)\n  email         String    @unique @db.VarChar(255)\n  password      String    @db.VarChar(255)\n  citizen_id    String?   @unique @db.Char(13)\n  position      String    @db.VarChar(255) // \"university_executive\" หรือ \"faculty_executive\"\n  department    String    @db.VarChar(255) // สำนักงานอธิการบดี หรือ ชื่อคณะ\n  zip_code      Int?\n  profile_image Bytes? // เก็บรูปโปรไฟล์ใน database เป็น binary data\n  created_at    DateTime? @default(now()) @db.Timestamptz(6)\n  updated_at    DateTime? @default(now()) @db.Timestamptz(6)\n  roles         roles     @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction)\n}\n\nmodel users {\n  user_id       Int           @id(map: \"user_pkey\") @default(autoincrement())\n  role_id       Int\n  first_name    String        @db.VarChar(255)\n  last_name     String        @db.VarChar(255)\n  email         String        @unique(map: \"user_email_key\") @db.VarChar(255)\n  password      String        @db.VarChar(255)\n  citizen_id    String?       @unique(map: \"user_citizen_id_key\") @db.Char(13)\n  position      String?       @db.VarChar(255)\n  department    String?       @db.VarChar(255)\n  zip_code      Int?\n  profile_image Bytes? // เก็บรูปโปรไฟล์ใน database เป็น binary data\n  created_at    DateTime?     @default(now()) @db.Timestamptz(6)\n  updated_at    DateTime?     @default(now()) @db.Timestamptz(6)\n  reservation   reservation[]\n  review        review[]\n  roles         roles         @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: \"user_role_id_fkey\")\n}\n",
+  "inlineSchemaHash": "6a1a0c1c57814b79e58d34ef97844831797d7e0abcd7e43b89aead6bbc234743",
+  "copyEngine": true
+}
+config.dirname = '/'
+
+config.runtimeDataModel = JSON.parse("{\"models\":{\"admin\":{\"fields\":[{\"name\":\"admin_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"role_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"first_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"last_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"citizen_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zip_code\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"profile_image\",\"kind\":\"scalar\",\"type\":\"Bytes\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"roles\",\"relationName\":\"adminToroles\"}],\"dbName\":null},\"equipment\":{\"fields\":[{\"name\":\"equipment_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"room_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"equipment_n\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"quantity\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"meeting_room\",\"kind\":\"object\",\"type\":\"meeting_room\",\"relationName\":\"equipmentTomeeting_room\"}],\"dbName\":null},\"meeting_room\":{\"fields\":[{\"name\":\"room_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"room_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"capacity\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"location_m\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status_m\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"Bytes\"},{\"name\":\"details_m\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"equipment\",\"kind\":\"object\",\"type\":\"equipment\",\"relationName\":\"equipmentTomeeting_room\"},{\"name\":\"reservation\",\"kind\":\"object\",\"type\":\"reservation\",\"relationName\":\"meeting_roomToreservation\"},{\"name\":\"review\",\"kind\":\"object\",\"type\":\"review\",\"relationName\":\"meeting_roomToreview\"}],\"dbName\":null},\"officer\":{\"fields\":[{\"name\":\"officer_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"role_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"first_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"last_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"citizen_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zip_code\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"profile_image\",\"kind\":\"scalar\",\"type\":\"Bytes\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"roles\",\"relationName\":\"officerToroles\"},{\"name\":\"reservation\",\"kind\":\"object\",\"type\":\"reservation\",\"relationName\":\"officerToreservation\"}],\"dbName\":null},\"reservation\":{\"fields\":[{\"name\":\"reservation_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"room_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"start_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"end_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"start_time\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"end_time\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"status_r\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"officer_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"details_r\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"booking_dates\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"is_multi_day\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"officer\",\"kind\":\"object\",\"type\":\"officer\",\"relationName\":\"officerToreservation\"},{\"name\":\"meeting_room\",\"kind\":\"object\",\"type\":\"meeting_room\",\"relationName\":\"meeting_roomToreservation\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"reservationTousers\"}],\"dbName\":null},\"review\":{\"fields\":[{\"name\":\"review_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"room_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"comment\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rating\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"meeting_room\",\"kind\":\"object\",\"type\":\"meeting_room\",\"relationName\":\"meeting_roomToreview\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"reviewTousers\"}],\"dbName\":null},\"roles\":{\"fields\":[{\"name\":\"role_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"role_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role_status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"admin\",\"kind\":\"object\",\"type\":\"admin\",\"relationName\":\"adminToroles\"},{\"name\":\"officer\",\"kind\":\"object\",\"type\":\"officer\",\"relationName\":\"officerToroles\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"rolesTousers\"},{\"name\":\"executive\",\"kind\":\"object\",\"type\":\"executive\",\"relationName\":\"executiveToroles\"}],\"dbName\":null},\"executive\":{\"fields\":[{\"name\":\"executive_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"role_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"first_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"last_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"citizen_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zip_code\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"profile_image\",\"kind\":\"scalar\",\"type\":\"Bytes\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"roles\",\"relationName\":\"executiveToroles\"}],\"dbName\":null},\"users\":{\"fields\":[{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"role_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"first_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"last_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"citizen_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zip_code\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"profile_image\",\"kind\":\"scalar\",\"type\":\"Bytes\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"reservation\",\"kind\":\"object\",\"type\":\"reservation\",\"relationName\":\"reservationTousers\"},{\"name\":\"review\",\"kind\":\"object\",\"type\":\"review\",\"relationName\":\"reviewTousers\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"roles\",\"relationName\":\"rolesTousers\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
+config.engineWasm = {
+  getRuntime: async () => require('./query_engine_bg.js'),
+  getQueryEngineWasmModule: async () => {
+    const loader = (await import('#wasm-engine-loader')).default
+    const engine = (await loader).default
+    return engine
   }
 }
+config.compilerWasm = undefined
 
+config.injectableEdgeEnv = () => ({
+  parsed: {
+    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
+  }
+})
+
+if (typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined) {
+  Debug.enable(typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined)
+}
+
+const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
-
 Object.assign(exports, Prisma)
+
