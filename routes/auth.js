@@ -8,6 +8,7 @@
 // ===================================================================
 
 import { Elysia } from 'elysia'
+import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma.js'
 import { validateRegisterData, formatValidationErrors } from '../validation.js'
 import { isValidDepartment, getAllDepartments } from '../utils/departments.js'
@@ -411,7 +412,15 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         return user
       }
 
+      // แยก token เพื่อดึง original userId จาก JWT
+      const headersString = JSON.stringify(request.headers)
+      const headersObj = JSON.parse(headersString)
+      const authHeader = headersObj.authorization
+      const token = authHeader.substring(7)
+      const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
       console.log('🔍 ผู้ใช้:', user.email, 'Role:', user.role)
+      console.log('🗂️ Original userId from token:', decoded.userId)
 
       // ข้อมูลที่อนุญาตให้แก้ไข
       const allowedFields = [
@@ -446,22 +455,22 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         case 'user':
           tableName = 'users'
           idField = 'user_id'
-          userId = user.user_id
+          userId = decoded.userId  // ใช้ original userId จาก token
           break
         case 'officer':
           tableName = 'officer'
           idField = 'officer_id'
-          userId = user.officer_id
+          userId = decoded.userId  // ใช้ original officer_id จาก token
           break
         case 'admin':
           tableName = 'admin'
           idField = 'admin_id'
-          userId = user.admin_id
+          userId = decoded.userId  // ใช้ original admin_id จาก token
           break
         case 'executive':
           tableName = 'executive'
           idField = 'executive_id'
-          userId = user.executive_id
+          userId = decoded.userId  // ใช้ original executive_id จาก token
           break
         default:
           set.status = 400

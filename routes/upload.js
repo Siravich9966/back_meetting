@@ -210,11 +210,38 @@ export const publicUploadRoutes = new Elysia({ prefix: '/upload' })
   // API สำหรับดึงรูปโปรไฟล์ (public)
   .get('/profile-image/:userId', async ({ params: { userId }, set }) => {
     try {
-      // หาข้อมูล user จาก userId
-      const user = await prisma.users.findUnique({
-        where: { user_id: parseInt(userId) },
+      let user = null
+      const userIdInt = parseInt(userId)
+
+      // ลองหาจาก users table ก่อน
+      user = await prisma.users.findUnique({
+        where: { user_id: userIdInt },
         select: { profile_image: true }
       })
+
+      // ถ้าไม่เจอ ลองหาจาก officer table
+      if (!user || !user.profile_image) {
+        user = await prisma.officer.findUnique({
+          where: { officer_id: userIdInt },
+          select: { profile_image: true }
+        })
+      }
+
+      // ถ้าไม่เจอ ลองหาจาก admin table
+      if (!user || !user.profile_image) {
+        user = await prisma.admin.findUnique({
+          where: { admin_id: userIdInt },
+          select: { profile_image: true }
+        })
+      }
+
+      // ถ้าไม่เจอ ลองหาจาก executive table
+      if (!user || !user.profile_image) {
+        user = await prisma.executive.findUnique({
+          where: { executive_id: userIdInt },
+          select: { profile_image: true }
+        })
+      }
 
       if (!user || !user.profile_image) {
         set.status = 404
