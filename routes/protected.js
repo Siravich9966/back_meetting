@@ -435,6 +435,238 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           user_data: user
         }
       })
+
+      // === Officer Reports === 
+      .get('/reports', async ({ request, query, set }) => {
+        const user = await authMiddleware(request, set)
+        if (user.success === false) return user
+
+        if (!isOfficer(user)) {
+          set.status = 403
+          return {
+            success: false,
+            message: 'การเข้าถึงจำกัดเฉพาะเจ้าหน้าที่เท่านั้น'
+          }
+        }
+
+        try {
+          console.log('📊 Officer Reports - User:', user.email, 'Position:', user.position)
+          const { period = 'current_month' } = query
+
+          // ⚠️ SECURITY FIX: เจ้าหน้าที่เห็นเฉพาะข้อมูลในหน่วยงานที่รับผิดชอบ
+          if (!user.position_department) {
+            set.status = 403
+            return {
+              success: false,
+              message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+            }
+          }
+
+          console.log('🏢 Officer department filter:', user.position_department)
+
+          // คำนวณช่วงเวลาตาม period
+          let startDate, endDate
+          const now = new Date()
+          
+          switch (period) {
+            case 'last_month':
+              startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+              endDate = new Date(now.getFullYear(), now.getMonth(), 0)
+              break
+            case 'last_3_months':
+              startDate = new Date(now.getFullYear(), now.getMonth() - 3, 1)
+              endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+              break
+            case 'last_6_months':
+              startDate = new Date(now.getFullYear(), now.getMonth() - 6, 1)
+              endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+              break
+            case 'current_quarter':
+              const currentQuarter = Math.floor(now.getMonth() / 3)
+              startDate = new Date(now.getFullYear(), currentQuarter * 3, 1)
+              endDate = new Date(now.getFullYear(), (currentQuarter + 1) * 3, 0)
+              break
+            case 'current_year':
+              startDate = new Date(now.getFullYear(), 0, 1)
+              endDate = new Date(now.getFullYear(), 11, 31)
+              break
+            default: // current_month
+              startDate = new Date(now.getFullYear(), now.getMonth(), 1)
+              endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+          }
+
+          console.log('📅 Date range:', startDate, 'to', endDate)
+
+          // เตรียมข้อมูลสำหรับสถิติ
+          const reservation_summary = []
+          const room_utilization = []
+          const monthly_trends = []
+
+          // สถิติสรุปการจอง
+          const totalReservations = await prisma.reservation.count({
+            where: {
+              meeting_room: {
+                department: user.position_department
+              },
+              start_at: {
+                gte: startDate,
+                lte: endDate
+              }
+            }
+          })
+
+          const approvedReservations = await prisma.reservation.count({
+            where: {
+              meeting_room: {
+                department: user.position_department
+              },
+              start_at: {
+                gte: startDate,
+                lte: endDate
+              },
+              status_r: 'approved'
+            }
+          })
+
+          const pendingReservations = await prisma.reservation.count({
+            where: {
+              meeting_room: {
+                department: user.position_department
+              },
+              start_at: {
+                gte: startDate,
+                lte: endDate
+              },
+              status_r: 'pending'
+            }
+          })
+
+          const rejectedReservations = await prisma.reservation.count({
+            where: {
+              meeting_room: {
+                department: user.position_department
+              },
+              start_at: {
+                gte: startDate,
+                lte: endDate
+              },
+              status_r: 'rejected'
+            }
+          })
+
+          reservation_summary.push({
+            category: 'การจองทั้งหมด',
+            count: totalReservations,
+            percentage: 100
+          })
+
+          if (totalReservations > 0) {
+            reservation_summary.push({
+              category: 'อนุมัติแล้ว',
+              count: approvedReservations,
+              percentage: Math.round((approvedReservations / totalReservations) * 100)
+            })
+
+            reservation_summary.push({
+              category: 'รอการอนุมัติ',
+              count: pendingReservations,
+              percentage: Math.round((pendingReservations / totalReservations) * 100)
+            })
+
+            reservation_summary.push({
+              category: 'ปฏิเสธ',
+              count: rejectedReservations,
+              percentage: Math.round((rejectedReservations / totalReservations) * 100)
+            })
+          }
+
+          // สถิติการใช้งานห้องประชุม
+          const roomUsageStats = await prisma.reservation.groupBy({
+            by: ['room_id'],
+            where: {
+              meeting_room: {
+                department: user.position_department
+              },
+              start_at: {
+                gte: startDate,
+                lte: endDate
+              },
+              status_r: 'approved'
+            },
+            _count: {
+              reservation_id: true
+            },
+            orderBy: {
+              _count: {
+                reservation_id: 'desc'
+              }
+            }
+          })
+
+          for (const roomStat of roomUsageStats.slice(0, 10)) { // แสดง 10 ห้องแรก
+            const room = await prisma.meeting_room.findUnique({
+              where: { room_id: roomStat.room_id },
+              select: { room_name: true }
+            })
+
+            room_utilization.push({
+              room_name: room?.room_name || `ห้อง ${roomStat.room_id}`,
+              usage_count: roomStat._count.reservation_id,
+              percentage: Math.round((roomStat._count.reservation_id / approvedReservations) * 100) || 0
+            })
+          }
+
+          // แนวโน้มการจองรายเดือน (สำหรับ 6 เดือนย้อนหลัง)
+          for (let i = 5; i >= 0; i--) {
+            const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1)
+            const nextMonth = new Date(now.getFullYear(), now.getMonth() - i + 1, 0)
+            
+            const monthlyReservations = await prisma.reservation.count({
+              where: {
+                meeting_room: {
+                  department: user.position_department
+                },
+                start_at: {
+                  gte: monthDate,
+                  lte: nextMonth
+                },
+                status_r: 'approved'
+              }
+            })
+
+            monthly_trends.push({
+              month: monthDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'short' }),
+              reservations: monthlyReservations
+            })
+          }
+
+          return {
+            success: true,
+            data: {
+              reservation_summary,
+              room_utilization,
+              monthly_trends
+            },
+            meta: {
+              department: user.position_department,
+              period,
+              date_range: {
+                start: startDate.toISOString(),
+                end: endDate.toISOString()
+              }
+            }
+          }
+
+        } catch (error) {
+          console.error('❌ Error in officer reports:', error)
+          set.status = 500
+          return {
+            success: false,
+            message: 'เกิดข้อผิดพลาดในการดึงรายงาน',
+            error: error.message
+          }
+        }
+      })
   )
 
 // === Admin Routes (ต้องมี admin role เท่านั้น) ===

@@ -14,13 +14,12 @@ export const POSITIONS = {
   // ผู้บริหาร → จะไปตาราง executive
   UNIVERSITY_EXECUTIVE: 'ผู้บริหารระดับมหาวิทยาลัย',
   
-  // เจ้าหน้าที่ระดับมหาวิทยาลัย → จะไปตาราง officer (ไม่ผูกกับคณะ)
-  UNIVERSITY_OFFICER_72: 'เจ้าหน้าที่ดูแลห้องประชุมอาคารประชุม 72 พรรษา มหาราชินี',
-  UNIVERSITY_OFFICER_HALL: 'เจ้าหน้าที่ดูแลห้องประชุมหอประชุมใหญ่ / หอประชุมเฉลิมพระเกียรติ 80 พรรษา',
-  UNIVERSITY_OFFICER_34: 'เจ้าหน้าที่ดูแลห้องประชุมอาคาร 34 อาคารเฉลิมพระเกียรติฉลองสิริราชสมบัติครบ 60 ปี(อาคาร 34 คณะวิทยาการจัดการ)',
+  // เจ้าหน้าที่แต่ละคณะ → จะไปตาราง officer (ต้องระบุคณะที่ดูแล)
+  UNIVERSITY_OFFICER_72: 'เจ้าหน้าที่ดูแลห้องประชุมอาคาร 72 พรรษา',
+  UNIVERSITY_OFFICER_HALL: 'เจ้าหน้าที่ดูแลห้องประชุมหอประชุมเฉลิมพระเกียรติ 80 พรรษา',
+  UNIVERSITY_OFFICER_34: 'เจ้าหน้าที่ดูแลห้องประชุมอาคาร 34 เฉลิมพระเกียรติ 60 ปี',
   
-  // เจ้าหน้าที่คณะ → จะไปตาราง officer (ต้องระบุคณะที่ดูแล)
-  // จะ generate ตาม DEPARTMENTS
+  // เจ้าหน้าที่คณะอื่นๆ → จะ generate ตาม DEPARTMENTS
 }
 
 // สร้าง Position สำหรับผู้บริหารคณะ (Faculty Executive)
@@ -32,7 +31,7 @@ export const FACULTY_EXECUTIVE_POSITIONS = Object.values(DEPARTMENTS)
 export const OFFICER_POSITIONS = Object.values(DEPARTMENTS)
   .map(dept => `เจ้าหน้าที่ดูแลห้องประชุม${dept}`)
 
-// เจ้าหน้าที่ระดับมหาวิทยาลัย (ไม่ผูกกับคณะ)
+// เจ้าหน้าที่ทั้งหมด (ทุกคนต้องมี department)
 export const UNIVERSITY_OFFICER_POSITIONS = [
   POSITIONS.UNIVERSITY_OFFICER_72,
   POSITIONS.UNIVERSITY_OFFICER_HALL,
@@ -96,15 +95,17 @@ export const getDepartmentFromPosition = (position) => {
     return position.replace('ผู้บริหาร', '')
   }
   
-  // สำหรับเจ้าหน้าที่คณะ
-  if (position.startsWith('เจ้าหน้าที่ดูแลห้องประชุม') && 
-      !UNIVERSITY_OFFICER_POSITIONS.includes(position)) {
-    return position.replace('เจ้าหน้าที่ดูแลห้องประชุม', '')
-  }
-  
-  // เจ้าหน้าที่ระดับมหาวิทยาลัย ไม่มีคณะ
-  if (UNIVERSITY_OFFICER_POSITIONS.includes(position)) {
-    return null
+  // สำหรับเจ้าหน้าที่ทั้งหมด - ลบ prefix แล้วจะได้ department/location
+  if (position.startsWith('เจ้าหน้าที่ดูแลห้องประชุม')) {
+    const department = position.replace('เจ้าหน้าที่ดูแลห้องประชุม', '')
+    
+    // แมปตำแหน่งพิเศษกับคณะ
+    if (department === 'อาคาร 72 พรรษา') return 'สำนักงานอธิการบดี'
+    if (department === 'หอประชุมเฉลิมพระเกียรติ 80 พรรษา') return 'สำนักงานอธิการบดี'
+    if (department === 'อาคาร 34 เฉลิมพระเกียรติ 60 ปี') return 'สำนักงานอธิการบดี'
+    
+    // สำหรับคณะอื่นๆ ให้ return department ตรงๆ
+    return department
   }
   
   return null

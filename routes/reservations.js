@@ -1315,10 +1315,19 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
     try {
       const { status = 'pending', limit = 20, offset = 0 } = query
       
-      // ดึงการจองในคณะตัวเอง
+      // ⚠️ SECURITY FIX: เจ้าหน้าที่แต่ละคณะเห็นเฉพาะการจองในคณะที่ตัวเองรับผิดชอบตามตำแหน่ง
+      if (!user.position_department) {
+        set.status = 403
+        return {
+          success: false,
+          message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+        }
+      }
+      
+      console.log(`🏢 [OFFICER] ${user.position} can access department: ${user.position_department}`)
       const where = {
         meeting_room: {
-          department: user.department
+          department: user.position_department // ⚠️ SECURITY FIX: ใช้ position_department
         }
       }
       
@@ -1451,12 +1460,20 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         }
       }
 
-      // ตรวจสอบว่าห้องอยู่ในคณะตัวเอง
-      if (reservation.meeting_room.department !== user.department) {
+      // ⚠️ SECURITY FIX: เจ้าหน้าที่ตรวจสอบว่าห้องอยู่ในคณะที่รับผิดชอบตามตำแหน่ง
+      if (!user.position_department) {
         set.status = 403
         return {
           success: false,
-          message: 'คุณไม่มีสิทธิ์อนุมัติการจองในคณะอื่น'
+          message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+        }
+      }
+      
+      if (reservation.meeting_room.department !== user.position_department) {
+        set.status = 403
+        return {
+          success: false,
+          message: `คุณไม่มีสิทธิ์อนุมัติการจองห้องประชุม ${reservation.meeting_room.department} (รับผิดชอบเฉพาะ ${user.position_department})`
         }
       }
 
@@ -1576,12 +1593,20 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         }
       }
 
-      // ตรวจสอบว่าห้องอยู่ในคณะตัวเอง
-      if (reservation.meeting_room.department !== user.department) {
+      // ⚠️ SECURITY FIX: เจ้าหน้าที่ตรวจสอบว่าห้องอยู่ในคณะที่รับผิดชอบตามตำแหน่ง
+      if (!user.position_department) {
         set.status = 403
         return {
           success: false,
-          message: 'คุณไม่มีสิทธิ์ปฏิเสธการจองในคณะอื่น'
+          message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+        }
+      }
+      
+      if (reservation.meeting_room.department !== user.position_department) {
+        set.status = 403
+        return {
+          success: false,
+          message: `คุณไม่มีสิทธิ์ปฏิเสธการจองห้องประชุม ${reservation.meeting_room.department} (รับผิดชอบเฉพาะ ${user.position_department})`
         }
       }
 
@@ -1868,6 +1893,170 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       return {
         success: false,
         message: 'เกิดข้อผิดพลาดในการดึงสถิติตามคณะ',
+        error: error.message
+      }
+    }
+  })
+
+  // ===== Officer Reports =====
+  .get('/reports', async ({ request, query, set }) => {
+    const user = await authMiddleware(request, set)
+    if (user.success === false) return user
+
+    if (!isOfficer(user)) {
+      set.status = 403
+      return {
+        success: false,
+        message: 'การเข้าถึงจำกัดเฉพาะเจ้าหน้าที่เท่านั้น'
+      }
+    }
+
+    try {
+      console.log('📊 Officer Reports - User:', user.email, 'Position:', user.position)
+      const { period = 'current_month' } = query
+
+      // ⚠️ SECURITY FIX: เจ้าหน้าที่เห็นเฉพาะข้อมูลในหน่วยงานที่รับผิดชอบ
+      if (!user.position_department) {
+        set.status = 403
+        return {
+          success: false,
+          message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+        }
+      }
+
+      console.log('🏢 Officer department filter:', user.position_department)
+
+      // คำนวณช่วงเวลาตาม period
+      let startDate, endDate
+      const now = new Date()
+      
+      switch (period) {
+        case 'last_month':
+          startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+          endDate = new Date(now.getFullYear(), now.getMonth(), 0)
+          break
+        case 'current_quarter':
+          const currentQuarter = Math.floor(now.getMonth() / 3)
+          startDate = new Date(now.getFullYear(), currentQuarter * 3, 1)
+          endDate = new Date(now.getFullYear(), (currentQuarter + 1) * 3, 0)
+          break
+        case 'current_year':
+          startDate = new Date(now.getFullYear(), 0, 1)
+          endDate = new Date(now.getFullYear(), 11, 31)
+          break
+        default: // current_month
+          startDate = new Date(now.getFullYear(), now.getMonth(), 1)
+          endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+      }
+
+      const whereCondition = {
+        meeting_room: { department: user.position_department },
+        created_at: {
+          gte: startDate,
+          lte: endDate
+        }
+      }
+
+      console.log('📅 Date range:', { period, startDate, endDate })
+      console.log('🔍 Where condition:', JSON.stringify(whereCondition, null, 2))
+
+      // ดึงข้อมูลสรุปการจอง
+      const reservationSummary = await prisma.reservation.groupBy({
+        by: ['status_r'],
+        where: whereCondition,
+        _count: {
+          reservation_id: true
+        }
+      })
+
+      // ดึงข้อมูลการใช้งานห้องประชุม
+      const roomUtilization = await prisma.reservation.groupBy({
+        by: ['room_id'],
+        where: whereCondition,
+        _count: {
+          reservation_id: true
+        },
+        orderBy: {
+          _count: {
+            reservation_id: 'desc'
+          }
+        }
+      })
+
+      // ดึงข้อมูลแนวโน้มรายเดือน (6 เดือนที่ผ่านมา)
+      const sixMonthsAgo = new Date()
+      sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5)
+      sixMonthsAgo.setDate(1)
+
+      const monthlyTrends = []
+      for (let i = 0; i < 6; i++) {
+        const monthStart = new Date(sixMonthsAgo.getFullYear(), sixMonthsAgo.getMonth() + i, 1)
+        const monthEnd = new Date(sixMonthsAgo.getFullYear(), sixMonthsAgo.getMonth() + i + 1, 0)
+        
+        const count = await prisma.reservation.count({
+          where: {
+            meeting_room: { department: user.position_department },
+            created_at: {
+              gte: monthStart,
+              lte: monthEnd
+            }
+          }
+        })
+        
+        monthlyTrends.push({
+          month: monthStart.toLocaleDateString('th-TH', { year: 'numeric', month: 'long' }),
+          total_reservations: count
+        })
+      }
+
+      // จัดรูปแบบข้อมูล
+      const reports = {
+        reservation_summary: {
+          approved: reservationSummary.find(s => s.status_r === 'approved')?._count.reservation_id || 0,
+          pending: reservationSummary.find(s => s.status_r === 'pending')?._count.reservation_id || 0,
+          rejected: reservationSummary.find(s => s.status_r === 'rejected')?._count.reservation_id || 0,
+          cancelled: reservationSummary.find(s => s.status_r === 'cancelled')?._count.reservation_id || 0
+        },
+        room_utilization: [],
+        monthly_trends: monthlyTrends
+      }
+
+      // เพิ่มชื่อห้องประชุมในข้อมูลการใช้งาน
+      if (roomUtilization.length > 0) {
+        const roomIds = roomUtilization.map(r => r.room_id)
+        const rooms = await prisma.meeting_room.findMany({
+          where: { room_id: { in: roomIds } },
+          select: { room_id: true, room_name: true }
+        })
+        
+        reports.room_utilization = roomUtilization.map(util => ({
+          room_id: util.room_id,
+          room_name: rooms.find(r => r.room_id === util.room_id)?.room_name || 'ไม่ทราบชื่อ',
+          total_reservations: util._count.reservation_id
+        }))
+      }
+
+      console.log('📊 Officer reports generated:', {
+        department: user.position_department,
+        period,
+        summary: reports.reservation_summary,
+        rooms: reports.room_utilization.length,
+        trends: reports.monthly_trends.length
+      })
+
+      return {
+        success: true,
+        message: `รายงานการใช้งานในหน่วยงาน ${user.position_department}`,
+        department: user.position_department,
+        period,
+        reports
+      }
+    } catch (error) {
+      console.error('❌ Officer Reports Error:', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการสร้างรายงาน',
         error: error.message
       }
     }

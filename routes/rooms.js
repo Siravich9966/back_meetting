@@ -12,6 +12,7 @@
 import { Elysia } from 'elysia'
 import prisma from '../lib/prisma.js'
 import { authMiddleware, isOfficer, canManageRoom } from '../middleware/index.js'
+import { getDepartmentFromPosition } from '../utils/positions.js'
 
 // Public Room APIs (ไม่ต้อง authentication)
 export const roomRoutes = new Elysia({ prefix: '/rooms' })
@@ -45,9 +46,25 @@ export const roomRoutes = new Elysia({ prefix: '/rooms' })
   })
 
   // ดูรายการห้องประชุมทั้งหมด
-  .get('/', async ({ query, set }) => {
+  .get('/', async ({ query, request, set }) => {
     try {
       const { status, capacity, search, department } = query
+      
+      // ⚠️ SECURITY CHECK: หาก request มี Authorization header แสดงว่าเป็น authenticated user
+      // ต้องตรวจสอบสิทธิ์การดูห้องประชุม
+      let authenticatedUser = null
+      try {
+        if (request.headers.authorization) {
+          authenticatedUser = await authMiddleware(request, set)
+          if (authenticatedUser.success === false) {
+            // หากมี token แต่ invalid ให้ clear authenticatedUser
+            authenticatedUser = null
+          }
+        }
+      } catch (error) {
+        // หาก auth middleware ล้มเหลว ให้ดำเนินการเป็น public request
+        authenticatedUser = null
+      }
       
       // สร้าง filter conditions
       const where = {}
@@ -60,7 +77,23 @@ export const roomRoutes = new Elysia({ prefix: '/rooms' })
         where.capacity = { gte: parseInt(capacity) }
       }
 
-      if (department) {
+      // ⚠️ SECURITY FIX: Officer สามารถดูได้เฉพาะห้องตาม position_department เท่านั้น
+      if (authenticatedUser && authenticatedUser.role === 'officer') {
+        if (authenticatedUser.position_department) {
+          where.department = authenticatedUser.position_department // บังคับให้เห็นเฉพาะห้องที่มีสิทธิ์ตาม position
+          console.log('🔐 [SECURITY] Officer room filtering by position_department:', {
+            officer_id: authenticatedUser.officer_id,
+            current_department: authenticatedUser.department,
+            position_department: authenticatedUser.position_department,
+            filtered_by: authenticatedUser.position_department
+          })
+        } else {
+          // หาก Officer ไม่มี position_department ให้ return empty result
+          where.room_id = -1 // Impossible room_id to return no results
+          console.log('⚠️ [SECURITY] Officer without position_department blocked from viewing rooms:', authenticatedUser.email)
+        }
+      } else if (department) {
+        // สำหรับ role อื่นๆ หรือ public request ให้ filter ตาม parameter ปกติ
         where.department = department
       }
       
@@ -295,24 +328,29 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
 
-          console.log('Creating room with data:', {
-            room_name,
-            capacity: parseInt(capacity),
-            location_m,
-            department: user.department,
-            status_m,
-            hasImage: imageBuffer ? true : false,
-            imageSize: imageBuffer ? imageBuffer.length : 0,
-            details_m
-          })
+          // ⚠️ SECURITY FIX: ใช้ position_department จาก JWT middleware
+          if (!user.position_department) {
+            set.status = 403
+            return {
+              success: false,
+              message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+            }
+          }
 
-          // สร้างห้องประชุมใหม่ (department ตาม user ที่ login)
+          console.log('🔐 [SECURITY] Officer room creation by position_department:', {
+            officer_id: user.officer_id,
+            current_department: user.department,
+            position_department: user.position_department,
+            creating_for_department: user.position_department
+          })
+          
+          // สร้างห้องประชุมใหม่ (department ตาม position_department)
           const newRoom = await prisma.meeting_room.create({
             data: {
               room_name,
               capacity: parseInt(capacity),
               location_m,
-              department: user.department, // ใช้ department ของ officer
+              department: user.position_department, // ⚠️ SECURITY FIX: ใช้ position_department
               status_m,
               image: imageBuffer, // เก็บรูปเป็น binary data ใน database
               details_m
@@ -385,7 +423,7 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
           }
 
           // เช็คสิทธิ์ในการจัดการห้องนี้
-          if (!canManageRoom(user, existingRoom.department)) {
+          if (!(await canManageRoom(user, existingRoom.department))) {
             set.status = 403
             return {
               success: false,
@@ -664,7 +702,7 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
           }
 
           // เช็คสิทธิ์ในการจัดการห้องนี้
-          if (!canManageRoom(user, existingRoom.department)) {
+          if (!(await canManageRoom(user, existingRoom.department))) {
             set.status = 403
             return {
               success: false,
@@ -734,9 +772,18 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
         try {
           const { status, capacity, search } = query
           
-          // สร้าง filter conditions (เฉพาะ department ตัวเอง)
+          // ⚠️ SECURITY FIX: ใช้ position_department แทน user.department
+          if (!user.position_department) {
+            set.status = 403
+            return {
+              success: false,
+              message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+            }
+          }
+          
+          // สร้าง filter conditions (เฉพาะ position_department ตัวเอง)
           const where = {
-            department: user.department
+            department: user.position_department // ⚠️ SECURITY FIX: ใช้ position_department
           }
           
           if (status) {
@@ -824,10 +871,15 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
 
           return {
             success: true,
-            message: `ห้องประชุมใน ${user.department}`,
+            message: `ห้องประชุมที่รับผิดชอบ (${user.position_department})`,
             rooms: roomsWithImageCheck,
             total: roomsWithImageCheck.length,
-            department: user.department
+            department: user.position_department,
+            position_info: {
+              current_department: user.department,
+              position_department: user.position_department,
+              position: user.position
+            }
           }
 
         } catch (error) {

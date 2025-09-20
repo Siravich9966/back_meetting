@@ -6,6 +6,7 @@
 
 import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma.js'
+import { getDepartmentFromPosition } from '../utils/positions.js'
 
 // JWT Authentication Middleware
 export const authMiddleware = async (request, set) => {
@@ -58,7 +59,7 @@ export const authMiddleware = async (request, set) => {
           position: true,
           department: true,
           zip_code: true,
-          profile_image: true,
+          // 🔥 ลบ profile_image: true และจะเพิ่ม path ทีหลัง
           created_at: true,
           updated_at: true,
           // เพิ่มข้อมูล address
@@ -72,6 +73,11 @@ export const authMiddleware = async (request, set) => {
           }
         }
       })
+
+      // 🔥 ไม่ส่ง profile_image ใน JWT response - ให้ frontend จัดการเอง
+      // if (user) {
+      //   user.profile_image = `/api/upload/profile-image/${user.user_id}`
+      // }
 
       // ถ้ามีข้อมูล address ให้ดึงชื่อจริงๆ มาด้วย
       if (user && (user.province_id || user.district_id || user.subdistrict_id)) {
@@ -114,7 +120,7 @@ export const authMiddleware = async (request, set) => {
           position: true,
           department: true,
           zip_code: true,
-          profile_image: true,
+          // 🔥 ลบ profile_image: true และจะเพิ่ม path ทีหลัง
           created_at: true,
           updated_at: true,
           // เพิ่มข้อมูล address
@@ -130,9 +136,12 @@ export const authMiddleware = async (request, set) => {
       })
 
       if (user) {
-        // เปลี่ยน officer_id เป็น user_id เพื่อให้ consistent
-        user.user_id = user.officer_id
-        delete user.officer_id
+        console.log(`🔍 [JWT] Found officer: officer_id=${user.officer_id}, email=${user.email}`)
+        
+        // 🔥 ไม่ส่ง profile_image ใน JWT response - ให้ frontend จัดการเอง
+        // user.profile_image = `/api/upload/profile-image/${user.officer_id}`
+        
+        // ✅ ไม่ต้องเปลี่ยน officer_id เป็น user_id อีกแล้ว - ใช้ของตัวเอง
 
         // ถ้ามีข้อมูล address ให้ดึงชื่อจริงๆ มาด้วย
         if (user.province_id || user.district_id || user.subdistrict_id) {
@@ -176,7 +185,7 @@ export const authMiddleware = async (request, set) => {
           position: true,
           department: true,
           zip_code: true,
-          profile_image: true,
+          // 🔥 ลบ profile_image: true และจะเพิ่ม path ทีหลัง
           created_at: true,
           updated_at: true,
           // เพิ่มข้อมูล address
@@ -192,9 +201,13 @@ export const authMiddleware = async (request, set) => {
       })
 
       if (user) {
-        // เปลี่ยน admin_id เป็น user_id เพื่อให้ consistent
-        user.user_id = user.admin_id
-        delete user.admin_id
+        console.log(`🔍 [JWT] Found admin: admin_id=${user.admin_id}, email=${user.email}`)
+        
+        // 🔥 เพิ่ม profile_image เป็น path แทน binary
+        // 🔥 ไม่ส่ง profile_image ใน JWT response - ให้ frontend จัดการเอง
+        // user.profile_image = `/api/upload/profile-image/${user.admin_id}`
+        
+        // ✅ ไม่ต้องเปลี่ยน admin_id เป็น user_id อีกแล้ว - ใช้ของตัวเอง
         
         // ถ้ามีข้อมูล address ให้ดึงชื่อจริงๆ มาด้วย
         if (user.province_id || user.district_id || user.subdistrict_id) {
@@ -238,7 +251,7 @@ export const authMiddleware = async (request, set) => {
           position: true,
           department: true,
           zip_code: true,
-          profile_image: true,
+          // 🔥 ลบ profile_image: true และจะเพิ่ม path ทีหลัง
           created_at: true,
           updated_at: true,
           // เพิ่มข้อมูล address
@@ -254,9 +267,13 @@ export const authMiddleware = async (request, set) => {
       })
 
       if (user) {
-        // เปลี่ยน executive_id เป็น user_id เพื่อให้ consistent
-        user.user_id = user.executive_id
-        delete user.executive_id
+        console.log(`🔍 [JWT] Found executive: executive_id=${user.executive_id}, email=${user.email}`)
+        
+        // 🔥 เพิ่ม profile_image เป็น path แทน binary
+        // 🔥 ไม่ส่ง profile_image ใน JWT response - ให้ frontend จัดการเอง
+        // user.profile_image = `/api/upload/profile-image/${user.executive_id}`
+        
+        // ✅ ไม่ต้องเปลี่ยน executive_id เป็น user_id อีกแล้ว - ใช้ของตัวเอง
         
         // ถ้ามีข้อมูล address ให้ดึงชื่อจริงๆ มาด้วย
         if (user.province_id || user.district_id || user.subdistrict_id) {
@@ -302,10 +319,44 @@ export const authMiddleware = async (request, set) => {
       userTable: userTable // เพิ่มข้อมูลว่ามาจาก table ไหน
     }
 
+    // ⚠️ SECURITY: สำหรับ Officer ให้เพิ่ม position_department สำหรับการตรวจสอบสิทธิ์
+    if (userTable === 'officer' && user.position) {
+      const positionDepartment = getDepartmentFromPosition(user.position)
+      userWithRole.position_department = positionDepartment
+      
+      console.log(`🔐 [SECURITY] Officer position-based department:`, {
+        officer_id: user.officer_id,
+        current_department: user.department,
+        position: user.position,
+        position_department: positionDepartment
+      })
+    }
+
+    // ✅ ล้าง ID ที่ไม่ถูกต้อง - ให้แต่ละ role มีแค่ ID ของตัวเอง
+    if (userTable === 'users') {
+      delete userWithRole.officer_id
+      delete userWithRole.admin_id  
+      delete userWithRole.executive_id
+    } else if (userTable === 'officer') {
+      delete userWithRole.user_id
+      delete userWithRole.admin_id
+      delete userWithRole.executive_id
+    } else if (userTable === 'admin') {
+      delete userWithRole.user_id
+      delete userWithRole.officer_id
+      delete userWithRole.executive_id
+    } else if (userTable === 'executive') {
+      delete userWithRole.user_id
+      delete userWithRole.officer_id
+      delete userWithRole.admin_id
+    }
+
     // แปลง profile_image binary data เป็น URL
     if (userWithRole.profile_image) {
       const userId = userWithRole.user_id || userWithRole.officer_id || userWithRole.admin_id || userWithRole.executive_id
-      userWithRole.profile_image = `/api/upload/profile-image/${userId}`
+      const role = decoded.role || 'user' // ใช้ role จาก token
+      userWithRole.profile_image = `/api/upload/profile-image/${userId}/${role}`
+      console.log(`🖼️ [JWT] Set profile_image URL for ${userTable} ID ${userId}: ${userWithRole.profile_image}`)
     }
 
     // คืนค่า user กลับไป

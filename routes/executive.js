@@ -48,25 +48,37 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
         }
 
       } else if (isFacultyExecutive(user)) {
-        // Faculty Executive - ดูได้เฉพาะคณะตัวเอง
-        console.log('📊 Faculty Executive: Dashboard for', user.department)
+        // Faculty Executive - ดูได้เฉพาะคณะตัวเอง (ใช้ original department)
+        // ⚠️ SECURITY FIX: ใช้ original executive department
+        const executiveData = await prisma.executive.findUnique({
+          where: { executive_id: user.executive_id },
+          select: { department: true }
+        })
+        
+        const originalDepartment = executiveData?.department || user.department
+        
+        console.log('📊 Faculty Executive: Dashboard', {
+          currentUserDepartment: user.department,
+          originalExecutiveDepartment: originalDepartment,
+          usingDepartment: originalDepartment
+        })
 
         stats = {
-          my_department: user.department,
+          my_department: originalDepartment,
           department_rooms: await prisma.meeting_room.count({
-            where: { department: user.department }
+            where: { department: originalDepartment }
           }),
           department_reservations: await prisma.reservation.count({
             where: {
               meeting_room: {
-                department: user.department
+                department: originalDepartment
               }
             }
           }),
           recent_reservations: await prisma.reservation.findMany({
             where: {
               meeting_room: {
-                department: user.department
+                department: originalDepartment
               }
             },
             include: {
@@ -121,8 +133,20 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
 
       // University Executive ดูได้ทุกคณะ, Faculty Executive ดูได้เฉพาะคณะตัวเอง
       if (isFacultyExecutive(user)) {
-        whereCondition.meeting_room = { department: user.department }
-        console.log('🏫 Faculty Executive - Filter by department:', user.department)
+        // ⚠️ SECURITY FIX: ใช้ original executive department
+        const executiveData = await prisma.executive.findUnique({
+          where: { executive_id: user.executive_id },
+          select: { department: true }
+        })
+        
+        const originalDepartment = executiveData?.department || user.department
+        whereCondition.meeting_room = { department: originalDepartment }
+        
+        console.log('🏫 Faculty Executive - Reports filter:', {
+          currentUserDepartment: user.department,
+          originalExecutiveDepartment: originalDepartment,
+          filterByDepartment: originalDepartment
+        })
       } else if (department && isUniversityExecutive(user)) {
         whereCondition.meeting_room = { department }
         console.log('🏛️ University Executive - Filter by department:', department)

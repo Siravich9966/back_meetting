@@ -5,15 +5,31 @@
 // ===================================================================
 
 import { isSameDepartment as compareDepartments } from '../utils/departments.js'
+import { getDepartmentFromPosition } from '../utils/positions.js'
+import prisma from '../lib/prisma.js'
 
-// Room Management Permissions
-export const canManageRoom = (user, roomDepartment) => {
+// Room Management Permissions - Enhanced with position_department from JWT
+export const canManageRoom = async (user, roomDepartment) => {
   // Admin ไม่สามารถจัดการห้องได้ (ตามกฎหมายที่อาจารย์กำหนด)
   if (user?.role === 'admin') return false
   
-  // Officer สามารถจัดการได้เฉพาะห้องใน department ตัวเอง
+  // Officer สามารถจัดการได้เฉพาะห้องตาม position_department เท่านั้น
+  // ⚠️ SECURITY FIX: ใช้ position_department จาก JWT middleware แทน current user.department
   if (user?.role === 'officer') {
-    return compareDepartments(user?.department, roomDepartment)
+    if (user.position_department) {
+      const canManage = compareDepartments(user.position_department, roomDepartment)
+      console.log('🔐 [SECURITY] canManageRoom check:', {
+        officer_id: user.officer_id,
+        current_department: user.department,
+        position_department: user.position_department,
+        room_department: roomDepartment,
+        can_manage: canManage
+      })
+      return canManage
+    } else {
+      console.log('⚠️ [WARNING] Officer without position_department:', user.email)
+      return false
+    }
   }
   
   return false

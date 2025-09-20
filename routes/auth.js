@@ -340,7 +340,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
 
       // ตรวจสอบถ้าเป็น test mode (สำหรับทดสอบ expiry)
       const isTestMode = body.testExpiry === true
-      const expiryTime = isTestMode ? '30s' : '1h' // Test: 30 วินาที, Production: 1 ชั่วโมง
+      const expiryTime = isTestMode ? '30s' : '1h' // Test: 30 วินาที, Production: 8 ชั่วโมง (วันทำงาน)
 
       const token = jwt.sign(
         {
@@ -368,16 +368,16 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       // ลบ password ออกจาก response และปรับ user_id ให้ consistent
       const { password, ...userWithoutPassword } = user
 
-      // ปรับ field ให้เหมือนกันทุก table
+      // ปรับ field ให้เหมือนกันทุก table - แต่ไม่ลบ original ID ออก
       if (userTable === 'officer') {
         userWithoutPassword.user_id = userWithoutPassword.officer_id
-        delete userWithoutPassword.officer_id
+        // เก็บ officer_id ไว้ด้วยเพื่อใช้ในการสร้าง URL
       } else if (userTable === 'admin') {
         userWithoutPassword.user_id = userWithoutPassword.admin_id
-        delete userWithoutPassword.admin_id
+        // เก็บ admin_id ไว้ด้วยเพื่อใช้ในการสร้าง URL
       } else if (userTable === 'executive') {
         userWithoutPassword.user_id = userWithoutPassword.executive_id
-        delete userWithoutPassword.executive_id
+        // เก็บ executive_id ไว้ด้วยเพื่อใช้ในการสร้าง URL
       }
 
       return {
@@ -422,12 +422,37 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       console.log('🔍 ผู้ใช้:', user.email, 'Role:', user.role)
       console.log('🗂️ Original userId from token:', decoded.userId)
 
-      // ข้อมูลที่อนุญาตให้แก้ไข
-      const allowedFields = [
-        'first_name', 'last_name', 'email', 'citizen_id', 
-        'department', 'position', // เพิ่ม department และ position
+      // ข้อมูลพื้นฐานที่ทุกคนแก้ไขได้
+      const basicFields = [
+        'first_name', 'last_name', 'email', 'citizen_id',
+        'department', // ✅ ปลดล็อค department ให้ทุกคนแก้ไขได้
         'province_id', 'district_id', 'subdistrict_id', 'zip_code'
       ]
+      
+      // ข้อมูลที่เฉพาะ admin แก้ไขได้ (เพื่อป้องกันการเปลี่ยน role/สิทธิ์)
+      const adminOnlyFields = ['position'] // 🔐 เฉพาะ position ที่ล็อคไว้
+      
+      let allowedFields = [...basicFields]
+      
+      // เฉพาะ admin เท่านั้นที่แก้ไข position ได้
+      if (user.role === 'admin') {
+        allowedFields.push(...adminOnlyFields)
+        console.log('✅ Admin detected: allowing position updates')
+      } else {
+        console.log('⚠️ Non-admin user: position updates blocked, department updates allowed')
+        
+        // เช็คว่ามีการพยายามแก้ไข position หรือไม่
+        const blockedAttempts = adminOnlyFields.filter(field => body[field] !== undefined)
+        if (blockedAttempts.length > 0) {
+          console.log('🚫 Blocked attempts to modify:', blockedAttempts)
+          set.status = 403
+          return {
+            success: false,
+            message: 'คุณไม่มีสิทธิ์ในการแก้ไขตำแหน่งงาน ติดต่อแอดมินเพื่อขอความช่วยเหลือ'
+          }
+        }
+      }
+      
       const updateData = {}
 
       // กรองเฉพาะข้อมูลที่อนุญาต
@@ -482,6 +507,53 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
 
       console.log('🎯 อัปเดต table:', tableName, 'ID:', userId)
 
+      // ตรวจสอบ email และ citizen_id ซ้ำก่อนอัปเดต
+      if (updateData.email || updateData.citizen_id) {
+        console.log('🔍 ตรวจสอบข้อมูลซ้ำ...')
+        
+        // ตรวจสอบ email ซ้ำในทุก table ยกเว้นข้อมูลตัวเอง
+        if (updateData.email) {
+          const emailChecks = await Promise.all([
+            prisma.users.findFirst({ where: { email: updateData.email, NOT: { user_id: tableName === 'users' ? userId : undefined } } }),
+            prisma.officer.findFirst({ where: { email: updateData.email, NOT: { officer_id: tableName === 'officer' ? userId : undefined } } }),
+            prisma.admin.findFirst({ where: { email: updateData.email, NOT: { admin_id: tableName === 'admin' ? userId : undefined } } }),
+            prisma.executive.findFirst({ where: { email: updateData.email, NOT: { executive_id: tableName === 'executive' ? userId : undefined } } })
+          ])
+          
+          const duplicateEmail = emailChecks.find(check => check !== null)
+          if (duplicateEmail) {
+            console.log('❌ อีเมลนี้ถูกใช้งานแล้ว')
+            set.status = 409
+            return {
+              success: false,
+              message: 'อีเมลนี้ถูกใช้งานแล้ว กรุณาใช้อีเมลอื่น'
+            }
+          }
+        }
+
+        // ตรวจสอบ citizen_id ซ้ำในทุก table ยกเว้นข้อมูลตัวเอง
+        if (updateData.citizen_id) {
+          const citizenChecks = await Promise.all([
+            prisma.users.findFirst({ where: { citizen_id: updateData.citizen_id, NOT: { user_id: tableName === 'users' ? userId : undefined } } }),
+            prisma.officer.findFirst({ where: { citizen_id: updateData.citizen_id, NOT: { officer_id: tableName === 'officer' ? userId : undefined } } }),
+            prisma.admin.findFirst({ where: { citizen_id: updateData.citizen_id, NOT: { admin_id: tableName === 'admin' ? userId : undefined } } }),
+            prisma.executive.findFirst({ where: { citizen_id: updateData.citizen_id, NOT: { executive_id: tableName === 'executive' ? userId : undefined } } })
+          ])
+          
+          const duplicateCitizen = citizenChecks.find(check => check !== null)
+          if (duplicateCitizen) {
+            console.log('❌ เลขบัตรประชาชนนี้ถูกใช้งานแล้ว')
+            set.status = 409
+            return {
+              success: false,
+              message: 'เลขบัตรประชาชนนี้ถูกใช้งานแล้ว กรุณาตรวจสอบข้อมูล'
+            }
+          }
+        }
+
+        console.log('✅ ไม่พบข้อมูลซ้ำ')
+      }
+
       // อัปเดตข้อมูลในฐานข้อมูล
       const updatedUser = await prisma[tableName].update({
         where: {
@@ -501,7 +573,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
           department: true,
           zip_code: true,
           subdistrict_id: true,  // แก้จาก tambon_id เป็น subdistrict_id
-          profile_image: true,
+          // 🔥 ลบ profile_image: true และจะเพิ่ม path ทีหลัง
           created_at: true,
           updated_at: true,
           roles: {
@@ -518,14 +590,23 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       let responseUser = { ...updatedUser }
 
       if (tableName === 'officer') {
+        // 🔥 เพิ่ม profile_image เป็น path แทน binary
+        responseUser.profile_image = `/api/upload/profile-image/${responseUser.officer_id}`
         responseUser.user_id = responseUser.officer_id
-        delete responseUser.officer_id
+        // เก็บ officer_id ไว้ด้วยเพื่อใช้ในการสร้าง URL
       } else if (tableName === 'admin') {
+        // 🔥 เพิ่ม profile_image เป็น path แทน binary
+        responseUser.profile_image = `/api/upload/profile-image/${responseUser.admin_id}`
         responseUser.user_id = responseUser.admin_id
-        delete responseUser.admin_id
+        // เก็บ admin_id ไว้ด้วยเพื่อใช้ในการสร้าง URL
       } else if (tableName === 'executive') {
+        // 🔥 เพิ่ม profile_image เป็น path แทน binary
+        responseUser.profile_image = `/api/upload/profile-image/${responseUser.executive_id}`
         responseUser.user_id = responseUser.executive_id
-        delete responseUser.executive_id
+        // เก็บ executive_id ไว้ด้วยเพื่อใช้ในการสร้าง URL
+      } else if (tableName === 'users') {
+        // 🔥 เพิ่ม profile_image เป็น path แทน binary
+        responseUser.profile_image = `/api/upload/profile-image/${responseUser.user_id}`
       }
 
       return {

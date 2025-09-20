@@ -20,7 +20,7 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
     }
     return { user }
   })
-  
+
   // API สำหรับอัปโหลดรูปโปรไฟล์
   .post('/profile-image', async ({ body, user, set }) => {
     try {
@@ -33,7 +33,7 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
       }
 
       const file = body.profileImage
-      
+
       // ตรวจสอบประเภทไฟล์
       if (!isValidImageFile(file.name)) {
         set.status = 400
@@ -87,7 +87,7 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
       // อัปเดตรูปโปรไฟล์ในฐานข้อมูล (เก็บเป็น binary data)
       const updatedUser = await prisma[tableName].update({
         where: { [idField]: userId },
-        data: { 
+        data: {
           profile_image: imageBuffer,
           updated_at: new Date()
         },
@@ -170,7 +170,7 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
       // อัปเดตรูปโปรไฟล์ในฐานข้อมูล (ลบข้อมูลรูป)
       const updatedUser = await prisma[tableName].update({
         where: { [idField]: userId },
-        data: { 
+        data: {
           profile_image: null,
           updated_at: new Date()
         },
@@ -207,43 +207,84 @@ export const uploadRoutes = new Elysia({ prefix: '/upload' })
 
 // สร้าง public routes สำหรับดึงรูป (ไม่ต้อง authentication)
 export const publicUploadRoutes = new Elysia({ prefix: '/upload' })
-  // API สำหรับดึงรูปโปรไฟล์ (public)
-  .get('/profile-image/:userId', async ({ params: { userId }, set }) => {
+  // API สำหรับดึงรูปโปรไฟล์ (public - ไม่ต้อง authenticate)
+  // รองรับ 2 รูปแบบ: /profile-image/:userId หรือ /profile-image/:userId/:role
+  .get('/profile-image/:userId/:role?', async ({ params: { userId, role }, set }) => {
     try {
-      let user = null
       const userIdInt = parseInt(userId)
+      let user = null
+      let searchedTable = 'unknown'
 
-      // ลองหาจาก users table ก่อน
-      user = await prisma.users.findUnique({
-        where: { user_id: userIdInt },
-        select: { profile_image: true }
-      })
+      console.log(`🔍 [GET profile-image] Requesting userId: ${userIdInt}, role: ${role || 'auto-detect'}`)
 
-      // ถ้าไม่เจอ ลองหาจาก officer table
-      if (!user || !user.profile_image) {
+      // ถ้ามี role parameter ให้ค้นหาใน table ที่ระบุ
+      if (role) {
+        switch (role.toLowerCase()) {
+          case 'user':
+            user = await prisma.users.findUnique({
+              where: { user_id: userIdInt },
+              select: { profile_image: true }
+            })
+            searchedTable = 'users'
+            break
+          case 'officer':
+            user = await prisma.officer.findUnique({
+              where: { officer_id: userIdInt },
+              select: { profile_image: true }
+            })
+            searchedTable = 'officer'
+            break
+          case 'admin':
+            user = await prisma.admin.findUnique({
+              where: { admin_id: userIdInt },
+              select: { profile_image: true }
+            })
+            searchedTable = 'admin'
+            break
+          case 'executive':
+            user = await prisma.executive.findUnique({
+              where: { executive_id: userIdInt },
+              select: { profile_image: true }
+            })
+            searchedTable = 'executive'
+            break
+        }
+      } else {
+        // ถ้าไม่มี role parameter ให้ค้นหาในทุก table (backward compatibility)
+        // แต่ให้ลำดับการค้นหาใหม่: officer → admin → executive → users
         user = await prisma.officer.findUnique({
           where: { officer_id: userIdInt },
           select: { profile_image: true }
         })
+        if (user) searchedTable = 'officer'
+
+        if (!user) {
+          user = await prisma.admin.findUnique({
+            where: { admin_id: userIdInt },
+            select: { profile_image: true }
+          })
+          if (user) searchedTable = 'admin'
+        }
+
+        if (!user) {
+          user = await prisma.executive.findUnique({
+            where: { executive_id: userIdInt },
+            select: { profile_image: true }
+          })
+          if (user) searchedTable = 'executive'
+        }
+
+        if (!user) {
+          user = await prisma.users.findUnique({
+            where: { user_id: userIdInt },
+            select: { profile_image: true }
+          })
+          if (user) searchedTable = 'users'
+        }
       }
 
-      // ถ้าไม่เจอ ลองหาจาก admin table
       if (!user || !user.profile_image) {
-        user = await prisma.admin.findUnique({
-          where: { admin_id: userIdInt },
-          select: { profile_image: true }
-        })
-      }
-
-      // ถ้าไม่เจอ ลองหาจาก executive table
-      if (!user || !user.profile_image) {
-        user = await prisma.executive.findUnique({
-          where: { executive_id: userIdInt },
-          select: { profile_image: true }
-        })
-      }
-
-      if (!user || !user.profile_image) {
+        console.log(`❌ [GET profile-image] ไม่พบรูปใน ${searchedTable} table สำหรับ ID ${userIdInt}`)
         set.status = 404
         return {
           success: false,
@@ -253,8 +294,11 @@ export const publicUploadRoutes = new Elysia({ prefix: '/upload' })
 
       // ส่งกลับ binary data เป็น image
       set.headers['Content-Type'] = 'image/jpeg' // สามารถเปลี่ยนเป็น image/png ได้ตามต้องการ
-      set.headers['Cache-Control'] = 'public, max-age=31536000' // Cache 1 ปี
-      
+      set.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate' // 🔥 ไม่ cache เลย!
+      set.headers['Pragma'] = 'no-cache'
+      set.headers['Expires'] = '0'
+
+      console.log(`✅ [GET profile-image] Returning image from ${searchedTable} table for ID ${userIdInt}`)
       return user.profile_image
 
     } catch (error) {
