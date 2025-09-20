@@ -130,6 +130,8 @@ exports.Prisma.AdminScalarFieldEnum = {
   citizen_id: 'citizen_id',
   position: 'position',
   department: 'department',
+  reset_token: 'reset_token',
+  reset_token_expiry: 'reset_token_expiry',
   province_id: 'province_id',
   district_id: 'district_id',
   subdistrict_id: 'subdistrict_id',
@@ -155,10 +157,10 @@ exports.Prisma.Meeting_roomScalarFieldEnum = {
   location_m: 'location_m',
   department: 'department',
   status_m: 'status_m',
-  image: 'image',
   details_m: 'details_m',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  image: 'image'
 };
 
 exports.Prisma.OfficerScalarFieldEnum = {
@@ -171,6 +173,8 @@ exports.Prisma.OfficerScalarFieldEnum = {
   citizen_id: 'citizen_id',
   position: 'position',
   department: 'department',
+  reset_token: 'reset_token',
+  reset_token_expiry: 'reset_token_expiry',
   province_id: 'province_id',
   district_id: 'district_id',
   subdistrict_id: 'subdistrict_id',
@@ -223,6 +227,8 @@ exports.Prisma.ExecutiveScalarFieldEnum = {
   citizen_id: 'citizen_id',
   position: 'position',
   department: 'department',
+  reset_token: 'reset_token',
+  reset_token_expiry: 'reset_token_expiry',
   province_id: 'province_id',
   district_id: 'district_id',
   subdistrict_id: 'subdistrict_id',
@@ -242,6 +248,8 @@ exports.Prisma.UsersScalarFieldEnum = {
   citizen_id: 'citizen_id',
   position: 'position',
   department: 'department',
+  reset_token: 'reset_token',
+  reset_token_expiry: 'reset_token_expiry',
   province_id: 'province_id',
   district_id: 'district_id',
   subdistrict_id: 'subdistrict_id',

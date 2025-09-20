@@ -4,7 +4,7 @@
 // วิธีรัน: bun setup-address-data.js
 // ===================================================================
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from './generated/prisma/index.js'
 import 'dotenv/config'
 
 // สร้าง Prisma client จาก generated folder
@@ -82,7 +82,7 @@ async function setupAddressData() {
               subdistrict_id: parseInt(subdistrictData.id),
               subdistrict_name: subdistrictData.name_th,
               district_id: district.district_id,
-              zip_code: parseInt(subdistrictData.zip_code),
+              zip_code: subdistrictData.zip_code.toString(), // แปลงเป็น String
             },
           })
           subdistrictCount++

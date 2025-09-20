@@ -19,6 +19,10 @@ model admin {
   position   String? @db.VarChar(255)
   department String? @db.VarChar(255)
 
+  // Reset Password fields
+  reset_token        String?   @db.VarChar(255)
+  reset_token_expiry DateTime? @db.Timestamptz(6)
+
   // Address fields - เชื่อมโยงกับ Address tables
   province_id    Int?
   district_id    Int?
@@ -51,12 +55,12 @@ model meeting_room {
   room_name   String        @db.VarChar(255)
   capacity    Int
   location_m  String        @db.VarChar(255)
-  department  String        @db.VarChar(255) // เพิ่ม department field
+  department  String        @db.VarChar(255)
   status_m    String?       @db.VarChar(255)
-  image       Bytes? // เก็บรูปใน database เป็น binary data
   details_m   String?       @db.VarChar(255)
   created_at  DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at  DateTime?     @default(now()) @db.Timestamptz(6)
+  image       Bytes?
   equipment   equipment[]
   reservation reservation[]
   review      review[]
@@ -72,6 +76,10 @@ model officer {
   citizen_id String? @unique @db.Char(13)
   position   String? @db.VarChar(255)
   department String? @db.VarChar(255)
+
+  // Reset Password fields
+  reset_token        String?   @db.VarChar(255)
+  reset_token_expiry DateTime? @db.Timestamptz(6)
 
   // Address fields - เชื่อมโยงกับ Address tables
   province_id    Int?
@@ -129,9 +137,9 @@ model roles {
   role_name   String      @db.VarChar(50)
   role_status String?     @default("active") @db.VarChar(50)
   admin       admin[]
+  executive   executive[]
   officer     officer[]
   users       users[]
-  executive   executive[]
 }
 
 model executive {
@@ -144,6 +152,10 @@ model executive {
   citizen_id   String? @unique @db.Char(13)
   position     String  @db.VarChar(255) // "university_executive" หรือ "faculty_executive"
   department   String  @db.VarChar(255) // สำนักงานอธิการบดี หรือ ชื่อคณะ
+
+  // Reset Password fields
+  reset_token        String?   @db.VarChar(255)
+  reset_token_expiry DateTime? @db.Timestamptz(6)
 
   // Address fields - เชื่อมโยงกับ Address tables
   province_id    Int?
@@ -172,6 +184,10 @@ model users {
   citizen_id String? @unique(map: "user_citizen_id_key") @db.Char(13)
   position   String? @db.VarChar(255)
   department String? @db.VarChar(255)
+
+  // Reset Password fields
+  reset_token        String?   @db.VarChar(255)
+  reset_token_expiry DateTime? @db.Timestamptz(6)
 
   // Address fields - เชื่อมโยงกับ Address tables
   province_id    Int?

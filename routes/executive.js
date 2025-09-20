@@ -127,7 +127,10 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
     }
 
     try {
-      console.log('📊 Executive Reports - User:', user.email, 'Position:', user.position)
+      console.log('📊 Executive Reports - User:', user.email, 'Position:', user.position, 'Department:', user.department)
+      console.log('🎯 Is University Executive:', isUniversityExecutive(user))
+      console.log('🎯 Is Faculty Executive:', isFacultyExecutive(user))
+      
       const { department, month, year } = query
       let whereCondition = {}
 
@@ -187,12 +190,13 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
       console.log('📊 Querying monthly_trends...')
       const monthly_trends = []
 
-      // ดึงข้อมูล department_stats สำหรับ University Executive  
+      // ดึงข้อมูล department_stats สำหรับทั้ง University และ Faculty Executive
       console.log('📊 Querying department_stats...')
       let department_stats = []
+      
       if (isUniversityExecutive(user)) {
+        // University Executive: ดูได้ทุกคณะ
         try {
-          // ใช้ raw query เพื่อดึงข้อมูล department กับจำนวนการจอง
           const departmentReservations = await prisma.$queryRaw`
             SELECT 
               mr.department,
@@ -213,7 +217,38 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
             utilization: Math.min(Math.round((Number(dept.reservation_count) / 30) * 100), 100)
           }))
         } catch (error) {
-          console.error('❌ Error querying department_stats:', error)
+          console.error('❌ Error querying department_stats for University Executive:', error)
+          department_stats = []
+        }
+        
+      } else if (isFacultyExecutive(user)) {
+        // Faculty Executive: ดูได้เฉพาะคณะตัวเอง
+        try {
+          console.log('📊 Faculty Executive querying department_stats for:', user.department)
+          
+          const facultyReservations = await prisma.$queryRaw`
+            SELECT 
+              mr.department,
+              COUNT(r.reservation_id) as reservation_count
+            FROM reservation r
+            JOIN meeting_room mr ON r.room_id = mr.room_id
+            WHERE mr.department = ${user.department}
+            ${whereCondition.created_at ? 
+              Prisma.sql`AND r.created_at >= ${whereCondition.created_at.gte} AND r.created_at <= ${whereCondition.created_at.lte}` :
+              Prisma.sql``
+            }
+            GROUP BY mr.department
+          `
+
+          department_stats = facultyReservations.map(dept => ({
+            department: dept.department,
+            reservations: Number(dept.reservation_count),
+            utilization: Math.min(Math.round((Number(dept.reservation_count) / 30) * 100), 100)
+          }))
+          
+          console.log('✅ Faculty department_stats result:', department_stats)
+        } catch (error) {
+          console.error('❌ Error querying department_stats for Faculty Executive:', error)
           department_stats = []
         }
       }

@@ -6,13 +6,11 @@
   "scripts": {
     "start": "bun index.js",
     "dev": "bun --watch index.js",
-
     "prod": "NODE_ENV=production bun index.js",
     "postinstall": "npx prisma generate",
     "setup-address": "bun setup-address-data.js",
     "migrate": "npx prisma migrate dev",
     "db-reset": "npx prisma migrate reset && bun setup-address-data.js"
-
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -35,6 +33,7 @@
     "elysia": "^1.3.5",
     "jsonwebtoken": "^9.0.2",
     "node-fetch": "^3.3.2",
+    "nodemailer": "^7.0.6",
     "prisma": "^6.11.1"
   }
 }

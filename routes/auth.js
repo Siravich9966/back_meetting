@@ -20,6 +20,7 @@ import {
   getExecutivePositionType
 } from '../utils/positions.js'
 import { authMiddleware } from '../middleware/index.js'
+import { sendResetEmail } from '../utils/email.js'
 
 export const authRoutes = new Elysia({ prefix: '/auth' })
   // API สมัครสมาชิก (Position-based)
@@ -401,6 +402,271 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
     }
   })
 
+  // API สำหรับตรวจสอบอีเมลและรีเซ็ตรหัสผ่าน
+  .post('/forgot-password', async ({ body, set }) => {
+    try {
+      console.log('🔐 เรียกใช้ API ตรวจสอบอีเมลสำหรับรีเซ็ตรหัสผ่าน')
+
+      if (!body.email) {
+        set.status = 400
+        return {
+          success: false,
+          message: 'กรุณากรอกอีเมล'
+        }
+      }
+
+      console.log('🔍 กำลังตรวจสอบอีเมลในฐานข้อมูล...')
+
+      // หาผู้ใช้ในฐานข้อมูลจาก 4 tables
+      let user = null
+      let userTable = null
+      let userIdField = null
+      let userId = null
+
+      // ตรวจสอบใน users table ก่อน
+      user = await prisma.users.findUnique({
+        where: { email: body.email }
+      })
+
+      if (user) {
+        userTable = 'users'
+        userIdField = 'user_id'
+        userId = user.user_id
+      } else {
+        // ตรวจสอบใน officer table
+        user = await prisma.officer.findUnique({
+          where: { email: body.email }
+        })
+
+        if (user) {
+          userTable = 'officer'
+          userIdField = 'officer_id'
+          userId = user.officer_id
+        } else {
+          // ตรวจสอบใน admin table
+          user = await prisma.admin.findUnique({
+            where: { email: body.email }
+          })
+
+          if (user) {
+            userTable = 'admin'
+            userIdField = 'admin_id'
+            userId = user.admin_id
+          } else {
+            // ตรวจสอบใน executive table
+            user = await prisma.executive.findUnique({
+              where: { email: body.email }
+            })
+
+            if (user) {
+              userTable = 'executive'
+              userIdField = 'executive_id'
+              userId = user.executive_id
+            }
+          }
+        }
+      }
+
+      // ตรวจสอบผลลัพธ์และให้ feedback ชัดเจน
+      if (!user) {
+        console.log('❌ ไม่พบอีเมลในระบบ')
+        set.status = 404
+        return {
+          success: false,
+          found: false,
+          message: 'ไม่พบอีเมลนี้ในระบบ กรุณาลงทะเบียนใหม่',
+          action: 'register'
+        }
+      }
+
+      console.log('✅ พบอีเมลในระบบ:', {
+        email: body.email,
+        table: userTable,
+        name: `${user.first_name} ${user.last_name}`
+      })
+
+      // สร้าง Reset Token (32 bytes = 64 hex characters)
+      const crypto = await import('crypto')
+      const resetToken = crypto.randomBytes(32).toString('hex')
+      const tokenExpiry = new Date(Date.now() + 3600000) // 1 ชั่วโมง
+
+      console.log('🔑 สร้าง Reset Token:', {
+        token: resetToken.substring(0, 8) + '...',
+        expiry: tokenExpiry.toLocaleString('th-TH')
+      })
+
+      // บันทึก Token ลงฐานข้อมูล
+      await prisma[userTable].update({
+        where: {
+          [userIdField]: userId
+        },
+        data: {
+          reset_token: resetToken,
+          reset_token_expiry: tokenExpiry
+        }
+      })
+
+      console.log('✅ บันทึก Reset Token ลงฐานข้อมูลสำเร็จ')
+
+      return {
+        success: true,
+        found: true,
+        message: 'พบอีเมลในระบบ กำลังนำคุณไปหน้ารีเซ็ตรหัสผ่าน',
+        action: 'reset',
+        user: {
+          email: user.email,
+          name: `${user.first_name} ${user.last_name}`,
+          table: userTable
+        },
+        reset_token: resetToken
+      }
+
+    } catch (error) {
+      console.error('❌ Error in forgot-password:', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการตรวจสอบอีเมล'
+      }
+    }
+  })
+
+  // API สำหรับรีเซ็ตรหัสผ่านด้วย Token
+  .post('/reset-password', async ({ body, set }) => {
+    try {
+      console.log('🔐 เรียกใช้ API รีเซ็ตรหัสผ่าน')
+
+      if (!body.token || !body.password) {
+        set.status = 400
+        return {
+          success: false,
+          message: 'กรุณาระบุ token และรหัสผ่านใหม่'
+        }
+      }
+
+      if (body.password.length < 6) {
+        set.status = 400
+        return {
+          success: false,
+          message: 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร'
+        }
+      }
+
+      console.log('🔍 กำลังตรวจสอบ Reset Token...')
+
+      // หา Token ในฐานข้อมูลจาก 4 tables
+      let user = null
+      let userTable = null
+      let userIdField = null
+
+      // ตรวจสอบใน users table ก่อน
+      user = await prisma.users.findFirst({
+        where: {
+          reset_token: body.token,
+          reset_token_expiry: {
+            gt: new Date() // มากกว่าเวลาปัจจุบัน (ยังไม่หมดอายุ)
+          }
+        }
+      })
+
+      if (user) {
+        userTable = 'users'
+        userIdField = 'user_id'
+      } else {
+        // ตรวจสอบใน officer table
+        user = await prisma.officer.findFirst({
+          where: {
+            reset_token: body.token,
+            reset_token_expiry: {
+              gt: new Date()
+            }
+          }
+        })
+
+        if (user) {
+          userTable = 'officer'
+          userIdField = 'officer_id'
+        } else {
+          // ตรวจสอบใน admin table
+          user = await prisma.admin.findFirst({
+            where: {
+              reset_token: body.token,
+              reset_token_expiry: {
+                gt: new Date()
+              }
+            }
+          })
+
+          if (user) {
+            userTable = 'admin'
+            userIdField = 'admin_id'
+          } else {
+            // ตรวจสอบใน executive table
+            user = await prisma.executive.findFirst({
+              where: {
+                reset_token: body.token,
+                reset_token_expiry: {
+                  gt: new Date()
+                }
+              }
+            })
+
+            if (user) {
+              userTable = 'executive'
+              userIdField = 'executive_id'
+            }
+          }
+        }
+      }
+
+      if (!user) {
+        console.log('❌ Token ไม่ถูกต้องหรือหมดอายุแล้ว')
+        set.status = 400
+        return {
+          success: false,
+          message: 'Token ไม่ถูกต้องหรือหมดอายุแล้ว'
+        }
+      }
+
+      console.log('✅ พบ Token ที่ถูกต้อง:', {
+        table: userTable,
+        email: user.email
+      })
+
+      // เข้ารหัสรหัสผ่านใหม่
+      const bcrypt = await import('bcryptjs')
+      const hashedPassword = await bcrypt.hash(body.password, 10)
+
+      // อัปเดตรหัสผ่านและลบ Token
+      await prisma[userTable].update({
+        where: {
+          [userIdField]: user[userIdField]
+        },
+        data: {
+          password: hashedPassword,
+          reset_token: null,
+          reset_token_expiry: null,
+          updated_at: new Date()
+        }
+      })
+
+      console.log('✅ เปลี่ยนรหัสผ่านสำเร็จ')
+
+      return {
+        success: true,
+        message: 'เปลี่ยนรหัสผ่านสำเร็จ กรุณาเข้าสู่ระบบด้วยรหัสผ่านใหม่'
+      }
+
+    } catch (error) {
+      console.error('❌ Error in reset-password:', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน'
+      }
+    }
+  })
+
   // API สำหรับอัปเดตโปรไฟล์ตนเอง
   .put('/profile', async ({ request, set, body }) => {
     try {
@@ -412,12 +678,14 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         return user
       }
 
+
       // แยก token เพื่อดึง original userId จาก JWT
       const headersString = JSON.stringify(request.headers)
       const headersObj = JSON.parse(headersString)
       const authHeader = headersObj.authorization
       const token = authHeader.substring(7)
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
 
       console.log('🔍 ผู้ใช้:', user.email, 'Role:', user.role)
       console.log('🗂️ Original userId from token:', decoded.userId)
@@ -506,6 +774,17 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       }
 
       console.log('🎯 อัปเดต table:', tableName, 'ID:', userId)
+      
+      // ตรวจสอบ userId ว่าเป็น undefined หรือไม่
+      if (!userId) {
+        console.log('❌ userId is undefined!')
+        console.log('🔍 User object:', JSON.stringify(user, null, 2))
+        set.status = 400
+        return {
+          success: false,
+          message: 'ไม่สามารถระบุ ID ผู้ใช้ได้'
+        }
+      }
 
       // ตรวจสอบ email และ citizen_id ซ้ำก่อนอัปเดต
       if (updateData.email || updateData.citizen_id) {

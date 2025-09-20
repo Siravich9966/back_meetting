@@ -436,6 +436,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
         }
       })
 
+
       // === Officer Reports === 
       .get('/reports', async ({ request, query, set }) => {
         const user = await authMiddleware(request, set)
@@ -446,10 +447,12 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           return {
             success: false,
             message: 'การเข้าถึงจำกัดเฉพาะเจ้าหน้าที่เท่านั้น'
+
           }
         }
 
         try {
+
           console.log('📊 Officer Reports - User:', user.email, 'Position:', user.position)
           const { period = 'current_month' } = query
 
@@ -511,9 +514,11 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
               start_at: {
                 gte: startDate,
                 lte: endDate
+
               }
             }
           })
+
 
           const approvedReservations = await prisma.reservation.count({
             where: {
@@ -537,9 +542,11 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
                 gte: startDate,
                 lte: endDate
               },
+
               status_r: 'pending'
             }
           })
+
 
           const rejectedReservations = await prisma.reservation.count({
             where: {
@@ -654,16 +661,19 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
                 start: startDate.toISOString(),
                 end: endDate.toISOString()
               }
+
             }
           }
 
         } catch (error) {
+
           console.error('❌ Error in officer reports:', error)
           set.status = 500
           return {
             success: false,
             message: 'เกิดข้อผิดพลาดในการดึงรายงาน',
             error: error.message
+
           }
         }
       })
