@@ -29,7 +29,7 @@ model admin {
   subdistrict_id Int?
   zip_code       Int?      // เก็บไว้เป็น backup หรืออาจลบทิ้งได้
   
-  profile_image  Bytes?    // เก็บรูปโปรไฟล์ใน database เป็น binary data
+  profile_image  Bytes?    // เก็บรูปโปรไฟล์ใน database เป็น binary data (มี fallback ไป UI Avatars ถ้าไม่มี)
   created_at     DateTime? @default(now()) @db.Timestamptz(6)
   updated_at     DateTime? @default(now()) @db.Timestamptz(6)
   
@@ -87,7 +87,7 @@ model officer {
   subdistrict_id Int?
   zip_code       Int?          // เก็บไว้เป็น backup หรืออาจลบทิ้งได้
   
-  profile_image  Bytes?        // เก็บรูปโปรไฟล์ใน database เป็น binary data
+  profile_image  Bytes?        // เก็บรูปโปรไฟล์ใน database เป็น binary data (มี fallback ไป UI Avatars ถ้าไม่มี)
   created_at     DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at     DateTime?     @default(now()) @db.Timestamptz(6)
   
@@ -163,7 +163,7 @@ model executive {
   subdistrict_id Int?
   zip_code       Int?      // เก็บไว้เป็น backup หรืออาจลบทิ้งได้
   
-  profile_image  Bytes?    // เก็บรูปโปรไฟล์ใน database เป็น binary data
+  profile_image  Bytes?    // เก็บรูปโปรไฟล์ใน database เป็น binary data (มี fallback ไป UI Avatars ถ้าไม่มี)
   created_at     DateTime? @default(now()) @db.Timestamptz(6)
   updated_at     DateTime? @default(now()) @db.Timestamptz(6)
   
@@ -195,7 +195,7 @@ model users {
   subdistrict_id Int?
   zip_code       Int?          // เก็บไว้เป็น backup หรืออาจลบทิ้งได้
   
-  profile_image  Bytes?        // เก็บรูปโปรไฟล์ใน database เป็น binary data
+  profile_image  Bytes?        // เก็บรูปโปรไฟล์ใน database เป็น binary data (มี fallback ไป UI Avatars ถ้าไม่มี)
   created_at     DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at     DateTime?     @default(now()) @db.Timestamptz(6)
   

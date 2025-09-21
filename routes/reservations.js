@@ -241,6 +241,97 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
     }
   })
 
+  // ===== User Report Room Problem =====
+  // API สำหรับผู้ใช้รายงานปัญหาห้องประชุม
+  .post('/report-problem', async ({ request, body, set }) => {
+    const user = await authMiddleware(request, set)
+    if (user.success === false) return user
+
+    try {
+      const { room_id, comment } = body
+
+      // ตรวจสอบว่าข้อมูลครบถ้วน
+      if (!room_id || !comment) {
+        set.status = 400
+        return {
+          success: false,
+          message: 'กรุณาระบุห้องประชุมและรายละเอียดปัญหา'
+        }
+      }
+
+      // ตรวจสอบว่าห้องประชุมมีจริง
+      const room = await prisma.meeting_room.findUnique({
+        where: { room_id: parseInt(room_id) }
+      })
+
+      if (!room) {
+        set.status = 404
+        return {
+          success: false,
+          message: 'ไม่พบห้องประชุมที่ระบุ'
+        }
+      }
+
+      // บันทึกรายงานปัญหาลงตาราง review
+      const report = await prisma.review.create({
+        data: {
+          user_id: user.user_id,
+          room_id: parseInt(room_id),
+          comment: comment.toString().trim(),
+          rating: null, // ไม่มีการให้คะแนน สำหรับรายงานปัญหา
+          created_at: new Date()
+        },
+        include: {
+          users: {
+            select: {
+              user_id: true,
+              first_name: true,  // แก้จาก firstname
+              last_name: true,   // แก้จาก lastname
+              email: true,
+              position: true,       // แก้จาก position_department
+              department: true      // เพิ่ม department
+            }
+          },
+          meeting_room: {
+            select: {
+              room_id: true,
+              room_name: true,
+              department: true
+            }
+          }
+        }
+      })
+
+      console.log(`✅ บันทึกรายงานปัญหาห้อง ${room.room_name} โดย ${user.first_name} ${user.last_name}`)  // แก้ชื่อ field
+
+      return {
+        success: true,
+        message: 'ส่งรายงานปัญหาเรียบร้อยแล้ว เจ้าหน้าที่จะดำเนินการตรวจสอบ',
+        report: {
+          review_id: report.review_id,
+          room_name: report.meeting_room.room_name,
+          comment: report.comment,
+          created_at: report.created_at,
+          reporter: {
+            name: `${report.users.first_name} ${report.users.last_name}`,  // แก้ชื่อ field
+            email: report.users.email,
+            position: report.users.position,       // เพิ่มตำแหน่ง
+            department: report.users.department    // แก้จาก position_department
+          }
+        }
+      }
+
+    } catch (error) {
+      console.error('❌ Report Problem Error:', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการส่งรายงานปัญหา',
+        error: error.message
+      }
+    }
+  })
+
 // ===================================================================
 // Protected User Reservation APIs (ต้อง auth)
 // ===================================================================
@@ -277,6 +368,12 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
               last_name: true,
               department: true
             }
+          },
+          officer: {
+            select: {
+              first_name: true,
+              last_name: true
+            }
           }
         },
         orderBy: {
@@ -298,7 +395,7 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         end_time: reservation.end_time,
         status: reservation.status_r,
         details: reservation.details_r,
-        approved_by: reservation.approved_by,
+        approved_by: reservation.officer ? `${reservation.officer.first_name} ${reservation.officer.last_name}` : null,
         rejected_reason: reservation.rejected_reason,
         created_at: reservation.created_at,
         updated_at: reservation.updated_at
@@ -1325,13 +1422,23 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       }
       
       console.log(`🏢 [OFFICER] ${user.position} can access department: ${user.position_department}`)
+      
+      // วันที่ปัจจุบัน (สำหรับกรองเฉพาะการจองที่ยังใช้งานได้)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0) // ตั้งเป็นเริ่มวัน
+      
       const where = {
         meeting_room: {
           department: user.position_department // ⚠️ SECURITY FIX: ใช้ position_department
+        },
+        // กรองเฉพาะการจองที่วันเริ่มต้องยังไม่เลยวันปัจจุบัน
+        start_at: {
+          gte: today // วันเริ่มต้องมากกว่าหรือเท่ากับวันนี้
         }
       }
       
-      if (status) {
+      // เพิ่มเงื่อนไข status เฉพาะเมื่อไม่ใช่ 'all'
+      if (status && status !== 'all') {
         where.status_r = status
       }
 
@@ -1360,7 +1467,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
             }
           }
         },
-        orderBy: { created_at: 'asc' },
+        orderBy: { created_at: 'desc' }, // เรียงจากใหม่สุดมาก่อน
         take: parseInt(limit),
         skip: parseInt(offset)
       })
@@ -1491,7 +1598,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         where: { reservation_id: reservationId },
         data: {
           status_r: 'approved',
-          officer_id: user.user_id,
+          officer_id: user.officer_id, // ✅ ใช้ officer_id ที่ถูกต้อง
           details_r: note ? `${reservation.details_r}\n\nหมายเหตุจากเจ้าหน้าที่: ${note}` : reservation.details_r,
           updated_at: new Date()
         },
@@ -1624,7 +1731,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         where: { reservation_id: reservationId },
         data: {
           status_r: 'rejected',
-          officer_id: user.user_id,
+          officer_id: user.officer_id, // ✅ ใช้ officer_id ที่ถูกต้อง
           rejected_reason: reason.trim(),  // เก็บในฟิลด์แยก
           updated_at: new Date()
         },

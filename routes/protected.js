@@ -677,6 +677,398 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           }
         }
       })
+
+      // === Officer Reviews (รายงานปัญหาและข้อเสนอแนะ) ===
+      .get('/reviews', async ({ request, query, set }) => {
+        const user = await authMiddleware(request, set)
+        if (user.success === false) return user
+
+        if (!isOfficer(user)) {
+          set.status = 403
+          return {
+            success: false,
+            message: 'การเข้าถึงจำกัดเฉพาะเจ้าหน้าที่เท่านั้น'
+          }
+        }
+
+        try {
+          // 📄 Pagination parameters
+          const page = parseInt(query.page) || 1
+          const limit = parseInt(query.limit) || 5
+          const offset = (page - 1) * limit
+
+          console.log('📝 Officer Reviews - User:', user.email, 'Department:', user.position_department)
+          console.log('📄 Pagination - Page:', page, 'Limit:', limit, 'Offset:', offset)
+
+          // ⚠️ SECURITY: เจ้าหน้าที่เห็นเฉพาะรีวิวของห้องประชุมในหน่วยงานตัวเอง
+          if (!user.position_department) {
+            set.status = 403
+            return {
+              success: false,
+              message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+            }
+          }
+
+          // นับจำนวนรีวิวทั้งหมด
+          const totalReviews = await prisma.review.count({
+            where: {
+              meeting_room: {
+                department: user.position_department
+              }
+            }
+          })
+
+          const reviews = await prisma.review.findMany({
+            where: {
+              meeting_room: {
+                department: user.position_department
+              }
+            },
+            include: {
+              users: {
+                select: {
+                  user_id: true,
+                  first_name: true,
+                  last_name: true,
+                  email: true,
+                  profile_image: true,
+                  department: true,
+                  position: true,
+                  citizen_id: true
+                }
+              },
+              meeting_room: {
+                select: {
+                  room_id: true,
+                  room_name: true,
+                  department: true
+                }
+              }
+            },
+            orderBy: {
+              created_at: 'desc'
+            },
+            skip: offset,
+            take: limit
+          })
+
+          const formattedReviews = reviews.map(review => ({
+            review_id: review.review_id,
+            // ข้อมูลผู้ใช้พื้นฐาน
+            user_name: review.users ? `${review.users.first_name || ''} ${review.users.last_name || ''}`.trim() : 'ไม่ระบุชื่อ',
+            first_name: review.users?.first_name || null,
+            last_name: review.users?.last_name || null,
+            user_email: review.users?.email || null,
+            citizen_id: review.users?.citizen_id || null,
+            
+            // ข้อมูลโปรไฟล์และตำแหน่ง (แปลง Bytes เป็น base64 หากมี)
+            user_profile_image: review.users?.profile_image ? 
+              `data:image/jpeg;base64,${Buffer.from(review.users.profile_image).toString('base64')}` : null,
+            user_department: review.users?.department || null,
+            user_position: review.users?.position || null,
+            
+            // ข้อมูลห้องประชุมและรีวิว
+            room_name: review.meeting_room?.room_name || 'ไม่ระบุห้อง',
+            rating: review.rating,
+            comment: review.comment,
+            created_at: review.created_at,
+            department: review.meeting_room?.department
+          }))
+
+          const totalPages = Math.ceil(totalReviews / limit)
+
+          console.log('📝 Found', formattedReviews.length, 'reviews for department:', user.position_department)
+          console.log('📄 Pagination info - Total:', totalReviews, 'Pages:', totalPages, 'Current page:', page)
+
+          return {
+            success: true,
+            reviews: formattedReviews,
+            pagination: {
+              current_page: page,
+              total_pages: totalPages,
+              total_items: totalReviews,
+              items_per_page: limit,
+              has_prev: page > 1,
+              has_next: page < totalPages
+            },
+            total: totalReviews,
+            department: user.position_department
+          }
+
+        } catch (error) {
+          console.error('❌ Error fetching officer reviews:', error)
+          set.status = 500
+          return {
+            success: false,
+            message: 'เกิดข้อผิดพลาดในการดึงรายงานปัญหา',
+            error: error.message
+          }
+        }
+      })
+
+      // === Officer Approval History (ประวัติการอนุมัติ) ===
+      .get('/approval-history', async ({ request, query, set }) => {
+        const user = await authMiddleware(request, set)
+        if (user.success === false) return user
+        
+        if (!isOfficer(user)) {
+          set.status = 403
+          return {
+            success: false,
+            message: 'การเข้าถึงจำกัดเฉพาะเจ้าหน้าที่เท่านั้น'
+          }
+        }
+
+        try {
+          const { status = 'all', limit = 10, offset = 0, page = 1 } = query
+          
+          // คำนวณ offset จาก page
+          const actualOffset = (parseInt(page) - 1) * parseInt(limit)
+          
+          // ⚠️ SECURITY: เจ้าหน้าที่เห็นเฉพาะในคณะที่รับผิดชอบ
+          if (!user.position_department) {
+            set.status = 403
+            return {
+              success: false,
+              message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+            }
+          }
+          
+          console.log(`📋 [APPROVAL HISTORY] ${user.position} accessing: ${user.position_department}`)
+          
+          // เงื่อนไข: การจองเก่า (เก่ากว่า 2 วัน) + ในคณะที่รับผิดชอบ
+          const twoDaysAgo = new Date()
+          twoDaysAgo.setDate(twoDaysAgo.getDate() - 2)
+          
+          const where = {
+            meeting_room: {
+              department: user.position_department
+            },
+            // การจองที่เก่ากว่า 2 วัน (สำหรับประวัติ)
+            created_at: {
+              lt: twoDaysAgo
+            }
+          }
+          
+          // กรอง status ถ้าไม่ใช่ 'all'
+          if (status && status !== 'all') {
+            where.status_r = status
+          }
+
+          // นับจำนวนรวม
+          const total = await prisma.reservation.count({ where })
+          
+          // ดึงข้อมูล (เรียงจากใหม่มาเก่า)
+          const reservations = await prisma.reservation.findMany({
+            where,
+            include: {
+              users: {
+                select: {
+                  first_name: true,
+                  last_name: true,
+                  email: true,
+                  department: true
+                }
+              },
+              meeting_room: {
+                select: {
+                  room_name: true,
+                  location_m: true,
+                  capacity: true
+                }
+              },
+              officer: {
+                select: {
+                  first_name: true,
+                  last_name: true
+                }
+              }
+            },
+            orderBy: {
+              created_at: 'desc' // เรียงใหม่มาเก่า (ตรงข้ามกับหน้า approvals)
+            },
+            skip: actualOffset,
+            take: parseInt(limit)
+          })
+
+          console.log(`📋 Found ${reservations.length} approval history records (total: ${total})`)
+
+          return {
+            success: true,
+            message: `ประวัติการอนุมัติในคณะ ${user.position_department} (${total} รายการ)`,
+            department: user.position_department,
+            reservations: reservations.map(r => ({
+              reservation_id: r.reservation_id,
+              room_name: r.meeting_room.room_name,
+              location: r.meeting_room.location_m,
+              reserved_by: `${r.users.first_name} ${r.users.last_name}`,
+              start_date: r.start_at,
+              end_date: r.end_at,
+              start_time: r.start_time,
+              end_time: r.end_time,
+              details: r.details_r,
+              status: r.status_r,
+              created_at: r.created_at,
+              approved_by: r.officer ? `${r.officer.first_name} ${r.officer.last_name}` : null,
+              rejected_reason: r.rejected_reason,
+              updated_at: r.updated_at
+            })),
+            pagination: {
+              current_page: parseInt(page),
+              total_pages: Math.ceil(total / parseInt(limit)),
+              total_items: total,
+              items_per_page: parseInt(limit),
+              has_prev: parseInt(page) > 1,
+              has_next: parseInt(page) < Math.ceil(total / parseInt(limit))
+            }
+          }
+
+        } catch (error) {
+          console.error('❌ Error fetching approval history:', error)
+          set.status = 500
+          return {
+            success: false,
+            message: 'เกิดข้อผิดพลาดในการดึงประวัติการอนุมัติ'
+          }
+        }
+      })
+
+      // === Officer Stats (Dashboard Statistics) ===
+      .get('/stats', async ({ request, set }) => {
+        const user = await authMiddleware(request, set)
+        if (user.success === false) return user
+
+        if (!isOfficer(user)) {
+          set.status = 403
+          return {
+            success: false,
+            message: 'การเข้าถึงจำกัดเฉพาะเจ้าหน้าที่เท่านั้น'
+          }
+        }
+
+        try {
+          console.log('📊 Officer Stats - User:', user.email, 'Position:', user.position)
+
+          // ตรวจสอบสิทธิ์การดูแลห้องประชุม
+          if (!user.position_department) {
+            set.status = 403
+            return {
+              success: false,
+              message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+            }
+          }
+
+          const today = new Date()
+          const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1)
+          const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
+
+          // 1. สถิติห้องประชุมของฉัน (ในหน่วยงานที่รับผิดชอบ)
+          const myRoomsTotal = await prisma.meeting_room.count({
+            where: {
+              department: user.position_department
+            }
+          })
+
+          // 2. สถิติการจองในหน่วยงานของฉันในเดือนนี้
+          const myDepartmentThisMonthReservations = await prisma.reservation.count({
+            where: {
+              meeting_room: {
+                department: user.position_department
+              },
+              start_at: {
+                gte: thisMonth,
+                lte: nextMonth
+              }
+            }
+          })
+
+          // 3. การจองที่รอการอนุมัติในหน่วยงานของฉัน
+          const myDepartmentPendingApprovals = await prisma.reservation.count({
+            where: {
+              meeting_room: {
+                department: user.position_department
+              },
+              status_r: 'pending'
+            }
+          })
+
+          // 4. สถิติห้องประชุมทั้งหมดในระบบ
+          const allRoomsTotal = await prisma.meeting_room.count()
+
+          // 5. การจองวันนี้ทั้งระบบ
+          const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+          const todayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
+          
+          const todayReservations = await prisma.reservation.count({
+            where: {
+              start_at: {
+                gte: todayStart,
+                lt: todayEnd
+              }
+            }
+          })
+
+          // 6. สถิติหน่วยงานทั้งหมด
+          const totalDepartments = await prisma.meeting_room.groupBy({
+            by: ['department'],
+            _count: {
+              department: true
+            }
+          })
+
+          // 7. การจองทั้งหมดในเดือนนี้ของทุกหน่วยงาน
+          const allDepartmentsTotalReservations = await prisma.reservation.count({
+            where: {
+              start_at: {
+                gte: thisMonth,
+                lte: nextMonth
+              }
+            }
+          })
+
+          const stats = {
+            // สถิติห้องประชุมของเจ้าหน้าที่
+            my_rooms_stats: {
+              total_rooms: myRoomsTotal
+            },
+            
+            // สถิติหน่วยงานของเจ้าหน้าที่
+            my_department_stats: {
+              this_month_reservations: myDepartmentThisMonthReservations,
+              pending_approvals: myDepartmentPendingApprovals
+            },
+            
+            // สถิติห้องประชุมทั้งหมด
+            all_rooms_stats: {
+              total_rooms: allRoomsTotal,
+              today_reservations: todayReservations
+            },
+            
+            // สถิติหน่วยงานทั้งหมด
+            all_departments_stats: {
+              total_departments: totalDepartments.length,
+              this_month_total_reservations: allDepartmentsTotalReservations
+            }
+          }
+
+          console.log('✅ Officer stats generated:', stats)
+
+          return {
+            success: true,
+            message: 'ดึงสถิติเจ้าหน้าที่สำเร็จ',
+            stats: stats
+          }
+
+        } catch (error) {
+          console.error('❌ Error in officer stats:', error)
+          set.status = 500
+          return {
+            success: false,
+            message: 'เกิดข้อผิดพลาดในการดึงสถิติ',
+            error: error.message
+          }
+        }
+      })
   )
 
 // === Admin Routes (ต้องมี admin role เท่านั้น) ===

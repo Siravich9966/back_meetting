@@ -28,6 +28,7 @@ import positionRoutes from './routes/positions.js' // Position APIs
 import { reservationRoutes, userReservationRoutes, officerReservationRoutes } from './routes/reservations.js' // Reservation APIs
 import { addressRoutes } from './routes/address.js' // Address APIs (จังหวัด, อำเภอ, ตำบล)
 import { uploadRoutes, publicUploadRoutes } from './routes/upload.js' // Upload APIs (รูปโปรไฟล์, รูปห้องประชุม)
+import { notificationRoutes } from './routes/notifications.js' // Notification APIs (แจ้งเตือนการจอง)
 
 // Configuration
 const PORT = process.env.PORT || 8000
@@ -142,6 +143,7 @@ app.group('/api', app => app
   .use(officerRoomRoutes) // Officer Room Management APIs: /api/protected/officer/rooms/*
   .use(adminRoutes) // Admin Role Management APIs (3-table): /api/protected/admin/*
   .use(executiveRoutes) // Executive APIs: /api/protected/executive/*
+  .use(notificationRoutes) // Notification APIs: /api/protected/notifications/*
 )
 
 // ฟังก์ชันเริ่มต้นเซิร์ฟเวอร์

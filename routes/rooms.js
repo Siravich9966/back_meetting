@@ -710,19 +710,89 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
 
-          // ตรวจสอบว่าห้องมีการจองหรือไม่
-          const reservations = await prisma.reservation.findMany({
+          // ตรวจสอบว่าห้องมีการจองที่ยังใช้งานอยู่หรือไม่ (เฉพาะการจองในอนาคตหรือปัจจุบัน)
+          const now = new Date()
+          
+          // ใช้เวลาประเทศไทย (UTC+7) เพื่อให้ตรงกับเวลาที่ผู้ใช้เห็น
+          const bangkokTime = new Date(now.getTime() + (7 * 60 * 60 * 1000))
+          
+          console.log(`🗑️ Attempting to delete room ${roomId}:`, {
+            serverTime: now.toISOString(),
+            bangkokTime: bangkokTime.toISOString(),
+            note: 'Checking for active/future reservations (end_time >= current time)'
+          })
+          
+          // หาการจองที่ยังไม่เสร็จสิ้น - เช็คทั้ง single day และ multi-day booking
+          const activeReservations = await prisma.reservation.findMany({
             where: { 
               room_id: roomId,
-              status_r: { not: 'cancelled' }
+              status_r: { notIn: ['cancelled', 'rejected'] }
+            },
+            select: {
+              reservation_id: true,
+              start_at: true,
+              end_at: true,
+              start_time: true,
+              end_time: true,
+              status_r: true,
+              is_multi_day: true,
+              booking_dates: true
+            }
+          })
+          
+          // กรองเฉพาะการจองที่ยังมีผลอยู่
+          const futureReservations = activeReservations.filter(reservation => {
+            const currentDateTime = bangkokTime
+            
+            if (reservation.is_multi_day && reservation.booking_dates) {
+              // Multi-day booking: เช็คว่ามีวันไหนที่ยังไม่ผ่านไปหรือไม่
+              const bookingDates = reservation.booking_dates.split(',')
+              const currentDateString = currentDateTime.toISOString().split('T')[0] // YYYY-MM-DD
+              
+              // หาวันที่สุดท้ายที่จอง
+              const lastDate = bookingDates[bookingDates.length - 1]
+              
+              // ถ้าวันสุดท้าย > วันปัจจุบัน หรือ วันสุดท้าย = วันปัจจุบัน แต่ยังไม่หมดเวลา
+              if (lastDate > currentDateString) {
+                return true // ยังมีวันในอนาคต
+              } else if (lastDate === currentDateString) {
+                // วันสุดท้ายคือวันนี้ เช็คเวลา
+                return reservation.end_time > currentDateTime
+              } else {
+                return false // หมดแล้ว
+              }
+            } else {
+              // Single day booking: เช็คว่าการจองยังไม่จบ
+              // ถ้าเป็นการจองในอนาคต (start_time > current) หรือ กำลังดำเนินอยู่ (start <= current < end)
+              
+              if (reservation.start_time > currentDateTime) {
+                return true // การจองในอนาคต
+              } else if (reservation.start_time <= currentDateTime && reservation.end_time > currentDateTime) {
+                return true // การจองที่กำลังดำเนินอยู่
+              } else {
+                return false // การจองที่จบไปแล้ว
+              }
             }
           })
 
-          if (reservations.length > 0) {
+          console.log(`🗑️ Active reservations found:`, {
+            count: futureReservations.length,
+            details: futureReservations.map(r => ({
+              id: r.reservation_id,
+              start_date: r.start_at.toISOString().split('T')[0],
+              start_datetime: r.start_time.toISOString(),
+              end_datetime: r.end_time.toISOString(),
+              status: r.status_r,
+              is_multi_day: r.is_multi_day,
+              booking_dates: r.booking_dates
+            }))
+          })
+
+          if (futureReservations.length > 0) {
             set.status = 400
             return {
               success: false,
-              message: 'ไม่สามารถลบห้องประชุมที่มีการจองอยู่ได้'
+              message: `ไม่สามารถลบห้องประชุมที่มีการจองที่ยังใช้งานอยู่ได้ (${futureReservations.length} การจอง)`
             }
           }
 
@@ -842,24 +912,79 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
               })
               
               // 👥 คำนวณจำนวนคนที่กำลังใช้งานในขณะนี้
-              const currentTime = new Date()
+              const now = new Date()
               
-              // หา reservation ที่กำลัง active อยู่ในช่วงเวลานี้
-              const currentReservations = await prisma.reservation.findMany({
+              // ใช้เวลาประเทศไทย (UTC+7)
+              const bangkokTime = new Date(now.getTime() + (7 * 60 * 60 * 1000))
+              const today = bangkokTime.toISOString().split('T')[0] // YYYY-MM-DD
+              const currentTime = bangkokTime.toISOString().split('T')[1].substring(0, 5) // HH:MM
+              
+              console.log(`🕐 Checking current usage for room ${room.room_id}:`, {
+                today,
+                currentTime,
+                currentDateTime: now.toISOString(),
+                bangkokDateTime: bangkokTime.toISOString()
+              })
+              
+              // หา reservation ที่กำลัง active อยู่ในขณะนี้ - รองรับ multi-day booking
+              const allReservations = await prisma.reservation.findMany({
                 where: {
                   room_id: room.room_id,
-                  status_r: 'approved', // ใช้ status_r แทน status
-                  // ตรวจสอบว่าอยู่ในช่วงเวลาการจองหรือไม่
-                  start_time: { lte: currentTime },
-                  end_time: { gte: currentTime }
+                  status_r: 'approved'
                 },
                 select: {
-                  user_id: true // เนื่องจากไม่มี participants_count ใช้ user_id แทน
+                  reservation_id: true,
+                  user_id: true,
+                  start_time: true,
+                  end_time: true,
+                  start_at: true,
+                  is_multi_day: true,
+                  booking_dates: true
                 }
               })
               
-              // นับจำนวน reservation ที่ active ปัจจุบัน (แต่ละการจองคือ 1 คน)
-              const currentUsers = currentReservations.length
+              // กรองเฉพาะการจองที่กำลัง active ในขณะนี้ และการจองในอนาคต
+              const activeReservations = allReservations.filter(reservation => {
+                const currentDateTime = bangkokTime
+                
+                if (reservation.is_multi_day && reservation.booking_dates) {
+                  // Multi-day booking: เช็คว่าวันนี้อยู่ในช่วงวันที่จองหรือไม่ หรือยังมีวันในอนาคต
+                  const bookingDates = reservation.booking_dates.split(',')
+                  const todayString = today
+                  
+                  // หาวันที่สุดท้ายที่จอง
+                  const lastDate = bookingDates[bookingDates.length - 1]
+                  
+                  if (todayString <= lastDate) {
+                    // ยังมีการจองที่ยังไม่สิ้นสุด (วันนี้หรือในอนาคต)
+                    if (todayString === lastDate) {
+                      // วันสุดท้ายคือวันนี้ เช็คเวลา
+                      return reservation.end_time > currentDateTime
+                    } else {
+                      // ยังมีวันในอนาคต
+                      return true
+                    }
+                  } else {
+                    return false // หมดไปแล้ว
+                  }
+                } else {
+                  // Single day booking: เช็คว่าการจองยังไม่จบสมบูรณ์
+                  // รวมทั้งการจองในอนาคตและการจองที่กำลังดำเนินอยู่
+                  return reservation.end_time > currentDateTime
+                }
+              })
+              
+              // ใช้จำนวนการจองทั้งหมดที่ยังมีผล (ไม่ใช่แค่ปัจจุบัน)
+              const currentUsers = activeReservations.length
+              
+              console.log(`👥 Room ${room.room_id} active reservations:`, {
+                activeNow: currentUsers,
+                activeDetails: activeReservations.map(r => ({
+                  id: r.reservation_id,
+                  start_datetime: r.start_time.toISOString(),
+                  end_datetime: r.end_time.toISOString()
+                }))
+              })
               
               return {
                 ...room,

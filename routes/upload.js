@@ -284,12 +284,16 @@ export const publicUploadRoutes = new Elysia({ prefix: '/upload' })
       }
 
       if (!user || !user.profile_image) {
-        console.log(`❌ [GET profile-image] ไม่พบรูปใน ${searchedTable} table สำหรับ ID ${userIdInt}`)
-        set.status = 404
-        return {
-          success: false,
-          message: 'ไม่พบรูปโปรไฟล์'
-        }
+        console.log(`❌ [GET profile-image] ไม่พบรูปใน ${searchedTable} table สำหรับ ID ${userIdInt}, redirecting to UI Avatars`)
+        
+        // สร้าง default avatar จาก UI Avatars API
+        const avatarUrl = `https://ui-avatars.com/api/?name=User&size=150&background=6366f1&color=ffffff&rounded=true&bold=true`
+        
+        // Redirect ไปยัง UI Avatars service
+        set.status = 302
+        set.headers['Location'] = avatarUrl
+        set.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        return
       }
 
       // ส่งกลับ binary data เป็น image
