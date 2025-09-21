@@ -796,19 +796,56 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
 
-          // ลบข้อมูลที่เกี่ยวข้องก่อน
-          await prisma.equipment.deleteMany({
+          // ลบข้อมูลที่เกี่ยวข้องก่อน (ตาม Foreign Key Dependencies)
+          console.log(`🗑️ Starting cascade delete for room ${roomId}`)
+          
+          // 1. ลบ review ก่อน
+          const reviewCount = await prisma.review.deleteMany({
             where: { room_id: roomId }
           })
+          console.log(`🗑️ Deleted ${reviewCount.count} reviews`)
 
-          await prisma.review.deleteMany({
+          // 2. ลบ equipment ก่อน
+          const equipmentCount = await prisma.equipment.deleteMany({
             where: { room_id: roomId }
           })
+          console.log(`🗑️ Deleted ${equipmentCount.count} equipment records`)
 
-          // ลบห้องประชุม
+          // 3. แทนที่จะลบ reservation ทั้งหมด ให้ตั้งค่า room_id เป็น null และบันทึกชื่อห้อง
+          // เพื่อเก็บประวัติการใช้งานไว้สำหรับ audit trail และสถิติ
+          
+          // ดึงข้อมูลห้องก่อนลบ เพื่อเก็บชื่อไว้ในประวัติ
+          const roomInfo = await prisma.meeting_room.findUnique({
+            where: { room_id: roomId },
+            select: { room_name: true, department: true }
+          })
+          
+          // ดึงข้อมูล reservation ทั้งหมดเพื่ออัปเดตแยกรายการ (รักษา details_r เดิม)
+          const reservations = await prisma.reservation.findMany({
+            where: { room_id: roomId },
+            select: { reservation_id: true, details_r: true }
+          })
+          
+          // อัปเดตแต่ละ reservation โดยไม่แทรกข้อความเข้าไปใน details_r
+          // เพียงแค่ตั้ง room_id = null เพื่อให้ระบบรู้ว่าห้องถูกลบ
+          for (const reservation of reservations) {
+            await prisma.reservation.update({
+              where: { reservation_id: reservation.reservation_id },
+              data: { 
+                room_id: null
+                // ไม่แก้ไข details_r เพื่อไม่ให้เกิดความสับสน
+              }
+            })
+          }
+          
+          const reservationCount = { count: reservations.length }
+          console.log(`🗑️ Updated ${reservationCount.count} reservations (set room_id to null, kept historical data)`)
+
+          // 4. สุดท้ายลบห้องประชุม
           await prisma.meeting_room.delete({
             where: { room_id: roomId }
           })
+          console.log(`🗑️ Successfully deleted meeting room ${roomId}`)
 
           return {
             success: true,

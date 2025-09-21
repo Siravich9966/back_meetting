@@ -2,7 +2,17 @@ import prisma from './lib/prisma.js'
 
 async function checkUserData() {
   try {
-    console.log('🔍 Checking user data...')
+    console.log('🔍 Checking address data status...')
+    
+    // เช็คจำนวนข้อมูลในแต่ละตาราง
+    const provinceCount = await prisma.province.count()
+    const districtCount = await prisma.district.count() 
+    const subdistrictCount = await prisma.subdistrict.count()
+    
+    console.log('📊 สถานะข้อมูลในฐานข้อมูล:')
+    console.log(`- จังหวัด: ${provinceCount} รายการ`)
+    console.log(`- อำเภอ: ${districtCount} รายการ`) 
+    console.log(`- ตำบล: ${subdistrictCount} รایการ`)
     
     // เช็คข้อมูล user id 4
     const user = await prisma.users.findUnique({
@@ -19,7 +29,7 @@ async function checkUserData() {
       }
     })
     
-    console.log('👤 User data:', user)
+    console.log('\n👤 User data:', user)
     
     if (user?.province_id) {
       const province = await prisma.province.findUnique({

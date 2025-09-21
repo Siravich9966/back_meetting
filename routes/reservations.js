@@ -16,6 +16,17 @@ import { Elysia } from 'elysia'
 import prisma from '../lib/prisma.js'
 import { authMiddleware, isUser, isOfficer } from '../middleware/index.js'
 
+// ฟังก์ชันแปลงสถานะเป็นภาษาไทย
+function translateStatus(status) {
+  const statusMap = {
+    'pending': 'รออนุมัติ',
+    'approved': 'อนุมัติแล้ว', 
+    'rejected': 'ปฏิเสธ',
+    'cancelled': 'ยกเลิก'
+  }
+  return statusMap[status] || status
+}
+
 // ===================================================================
 // Public Reservation APIs (ไม่ต้อง auth)
 // ===================================================================
@@ -309,7 +320,7 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
         message: 'ส่งรายงานปัญหาเรียบร้อยแล้ว เจ้าหน้าที่จะดำเนินการตรวจสอบ',
         report: {
           review_id: report.review_id,
-          room_name: report.meeting_room.room_name,
+          room_name: report.meeting_room ? report.meeting_room.room_name : '⚠️ ห้องนี้ไม่มีในระบบแล้ว',
           comment: report.comment,
           created_at: report.created_at,
           reporter: {
@@ -382,24 +393,29 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
       })
 
       // จัดรูปแบบข้อมูล
-      const formattedReservations = reservations.map(reservation => ({
+      const formattedReservations = reservations.map(reservation => {
+        // ตรวจสอบว่าห้องถูกลบไปแล้วหรือไม่
+        const isRoomDeleted = !reservation.meeting_room
+        
+        return {
         reservation_id: reservation.reservation_id,
-        room_name: reservation.meeting_room.room_name,
-        location: reservation.meeting_room.location_m,
-        capacity: reservation.meeting_room.capacity,
-        department: reservation.meeting_room.department, // ใช้ department ของห้อง ไม่ใช่ของผู้จอง
+        room_name: isRoomDeleted ? '⚠️ ห้องนี้ไม่มีในระบบแล้ว' : reservation.meeting_room.room_name,
+        location: isRoomDeleted ? null : reservation.meeting_room.location_m,
+        capacity: isRoomDeleted ? null : reservation.meeting_room.capacity,
+        department: isRoomDeleted ? null : reservation.meeting_room.department,
         user_department: reservation.users.department, // เพิ่มไว้สำหรับอ้างอิงถ้าจำเป็น
         start_date: reservation.start_at,
         end_date: reservation.end_at,
         start_time: reservation.start_time,
         end_time: reservation.end_time,
-        status: reservation.status_r,
+        status: translateStatus(reservation.status_r),
         details: reservation.details_r,
         approved_by: reservation.officer ? `${reservation.officer.first_name} ${reservation.officer.last_name}` : null,
         rejected_reason: reservation.rejected_reason,
         created_at: reservation.created_at,
         updated_at: reservation.updated_at
-      }))
+        }
+      })
 
       return {
         success: true,
@@ -791,21 +807,24 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
       return {
         success: true,
         message: `การจองของ ${user.first_name} ${user.last_name}`,
-        reservations: reservations.map(r => ({
+        reservations: reservations.map(r => {
+          const isRoomDeleted = !r.meeting_room
+          return {
           reservation_id: r.reservation_id,
-          room_name: r.meeting_room?.room_name,
-          department: r.meeting_room?.department,
-          location: r.meeting_room?.location_m,
+          room_name: isRoomDeleted ? '⚠️ ห้องนี้ไม่มีในระบบแล้ว' : r.meeting_room.room_name,
+          department: isRoomDeleted ? null : r.meeting_room.department,
+          location: isRoomDeleted ? null : r.meeting_room.location_m,
           start_at: r.start_at,
           end_at: r.end_at,
           start_time: r.start_time,
           end_time: r.end_time,
           details: r.details_r,
-          status: r.status_r,
+          status: translateStatus(r.status_r),
           approved_by: r.officer ? `${r.officer.first_name} ${r.officer.last_name}` : null,
           created_at: r.created_at,
           updated_at: r.updated_at
-        })),
+          }
+        }),
         pagination: {
           total,
           limit: parseInt(limit),
@@ -898,12 +917,13 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
             start_time: reservation.start_time,
             end_time: reservation.end_time,
             details: reservation.details_r,
-            status: reservation.status_r
+            status: translateStatus(reservation.status_r)
           },
           approval: {
             approved_by: reservation.officer ? 
               `${reservation.officer.first_name} ${reservation.officer.last_name}` : null,
-            officer_department: reservation.officer?.department
+            officer_department: reservation.officer?.department,
+            rejected_reason: reservation.rejected_reason || null
           },
           timestamps: {
             created_at: reservation.created_at,
@@ -974,8 +994,8 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         set.status = 400
         return {
           success: false,
-          message: `ไม่สามารถแก้ไขการจองที่มีสถานะ ${existingReservation.status_r} ได้`,
-          current_status: existingReservation.status_r
+          message: `ไม่สามารถแก้ไขการจองที่มีสถานะ "${translateStatus(existingReservation.status_r)}" ได้`,
+          current_status: translateStatus(existingReservation.status_r)
         }
       }
 
@@ -1478,24 +1498,27 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         success: true,
         message: `การจองในคณะ ${user.department} (${reservations.length} รายการ)`,
         department: user.department,
-        reservations: reservations.map(r => ({
+        reservations: reservations.map(r => {
+          const isRoomDeleted = !r.meeting_room
+          return {
           reservation_id: r.reservation_id,
-          room_name: r.meeting_room.room_name,
-          location: r.meeting_room.location_m,
-          capacity: r.meeting_room.capacity,
+          room_name: isRoomDeleted ? '⚠️ ห้องนี้ไม่มีในระบบแล้ว' : r.meeting_room.room_name,
+          location: isRoomDeleted ? null : r.meeting_room.location_m,
+          capacity: isRoomDeleted ? null : r.meeting_room.capacity,
           start_date: r.start_at,
           end_date: r.end_at,
           start_time: r.start_time,
           end_time: r.end_time,
           details: r.details_r,
-          status: r.status_r,
+          status: translateStatus(r.status_r),
           reserved_by: `${r.users.first_name} ${r.users.last_name}`,
           user_email: r.users.email,
           user_department: r.users.department,
           processed_by: r.officer ? `${r.officer.first_name} ${r.officer.last_name}` : null,
           created_at: r.created_at,
           updated_at: r.updated_at
-        })),
+          }
+        }),
         pagination: {
           total,
           limit: parseInt(limit),
@@ -1589,7 +1612,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         set.status = 400
         return {
           success: false,
-          message: `การจองนี้มีสถานะ ${reservation.status_r} แล้ว ไม่สามารถอนุมัติได้`
+          message: `การจองนี้มีสถานะ "${translateStatus(reservation.status_r)}" แล้ว ไม่สามารถอนุมัติได้`
         }
       }
 
@@ -1722,7 +1745,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         set.status = 400
         return {
           success: false,
-          message: `การจองนี้มีสถานะ ${reservation.status_r} แล้ว ไม่สามารถปฏิเสธได้`
+          message: `การจองนี้มีสถานะ "${translateStatus(reservation.status_r)}" แล้ว ไม่สามารถปฏิเสธได้`
         }
       }
 
