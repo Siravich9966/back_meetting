@@ -1032,7 +1032,8 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
       }
 
       // ตรวจสอบการจองที่ซ้อนทับ (ยกเว้นการจองปัจจุบัน)
-      const conflictReservations = await prisma.reservation.findMany({
+      // ดึงการจองทั้งหมดในห้องเดียวกันที่ไม่ใช่การจองปัจจุบัน
+      const allReservationsInRoom = await prisma.reservation.findMany({
         where: {
           room_id: existingReservation.room_id,
           reservation_id: {
@@ -1040,16 +1041,42 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
           },
           status_r: {
             in: ['pending', 'approved']
-          },
-          OR: [
-            {
-              AND: [
-                { start_at: { lte: endDate } },
-                { end_at: { gte: startDate } }
-              ]
-            }
-          ]
+          }
         }
+      })
+
+      // ตรวจสอบ conflict ทั้งวันที่และเวลา
+      const conflictReservations = allReservationsInRoom.filter(reservation => {
+        // เช็ควันที่ทับซ้อนก่อน
+        const reservationStartDate = new Date(reservation.start_at)
+        const reservationEndDate = new Date(reservation.end_at)
+        
+        const datesOverlap = (reservationStartDate <= endDate && reservationEndDate >= startDate)
+        
+        if (!datesOverlap) {
+          return false // วันที่ไม่ทับซ้อน
+        }
+
+        // ถ้าวันที่ทับซ้อน ให้เช็คเวลา
+        const reservationStartTime = new Date(reservation.start_time)
+        const reservationEndTime = new Date(reservation.end_time)
+        
+        // เช็คเวลาทับซ้อน: ถ้า (start < other_end) และ (end > other_start) = ทับซ้อน
+        const timesOverlap = (startTime < reservationEndTime && endTime > reservationStartTime)
+        
+        return timesOverlap
+      })
+
+      console.log('🔍 Conflict check details:', {
+        roomId: existingReservation.room_id,
+        excludeReservationId: parseInt(id),
+        newTimeRange: `${startTime.toISOString()} - ${endTime.toISOString()}`,
+        allReservationsCount: allReservationsInRoom.length,
+        conflictsFound: conflictReservations.length,
+        conflicts: conflictReservations.map(r => ({
+          id: r.reservation_id,
+          time: `${new Date(r.start_time).toISOString()} - ${new Date(r.end_time).toISOString()}`
+        }))
       })
 
       if (conflictReservations.length > 0) {

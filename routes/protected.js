@@ -841,9 +841,21 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           twoDaysAgo.setDate(twoDaysAgo.getDate() - 2)
           
           const where = {
-            meeting_room: {
-              department: user.position_department
-            },
+            OR: [
+              // ห้องที่ยังอยู่ในคณะนี้
+              {
+                meeting_room: {
+                  department: user.position_department
+                }
+              },
+              // ห้องที่ถูกลบแล้ว (room_id = null) แต่มีข้อมูลคณะใน details_r
+              {
+                room_id: null,
+                details_r: {
+                  contains: `(${user.position_department})`
+                }
+              }
+            ],
             // การจองที่เก่ากว่า 2 วัน (สำหรับประวัติ)
             created_at: {
               lt: twoDaysAgo
@@ -897,22 +909,35 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
             success: true,
             message: `ประวัติการอนุมัติในคณะ ${user.position_department} (${total} รายการ)`,
             department: user.position_department,
-            reservations: reservations.map(r => ({
-              reservation_id: r.reservation_id,
-              room_name: r.meeting_room.room_name,
-              location: r.meeting_room.location_m,
-              reserved_by: `${r.users.first_name} ${r.users.last_name}`,
-              start_date: r.start_at,
-              end_date: r.end_at,
-              start_time: r.start_time,
-              end_time: r.end_time,
-              details: r.details_r,
-              status: r.status_r,
-              created_at: r.created_at,
-              approved_by: r.officer ? `${r.officer.first_name} ${r.officer.last_name}` : null,
-              rejected_reason: r.rejected_reason,
-              updated_at: r.updated_at
-            })),
+            reservations: reservations.map(r => {
+              // จัดการกรณีห้องถูกลบ - แยกชื่อห้องจาก details_r
+              let roomName = r.meeting_room?.room_name
+              let location = r.meeting_room?.location_m
+              
+              if (!roomName && r.details_r) {
+                // ค้นหาชื่อห้องใน details_r ที่เก็บไว้
+                const match = r.details_r.match(/\[ห้องประชุม: (.+?) \(.+?\) - ถูกลบแล้ว\]/)
+                roomName = match ? `${match[1]} (ถูกลบแล้ว)` : 'ห้องประชุม (ถูกลบแล้ว)'
+                location = 'ไม่ทราบ'
+              }
+              
+              return {
+                reservation_id: r.reservation_id,
+                room_name: roomName || 'ห้องประชุม (ถูกลบแล้ว)',
+                location: location || 'ไม่ทราบ',
+                reserved_by: `${r.users.first_name} ${r.users.last_name}`,
+                start_date: r.start_at,
+                end_date: r.end_at,
+                start_time: r.start_time,
+                end_time: r.end_time,
+                details: r.details_r,
+                status: r.status_r,
+                created_at: r.created_at,
+                approved_by: r.officer ? `${r.officer.first_name} ${r.officer.last_name}` : null,
+                rejected_reason: r.rejected_reason,
+                updated_at: r.updated_at
+              }
+            }),
             pagination: {
               current_page: parseInt(page),
               total_pages: Math.ceil(total / parseInt(limit)),

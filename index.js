@@ -38,10 +38,15 @@ const app = new Elysia()
 
 // ตั้งค่า CORS
 app.use(cors({
-  origin: '*', // อนุญาตทุก origin สำหรับการทดสอบ
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3090',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3090'
+  ], // Support both common frontend ports
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH']
 }))
 
 // Static file serving ไม่ใช้แล้ว - รูปเก็บใน database

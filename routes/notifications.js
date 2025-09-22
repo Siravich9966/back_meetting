@@ -22,7 +22,7 @@ export const notificationRoutes = new Elysia({ prefix: '/protected/notifications
         return { success: false, message: 'ไม่พบข้อมูลคณะของเจ้าหน้าที่' }
       }
 
-      console.log('🔔 [Notifications] Officer:', user.user_id, 'Department:', user.position_department)
+      console.log('🔔 [Notifications] Officer:', user.officer_id, 'Department:', user.position_department)
 
       // ดึงการจองใหม่ที่ยังรอการอนุมัติในคณะตัวเอง
       const pendingReservations = await prisma.reservation.findMany({
@@ -56,21 +56,24 @@ export const notificationRoutes = new Elysia({ prefix: '/protected/notifications
       })
 
       // แปลงข้อมูลให้อยู่ในรูปแบบที่ frontend ต้องการ
-      const notifications = pendingReservations.map(reservation => ({
-        id: reservation.reservation_id,
-        type: 'booking_request',
-        title: 'การจองใหม่',
-        message: `มีการจองห้องประชุม ${reservation.meeting_room.room_name} รอการอนุมัติ`,
-        room_name: reservation.meeting_room.room_name,
-        user_name: `${reservation.users.first_name} ${reservation.users.last_name}`,
-        booking_date: reservation.start_at,
-        booking_time: reservation.start_time && reservation.end_time ? 
-          `${new Date(reservation.start_time).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })} - ${new Date(reservation.end_time).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}` : 
-          'ไม่ระบุเวลา',
-        created_at: reservation.created_at,
-        time_ago: getTimeAgo(reservation.created_at),
-        is_new: isRecent(reservation.created_at, 24) // ถือว่า "ใหม่" ถ้าสร้างภายใน 24 ชม.
-      }))
+      const notifications = pendingReservations.map(reservation => {
+        const roomName = reservation.meeting_room?.room_name || 'ห้องประชุม (ถูกลบแล้ว)'
+        return {
+          id: reservation.reservation_id,
+          type: 'booking_request',
+          title: 'การจองใหม่',
+          message: `มีการจองห้องประชุม ${roomName} รอการอนุมัติ`,
+          room_name: roomName,
+          user_name: `${reservation.users.first_name} ${reservation.users.last_name}`,
+          booking_date: reservation.start_at,
+          booking_time: reservation.start_time && reservation.end_time ? 
+            `${new Date(reservation.start_time).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })} - ${new Date(reservation.end_time).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}` : 
+            'ไม่ระบุเวลา',
+          created_at: reservation.created_at,
+          time_ago: getTimeAgo(reservation.created_at),
+          is_new: isRecent(reservation.created_at, 24) // ถือว่า "ใหม่" ถ้าสร้างภายใน 24 ชม.
+        }
+      })
 
       return {
         success: true,
@@ -133,12 +136,13 @@ export const notificationRoutes = new Elysia({ prefix: '/protected/notifications
       // แปลงข้อมูลให้อยู่ในรูปแบบที่ frontend ต้องการ
       const notifications = approvedReservations.map(reservation => {
         const isApproved = reservation.status_r === 'approved'
+        const roomName = reservation.meeting_room?.room_name || 'ห้องประชุม (ถูกลบแล้ว)'
         return {
           id: reservation.reservation_id,
           type: isApproved ? 'booking_approved' : 'booking_rejected',
           title: isApproved ? 'การจองได้รับการอนุมัติ' : 'การจองถูกปฏิเสธ',
-          message: `ห้องประชุม ${reservation.meeting_room.room_name} วันที่ ${new Date(reservation.start_at).toLocaleDateString('th-TH')}`,
-          room_name: reservation.meeting_room.room_name,
+          message: `ห้องประชุม ${roomName} วันที่ ${new Date(reservation.start_at).toLocaleDateString('th-TH')}`,
+          room_name: roomName,
           booking_date: reservation.start_at,
           booking_time: reservation.start_time && reservation.end_time ? 
             `${new Date(reservation.start_time).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })} - ${new Date(reservation.end_time).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}` : 
@@ -206,7 +210,7 @@ export const notificationRoutes = new Elysia({ prefix: '/protected/notifications
 
       // ตรวจสอบสิทธิ์การเข้าถึง
       const isUser = reservation.users.user_id === user.user_id
-      const isOfficer = user.position_department === reservation.meeting_room.department
+      const isOfficer = user.position_department === reservation.meeting_room?.department
       
       if (!isUser && !isOfficer) {
         set.status = 403
@@ -271,7 +275,7 @@ export const notificationRoutes = new Elysia({ prefix: '/protected/notifications
 
       // ตรวจสอบสิทธิ์การเข้าถึง
       const isUser = reservation.users.user_id === user.user_id
-      const isOfficer = user.position_department === reservation.meeting_room.department
+      const isOfficer = user.position_department === reservation.meeting_room?.department
       
       if (!isUser && !isOfficer) {
         set.status = 403

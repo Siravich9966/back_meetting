@@ -103,6 +103,34 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         }
       }
 
+      // ตรวจสอบ citizen_id ซ้ำในทุก table (ถ้ามีการใส่มา)
+      if (body.citizen_id) {
+        const existingCitizenInUsers = await prisma.users.findUnique({
+          where: { citizen_id: body.citizen_id }
+        })
+
+        const existingCitizenInOfficer = await prisma.officer.findUnique({
+          where: { citizen_id: body.citizen_id }
+        })
+
+        const existingCitizenInAdmin = await prisma.admin.findUnique({
+          where: { citizen_id: body.citizen_id }
+        })
+
+        const existingCitizenInExecutive = await prisma.executive.findUnique({
+          where: { citizen_id: body.citizen_id }
+        })
+
+        if (existingCitizenInUsers || existingCitizenInOfficer || existingCitizenInAdmin || existingCitizenInExecutive) {
+          console.log('❌ เลขบัตรประชาชนนี้ถูกใช้งานแล้ว')
+          set.status = 409
+          return {
+            success: false,
+            message: 'เลขบัตรประชาชนนี้ถูกใช้งานแล้ว'
+          }
+        }
+      }
+
       // เข้ารหัสรหัสผ่าน
       const bcrypt = await import('bcryptjs')
       const hashedPassword = await bcrypt.hash(body.password, 10)
@@ -217,6 +245,144 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       return {
         success: false,
         message: 'เกิดข้อผิดพลาดในการสมัครสมาชิก'
+      }
+    }
+  })
+
+  // 🎯 API สมัครสมาชิก Admin โดยตรง (สำหรับสร้าง Admin คนแรก)
+  .post('/register-admin', async ({ body, set }) => {
+    try {
+      console.log('🔐 เรียกใช้ API สมัครสมาชิก Admin โดยตรง')
+      console.log('📋 ข้อมูลที่ได้รับ:', body)
+
+      // ตรวจสอบข้อมูลด้วย validation
+      const validation = validateRegisterData(body)
+
+      if (!validation.isValid) {
+        console.log('❌ ตรวจสอบข้อมูลไม่ผ่าน:', validation.errors)
+        set.status = 400
+        return {
+          success: false,
+          message: formatValidationErrors(validation.errors)
+        }
+      }
+
+      // ตรวจสอบ email ซ้ำในทุก table
+      const existingInUsers = await prisma.users.findUnique({
+        where: { email: body.email }
+      })
+
+      const existingInOfficer = await prisma.officer.findUnique({
+        where: { email: body.email }
+      })
+
+      const existingInAdmin = await prisma.admin.findUnique({
+        where: { email: body.email }
+      })
+
+      const existingInExecutive = await prisma.executive.findUnique({
+        where: { email: body.email }
+      })
+
+      if (existingInUsers || existingInOfficer || existingInAdmin || existingInExecutive) {
+        console.log('❌ อีเมลนี้ถูกใช้งานแล้ว')
+        set.status = 409
+        return {
+          success: false,
+          message: 'อีเมลนี้ถูกใช้งานแล้ว'
+        }
+      }
+
+      // ตรวจสอบ citizen_id ซ้ำในทุก table (ถ้ามีการใส่มา)
+      if (body.citizen_id) {
+        const existingCitizenInUsers = await prisma.users.findUnique({
+          where: { citizen_id: body.citizen_id }
+        })
+
+        const existingCitizenInOfficer = await prisma.officer.findUnique({
+          where: { citizen_id: body.citizen_id }
+        })
+
+        const existingCitizenInAdmin = await prisma.admin.findUnique({
+          where: { citizen_id: body.citizen_id }
+        })
+
+        const existingCitizenInExecutive = await prisma.executive.findUnique({
+          where: { citizen_id: body.citizen_id }
+        })
+
+        if (existingCitizenInUsers || existingCitizenInOfficer || existingCitizenInAdmin || existingCitizenInExecutive) {
+          console.log('❌ เลขบัตรประชาชนนี้ถูกใช้งานแล้ว')
+          set.status = 409
+          return {
+            success: false,
+            message: 'เลขบัตรประชาชนนี้ถูกใช้งานแล้ว'
+          }
+        }
+      }
+
+      // เข้ารหัสรหัสผ่าน
+      const bcrypt = await import('bcryptjs')
+      const hashedPassword = await bcrypt.hash(body.password, 10)
+
+      // สร้าง Admin ใหม่
+      const newAdmin = await prisma.admin.create({
+        data: {
+          email: body.email,
+          password: hashedPassword,
+          first_name: body.first_name,
+          last_name: body.last_name,
+          role_id: 3, // admin role
+          citizen_id: body.citizen_id || null,
+          position: body.position || 'ผู้ดูแลระบบ',
+          department: body.department || 'สำนักงานอธิการบดี',
+          // Address fields
+          province_id: body.province_id ? parseInt(body.province_id) : null,
+          district_id: body.district_id ? parseInt(body.district_id) : null,
+          subdistrict_id: body.subdistrict_id ? parseInt(body.subdistrict_id) : null,
+          zip_code: body.zip_code ? parseInt(body.zip_code) : null,
+        }
+      })
+
+      console.log('✅ สร้าง Admin ใหม่สำเร็จ')
+
+      // ลบ password ออกจาก response
+      const { password, ...adminWithoutPassword } = newAdmin
+
+      return {
+        success: true,
+        message: 'สมัครสมาชิก Admin สำเร็จ!',
+        user: {
+          ...adminWithoutPassword,
+          userTable: 'admin',
+          role: 'admin'
+        }
+      }
+
+    } catch (err) {
+      console.error('❌ เกิดข้อผิดพลาดในการสมัครสมาชิก Admin:', err)
+
+      // จัดการ error เฉพาะ
+      if (err.code === 'P2002' && err.meta?.target?.includes('citizen_id')) {
+        set.status = 409
+        return {
+          success: false,
+          message: 'เลขบัตรประชาชนนี้ถูกใช้งานแล้ว'
+        }
+      }
+
+      if (err.code === 'P2002' && err.meta?.target?.includes('email')) {
+        set.status = 409
+        return {
+          success: false,
+          message: 'อีเมลนี้ถูกใช้งานแล้ว'
+        }
+      }
+
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการสมัครสมาชิก Admin'
       }
     }
   })

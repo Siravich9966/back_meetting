@@ -263,15 +263,23 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
 
       // Add room details to utilization data
       if (reports.room_utilization.length > 0) {
-        const roomIds = reports.room_utilization.map(r => r.room_id)
-        const rooms = await prisma.meeting_room.findMany({
-          where: { room_id: { in: roomIds } },
-          select: { room_id: true, room_name: true, department: true }
-        })
+        const roomIds = reports.room_utilization.map(r => r.room_id).filter(id => id !== null)
+        
+        let rooms = []
+        if (roomIds.length > 0) {
+          rooms = await prisma.meeting_room.findMany({
+            where: { room_id: { in: roomIds } },
+            select: { room_id: true, room_name: true, department: true }
+          })
+        }
 
         reports.room_utilization = reports.room_utilization.map(util => ({
           ...util,
-          meeting_room: rooms.find(room => room.room_id === util.room_id)
+          meeting_room: util.room_id ? rooms.find(room => room.room_id === util.room_id) : {
+            room_id: null,
+            room_name: 'ไม่ระบุห้อง',
+            department: 'ไม่ระบุ'
+          }
         }))
       }
 

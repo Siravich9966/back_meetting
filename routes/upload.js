@@ -215,8 +215,6 @@ export const publicUploadRoutes = new Elysia({ prefix: '/upload' })
       let user = null
       let searchedTable = 'unknown'
 
-      console.log(`🔍 [GET profile-image] Requesting userId: ${userIdInt}, role: ${role || 'auto-detect'}`)
-
       // ถ้ามี role parameter ให้ค้นหาใน table ที่ระบุ
       if (role) {
         switch (role.toLowerCase()) {
@@ -284,8 +282,6 @@ export const publicUploadRoutes = new Elysia({ prefix: '/upload' })
       }
 
       if (!user || !user.profile_image) {
-        console.log(`❌ [GET profile-image] ไม่พบรูปใน ${searchedTable} table สำหรับ ID ${userIdInt}, redirecting to UI Avatars`)
-        
         // สร้าง default avatar จาก UI Avatars API
         const avatarUrl = `https://ui-avatars.com/api/?name=User&size=150&background=6366f1&color=ffffff&rounded=true&bold=true`
         
@@ -302,7 +298,6 @@ export const publicUploadRoutes = new Elysia({ prefix: '/upload' })
       set.headers['Pragma'] = 'no-cache'
       set.headers['Expires'] = '0'
 
-      console.log(`✅ [GET profile-image] Returning image from ${searchedTable} table for ID ${userIdInt}`)
       return user.profile_image
 
     } catch (error) {

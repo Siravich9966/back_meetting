@@ -826,14 +826,16 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             select: { reservation_id: true, details_r: true }
           })
           
-          // อัปเดตแต่ละ reservation โดยไม่แทรกข้อความเข้าไปใน details_r
-          // เพียงแค่ตั้ง room_id = null เพื่อให้ระบบรู้ว่าห้องถูกลบ
+          // อัปเดตแต่ละ reservation โดยเก็บข้อมูลห้องไว้สำหรับประวัติ
+          // ตั้ง room_id = null แต่เก็บชื่อห้องและ department ไว้
           for (const reservation of reservations) {
             await prisma.reservation.update({
               where: { reservation_id: reservation.reservation_id },
               data: { 
-                room_id: null
-                // ไม่แก้ไข details_r เพื่อไม่ให้เกิดความสับสน
+                room_id: null,
+                // เพิ่มข้อมูลห้องที่ถูกลบเข้าไปใน details_r เพื่อเก็บประวัติ
+                details_r: reservation.details_r + 
+                  `\n[ห้องประชุม: ${roomInfo.room_name} (${roomInfo.department}) - ถูกลบแล้ว]`
               }
             })
           }
