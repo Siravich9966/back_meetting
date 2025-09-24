@@ -811,37 +811,11 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
           })
           console.log(`🗑️ Deleted ${equipmentCount.count} equipment records`)
 
-          // 3. แทนที่จะลบ reservation ทั้งหมด ให้ตั้งค่า room_id เป็น null และบันทึกชื่อห้อง
-          // เพื่อเก็บประวัติการใช้งานไว้สำหรับ audit trail และสถิติ
-          
-          // ดึงข้อมูลห้องก่อนลบ เพื่อเก็บชื่อไว้ในประวัติ
-          const roomInfo = await prisma.meeting_room.findUnique({
-            where: { room_id: roomId },
-            select: { room_name: true, department: true }
+          // 3. ลบ reservations ทั้งหมดของห้องนี้
+          const reservationCount = await prisma.reservation.deleteMany({
+            where: { room_id: roomId }
           })
-          
-          // ดึงข้อมูล reservation ทั้งหมดเพื่ออัปเดตแยกรายการ (รักษา details_r เดิม)
-          const reservations = await prisma.reservation.findMany({
-            where: { room_id: roomId },
-            select: { reservation_id: true, details_r: true }
-          })
-          
-          // อัปเดตแต่ละ reservation โดยเก็บข้อมูลห้องไว้สำหรับประวัติ
-          // ตั้ง room_id = null แต่เก็บชื่อห้องและ department ไว้
-          for (const reservation of reservations) {
-            await prisma.reservation.update({
-              where: { reservation_id: reservation.reservation_id },
-              data: { 
-                room_id: null,
-                // เพิ่มข้อมูลห้องที่ถูกลบเข้าไปใน details_r เพื่อเก็บประวัติ
-                details_r: reservation.details_r + 
-                  `\n[ห้องประชุม: ${roomInfo.room_name} (${roomInfo.department}) - ถูกลบแล้ว]`
-              }
-            })
-          }
-          
-          const reservationCount = { count: reservations.length }
-          console.log(`🗑️ Updated ${reservationCount.count} reservations (set room_id to null, kept historical data)`)
+          console.log(`🗑️ Deleted ${reservationCount.count} reservations`)
 
           // 4. สุดท้ายลบห้องประชุม
           await prisma.meeting_room.delete({

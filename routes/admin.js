@@ -144,15 +144,13 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
     }
 
     try {
-      const { first_name, last_name, email, citizen_id, position, department, role, password, address, zip_code } = await request.json()
+      const { first_name, last_name, email, citizen_id, position, department, role, password, province_id, district_id, subdistrict_id, zip_code } = await request.json()
       
       console.log(`➕ Admin: เพิ่มผู้ใช้ใหม่ ${first_name} ${last_name} (${role})`)
+      console.log(`📍 ข้อมูลที่อยู่: จังหวัด=${province_id}, อำเภอ=${district_id}, ตำบล=${subdistrict_id}, รหัสไปรษณีย์=${zip_code}`)
       
       // Hash password
       const hashedPassword = await Bun.password.hash(password)
-      
-      // จัดการข้อมูลที่อยู่
-      const addressData = address || {}
       
       // ตรวจสอบอีเมลซ้ำ
       const existingEmail = await Promise.all([
@@ -204,9 +202,9 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
               department: department || null,
               password: hashedPassword, // ใช้ password แทน password_hash
               // Address fields
-              province_id: addressData?.province?.province_id || null,
-              district_id: addressData?.district?.district_id || null,
-              subdistrict_id: addressData?.subdistrict?.subdistrict_id || null,
+              province_id: province_id ? parseInt(province_id) : null,
+              district_id: district_id ? parseInt(district_id) : null,
+              subdistrict_id: subdistrict_id ? parseInt(subdistrict_id) : null,
               zip_code: zip_code ? parseInt(zip_code) : null,
               created_at: new Date()
             }
@@ -225,9 +223,9 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
               department: department || 'ไม่ระบุ',
               password: hashedPassword, // ใช้ password แทน password_hash
               // Address fields
-              province_id: addressData?.province?.province_id || null,
-              district_id: addressData?.district?.district_id || null,
-              subdistrict_id: addressData?.subdistrict?.subdistrict_id || null,
+              province_id: province_id ? parseInt(province_id) : null,
+              district_id: district_id ? parseInt(district_id) : null,
+              subdistrict_id: subdistrict_id ? parseInt(subdistrict_id) : null,
               zip_code: zip_code ? parseInt(zip_code) : null,
               created_at: new Date()
             }
@@ -246,9 +244,9 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
               department: department || 'ไม่ระบุ',
               password: hashedPassword, // ใช้ password แทน password_hash
               // Address fields
-              province_id: addressData?.province?.province_id || null,
-              district_id: addressData?.district?.district_id || null,
-              subdistrict_id: addressData?.subdistrict?.subdistrict_id || null,
+              province_id: province_id ? parseInt(province_id) : null,
+              district_id: district_id ? parseInt(district_id) : null,
+              subdistrict_id: subdistrict_id ? parseInt(subdistrict_id) : null,
               zip_code: zip_code ? parseInt(zip_code) : null,
               created_at: new Date()
             }
@@ -267,9 +265,9 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
               department: department || 'สำนักงานอธิการบดี',
               password: hashedPassword, // ใช้ password แทน password_hash
               // Address fields
-              province_id: addressData?.province?.province_id || null,
-              district_id: addressData?.district?.district_id || null,
-              subdistrict_id: addressData?.subdistrict?.subdistrict_id || null,
+              province_id: province_id ? parseInt(province_id) : null,
+              district_id: district_id ? parseInt(district_id) : null,
+              subdistrict_id: subdistrict_id ? parseInt(subdistrict_id) : null,
               zip_code: zip_code ? parseInt(zip_code) : null,
               created_at: new Date()
             }
@@ -315,9 +313,9 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
 
     try {
       const { userId } = params
-      const { first_name, last_name, email, citizen_id, position, department, role, originalRole, zip_code, province_id, district_id, subdistrict_id } = await request.json()
+      const { first_name, last_name, email, citizen_id, department, originalRole, zip_code, province_id, district_id, subdistrict_id } = await request.json()
       
-      console.log(`✏️ Admin: แก้ไขผู้ใช้ ID=${userId}, Role=${originalRole}->${role}`)
+      console.log(`✏️ Admin: แก้ไขข้อมูลผู้ใช้ ID=${userId}, Role=${originalRole}`)
       
       // ตรวจสอบอีเมลซ้ำ (ยกเว้นตัวเอง)
       const existingEmail = await Promise.all([
@@ -355,82 +353,8 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
 
       let updatedUser
       
-      // ถ้าเปลี่ยน role ต้องลบจาก table เดิมและสร้างใหม่
-      if (originalRole !== role) {
-        // ลบจาก table เดิม
-        switch(originalRole) {
-          case 'user':
-            await prisma.users.delete({ where: { user_id: parseInt(userId) } })
-            break
-          case 'officer':
-            await prisma.officer.delete({ where: { officer_id: parseInt(userId) } })
-            break
-          case 'executive':
-            await prisma.executive.delete({ where: { executive_id: parseInt(userId) } })
-            break
-          case 'admin':
-            await prisma.admin.delete({ where: { admin_id: parseInt(userId) } })
-            break
-        }
-        
-        // สร้างใน table ใหม่
-        switch(role) {
-          case 'user':
-            updatedUser = await prisma.users.create({
-              data: {
-                first_name,
-                last_name,
-                email,
-                citizen_id,
-                password_hash: 'temp_password_hash',
-                created_at: new Date()
-              }
-            })
-            break
-          case 'officer':
-            updatedUser = await prisma.officer.create({
-              data: {
-                first_name,
-                last_name,
-                email,
-                citizen_id,
-                position: position || 'เจ้าหน้าที่',
-                department: department || 'ไม่ระบุ',
-                password_hash: 'temp_password_hash',
-                created_at: new Date()
-              }
-            })
-            break
-          case 'executive':
-            updatedUser = await prisma.executive.create({
-              data: {
-                first_name,
-                last_name,
-                email,
-                citizen_id,
-                position: position || 'ผู้บริหาร',
-                department: department || 'ไม่ระบุ',
-                password_hash: 'temp_password_hash',
-                created_at: new Date()
-              }
-            })
-            break
-          case 'admin':
-            updatedUser = await prisma.admin.create({
-              data: {
-                first_name,
-                last_name,
-                email,
-                citizen_id,
-                password_hash: 'temp_password_hash',
-                created_at: new Date()
-              }
-            })
-            break
-        }
-      } else {
-        // แก้ไขใน table เดิม
-        switch(role) {
+      // แก้ไขข้อมูลใน table เดิม (ไม่เปลี่ยน role)
+      switch(originalRole) {
           case 'user':
             updatedUser = await prisma.users.update({
               where: { user_id: parseInt(userId) },
@@ -439,6 +363,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 last_name,
                 email,
                 citizen_id,
+                department: department || 'ไม่ระบุ',
                 zip_code: zip_code ? parseInt(zip_code, 10) : null,
                 province_id: province_id ? parseInt(province_id, 10) : null,
                 district_id: district_id ? parseInt(district_id, 10) : null,
@@ -454,7 +379,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 last_name,
                 email,
                 citizen_id,
-                position: position || 'เจ้าหน้าที่',
                 department: department || 'ไม่ระบุ',
                 zip_code: zip_code ? parseInt(zip_code, 10) : null,
                 province_id: province_id ? parseInt(province_id, 10) : null,
@@ -471,7 +395,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 last_name,
                 email,
                 citizen_id,
-                position: position || 'ผู้บริหาร',
                 department: department || 'ไม่ระบุ',
                 zip_code: zip_code ? parseInt(zip_code, 10) : null,
                 province_id: province_id ? parseInt(province_id, 10) : null,
@@ -488,6 +411,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 last_name,
                 email,
                 citizen_id,
+                department: department || 'ไม่ระบุ',
                 zip_code: zip_code ? parseInt(zip_code, 10) : null,
                 province_id: province_id ? parseInt(province_id, 10) : null,
                 district_id: district_id ? parseInt(district_id, 10) : null,
@@ -496,12 +420,11 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
             })
             break
         }
-      }
       
       return {
         success: true,
-        message: `แก้ไขข้อมูลผู้ใช้ ${role} สำเร็จ`,
-        data: { ...updatedUser, role }
+        message: `แก้ไขข้อมูลผู้ใช้สำเร็จ`,
+        data: { ...updatedUser, role: originalRole }
       }
       
     } catch (error) {
@@ -543,11 +466,29 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
       // ลบจาก table ที่ถูกต้องตาม role
       switch(role) {
         case 'user':
+          // ลบ reservations ที่เชื่อมโยงก่อน (Cascade Delete)
+          const deletedUserReservations = await prisma.reservation.deleteMany({
+            where: { user_id: parseInt(userId) }
+          })
+          console.log(`🗑️ ลบ ${deletedUserReservations.count} reservations ที่เชื่อมโยงกับ user ID=${userId}`)
+          
+          // ลบ reviews ที่เชื่อมโยงก่อน (Cascade Delete)
+          const deletedUserReviews = await prisma.review.deleteMany({
+            where: { user_id: parseInt(userId) }
+          })
+          console.log(`🗑️ ลบ ${deletedUserReviews.count} reviews ที่เชื่อมโยงกับ user ID=${userId}`)
+          
           deleteResult = await prisma.users.delete({
             where: { user_id: parseInt(userId) }
           })
           break
         case 'officer':
+          // ลบ reservations ที่เชื่อมโยงก่อน (Cascade Delete)
+          const deletedReservations = await prisma.reservation.deleteMany({
+            where: { officer_id: parseInt(userId) }
+          })
+          console.log(`🗑️ ลบ ${deletedReservations.count} reservations ที่เชื่อมโยงกับ officer ID=${userId}`)
+          
           deleteResult = await prisma.officer.delete({
             where: { officer_id: parseInt(userId) }
           })

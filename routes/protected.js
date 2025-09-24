@@ -841,21 +841,10 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           twoDaysAgo.setDate(twoDaysAgo.getDate() - 2)
           
           const where = {
-            OR: [
-              // ห้องที่ยังอยู่ในคณะนี้
-              {
-                meeting_room: {
-                  department: user.position_department
-                }
-              },
-              // ห้องที่ถูกลบแล้ว (room_id = null) แต่มีข้อมูลคณะใน details_r
-              {
-                room_id: null,
-                details_r: {
-                  contains: `(${user.position_department})`
-                }
-              }
-            ],
+            // เฉพาะห้องที่ยังอยู่ในคณะนี้ (ไม่เอาห้องที่ถูกลบแล้ว)
+            meeting_room: {
+              department: user.position_department
+            },
             // การจองที่เก่ากว่า 2 วัน (สำหรับประวัติ)
             created_at: {
               lt: twoDaysAgo
@@ -987,25 +976,58 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1)
           const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
 
-          // 1. สถิติห้องประชุมของฉัน (ในหน่วยงานที่รับผิดชอบ)
-          const myRoomsTotal = await prisma.meeting_room.count({
+          // 1. ดึงห้องประชุมของฉัน (ในหน่วยงานที่รับผิดชอบ) พร้อมสถิติการจอง
+          const myRooms = await prisma.meeting_room.findMany({
             where: {
               department: user.position_department
+            },
+            include: {
+              _count: {
+                select: {
+                  reservation: {
+                    where: {
+                      status_r: 'approved', // เฉพาะที่อนุมัติแล้ว
+                      // ไม่รวมการจองที่ถูกยกเลิก (ตรวจสอบตามสถานะอื่น ๆ ถ้ามี)
+                    }
+                  }
+                }
+              }
             }
           })
 
-          // 2. สถิติการจองในหน่วยงานของฉันในเดือนนี้
-          const myDepartmentThisMonthReservations = await prisma.reservation.count({
+          // 2. สถิติการจองตามหน่วยงานของผู้ใช้ที่มาจอง (ไม่ใช่หน่วยงานของเจ้าหน้าที่)
+          const departmentReservationStats = await prisma.reservation.findMany({
             where: {
               meeting_room: {
                 department: user.position_department
               },
-              start_at: {
-                gte: thisMonth,
-                lte: nextMonth
+              status_r: 'approved', // เฉพาะที่อนุมัติแล้ว
+            },
+            include: {
+              users: {
+                select: {
+                  department: true
+                }
               }
             }
           })
+
+          // จัดกลุ่มสถิติตามหน่วยงานของผู้ใช้ที่จอง
+          const departmentBookingStats = {}
+          departmentReservationStats.forEach(reservation => {
+            const userDepartment = reservation.users?.department || 'ไม่ระบุหน่วยงาน'
+            if (!departmentBookingStats[userDepartment]) {
+              departmentBookingStats[userDepartment] = 0
+            }
+            departmentBookingStats[userDepartment]++
+          })
+
+          // แปลงเป็น array และเรียงลำดับ
+          const departmentStatsArray = Object.entries(departmentBookingStats).map(([department, bookings]) => ({
+            department,
+            bookings,
+            percentage: 100 // จะคำนวณเปอร์เซ็นต์ใน frontend
+          })).sort((a, b) => b.bookings - a.bookings)
 
           // 3. การจองที่รอการอนุมัติในหน่วยงานของฉัน
           const myDepartmentPendingApprovals = await prisma.reservation.count({
@@ -1017,8 +1039,19 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
             }
           })
 
-          // 4. สถิติห้องประชุมทั้งหมดในระบบ
-          const allRoomsTotal = await prisma.meeting_room.count()
+          // 4. การจองในเดือนนี้ของหน่วยงานที่ดูแล
+          const myDepartmentThisMonthReservations = await prisma.reservation.count({
+            where: {
+              meeting_room: {
+                department: user.position_department
+              },
+              status_r: 'approved',
+              start_at: {
+                gte: thisMonth,
+                lte: nextMonth
+              }
+            }
+          })
 
           // 5. การจองวันนี้ทั้งระบบ
           const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate())
@@ -1033,46 +1066,101 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
             }
           })
 
-          // 6. สถิติหน่วยงานทั้งหมด
-          const totalDepartments = await prisma.meeting_room.groupBy({
-            by: ['department'],
-            _count: {
-              department: true
-            }
-          })
-
-          // 7. การจองทั้งหมดในเดือนนี้ของทุกหน่วยงาน
-          const allDepartmentsTotalReservations = await prisma.reservation.count({
-            where: {
-              start_at: {
-                gte: thisMonth,
-                lte: nextMonth
+          // 6. สถิติการใช้ห้องประชุมทั้งหมดในระบบ
+          const allRooms = await prisma.meeting_room.findMany({
+            include: {
+              _count: {
+                select: {
+                  reservation: {
+                    where: {
+                      status_r: 'approved', // เฉพาะที่อนุมัติแล้ว
+                    }
+                  }
+                }
+              }
+            },
+            orderBy: {
+              reservation: {
+                _count: 'desc' // เรียงจากห้องที่ถูกจองมากที่สุด
               }
             }
           })
 
+          // 7. สถิติการจองตามหน่วยงานทั้งหมดในระบบ (ของผู้ใช้ที่จอง)
+          const allDepartmentReservationStats = await prisma.reservation.findMany({
+            where: {
+              status_r: 'approved', // เฉพาะที่อนุมัติแล้ว
+            },
+            include: {
+              users: {
+                select: {
+                  department: true
+                }
+              }
+            }
+          })
+
+          // จัดกลุ่มสถิติตามหน่วยงานของผู้ใช้ทั้งระบบ
+          const allDepartmentBookingStats = {}
+          allDepartmentReservationStats.forEach(reservation => {
+            const userDepartment = reservation.users?.department || 'ไม่ระบุหน่วยงาน'
+            if (!allDepartmentBookingStats[userDepartment]) {
+              allDepartmentBookingStats[userDepartment] = 0
+            }
+            allDepartmentBookingStats[userDepartment]++
+          })
+
+          // แปลงเป็น array และเรียงลำดับ พร้อมคำนวณเปอร์เซ็นต์
+          const totalAllBookings = allDepartmentReservationStats.length
+          const allDepartmentStatsArray = Object.entries(allDepartmentBookingStats).map(([department, bookings]) => ({
+            department,
+            bookings,
+            percentage: totalAllBookings > 0 ? ((bookings / totalAllBookings) * 100).toFixed(1) : 0
+          })).sort((a, b) => b.bookings - a.bookings)
+
           const stats = {
             // สถิติห้องประชุมของเจ้าหน้าที่
             my_rooms_stats: {
-              total_rooms: myRoomsTotal
+              total_rooms: myRooms.length,
+              rooms_detail: myRooms.map(room => ({
+                room_id: room.room_id,
+                room_name: room.room_name,
+                capacity: room.capacity,
+                department: room.department,
+                bookings: room._count.reservation
+              }))
+            },
+            
+            // สถิติการจองตามหน่วยงานของผู้ใช้ที่มาจอง (เฉพาะห้องที่ดูแล)
+            department_booking_stats: {
+              data: departmentStatsArray,
+              total_bookings: departmentReservationStats.length
+            },
+            
+            // สถิติห้องประชุมทั้งหมดในระบบ
+            all_rooms_stats: {
+              total_rooms: allRooms.length,
+              rooms_detail: allRooms.map(room => ({
+                room_id: room.room_id,
+                room_name: room.room_name,
+                capacity: room.capacity,
+                department: room.department,
+                bookings: room._count.reservation
+              })),
+              total_bookings: allRooms.reduce((sum, room) => sum + room._count.reservation, 0)
+            },
+            
+            // สถิติการจองตามหน่วยงานทั้งหมดในระบบ
+            all_department_booking_stats: {
+              data: allDepartmentStatsArray,
+              total_bookings: totalAllBookings
             },
             
             // สถิติหน่วยงานของเจ้าหน้าที่
             my_department_stats: {
               this_month_reservations: myDepartmentThisMonthReservations,
-              pending_approvals: myDepartmentPendingApprovals
-            },
-            
-            // สถิติห้องประชุมทั้งหมด
-            all_rooms_stats: {
-              total_rooms: allRoomsTotal,
+              pending_approvals: myDepartmentPendingApprovals,
               today_reservations: todayReservations
-            },
-            
-            // สถิติหน่วยงานทั้งหมด
-            all_departments_stats: {
-              total_departments: totalDepartments.length,
-              this_month_total_reservations: allDepartmentsTotalReservations
             }
           }
 
