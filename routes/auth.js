@@ -189,7 +189,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
             last_name: body.last_name,
             role_id: roleId, // 4 = executive
             citizen_id: body.citizen_id || null,
-            position: executiveType, // university_executive หรือ faculty_executive
+            position: body.position, // เก็บตำแหน่งภาษาไทยตามที่ผู้ใช้เลือก
             department: departmentFromPosition ||
               (executiveType === 'university_executive' ? 'สำนักงานอธิการบดี' : body.department),
             // Address fields - รับ IDs และ zip_code

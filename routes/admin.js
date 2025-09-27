@@ -5,6 +5,19 @@
 import { Elysia } from 'elysia'
 import prisma from '../lib/prisma.js'
 import { authMiddleware, isAdmin } from '../middleware/index.js'
+import {
+  isValidPosition,
+  getDepartmentFromPosition,
+  getExecutivePositionType,
+  ALL_OFFICER_POSITIONS,
+  POSITIONS
+} from '../utils/positions.js'
+
+// ฟังก์ชันช่วยแปลงตำแหน่งให้แสดงเป็นภาษาไทย โดยเฉพาะผู้บริหาร
+const positionDisplay = (role, position, department) => {
+  // ตอนนี้ executive เก็บ position เป็นภาษาไทยแล้ว ไม่ต้องแปลง
+  return position || null
+}
 
 export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
   
@@ -99,13 +112,16 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
         })
       ])
 
-      // รวมข้อมูลและเพิ่ม role
+      // รวมข้อมูลและเพิ่ม role + position_display (ภาษาไทย)
       const allUsers = [
         ...users.map(u => ({ ...u, role: 'user' })),
         ...officers.map(o => ({ ...o, role: 'officer' })),
         ...executives.map(e => ({ ...e, role: 'executive' })),
         ...admins.map(a => ({ ...a, role: 'admin' }))
-      ]
+      ].map(u => ({
+        ...u,
+        position_display: positionDisplay(u.role, u.position, u.department)
+      }))
 
       // เรียงตาม created_at จากใหม่ไปเก่า
       allUsers.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -128,6 +144,103 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
   })
   
   // ============================
+  // 👁️ ดูข้อมูลผู้ใช้รายคน (สำหรับแก้ไข)
+  // ============================
+  .get('/users/:userId/:role', async ({ request, set, params }) => {
+    // ตรวจสอบสิทธิ์ admin
+    const user = await authMiddleware(request, set)
+    if (user.success === false) return user
+    
+    if (!isAdmin(user)) {
+      set.status = 403
+      return {
+        success: false,
+        message: 'การเข้าถึงจำกัดเฉพาะผู้ดูแลระบบเท่านั้น'
+      }
+    }
+
+    try {
+      const { userId, role } = params
+      console.log(`👁️ Admin: ดูข้อมูลผู้ใช้ ID=${userId}, Role=${role}`)
+      
+      let userData = null
+      
+      // ดึงข้อมูลตาม role พร้อม address information
+      if (role === 'user') {
+        userData = await prisma.users.findUnique({
+          where: { user_id: parseInt(userId) },
+          include: {
+            province: true,
+            district: true,
+            subdistrict: true
+          }
+        })
+      } else if (role === 'officer') {
+        userData = await prisma.officer.findUnique({
+          where: { officer_id: parseInt(userId) },
+          include: {
+            province: true,
+            district: true,
+            subdistrict: true
+          }
+        })
+      } else if (role === 'executive') {
+        userData = await prisma.executive.findUnique({
+          where: { executive_id: parseInt(userId) },
+          include: {
+            province: true,
+            district: true,
+            subdistrict: true
+          }
+        })
+      } else if (role === 'admin') {
+        userData = await prisma.admin.findUnique({
+          where: { admin_id: parseInt(userId) },
+          include: {
+            province: true,
+            district: true,
+            subdistrict: true
+          }
+        })
+      }
+
+      if (!userData) {
+        set.status = 404
+        return {
+          success: false,
+          message: 'ไม่พบข้อมูลผู้ใช้'
+        }
+      }
+
+      // เพิ่ม role และจัดรูปแบบข้อมูล address + position_display
+      const responseData = {
+        ...userData,
+        role,
+        // เพิ่มข้อมูลที่อยู่ที่มีชื่อ
+        province_name: userData.province?.province_name || null,
+        district_name: userData.district?.district_name || null,
+        subdistrict_name: userData.subdistrict?.subdistrict_name || null,
+        // เพิ่มตำแหน่งแสดงผลเป็นภาษาไทย
+        position_display: positionDisplay(role, userData.position, userData.department)
+      }
+
+      return {
+        success: true,
+        message: `ดึงข้อมูลผู้ใช้ ${userData.first_name} ${userData.last_name}`,
+        data: responseData
+      }
+      
+    } catch (error) {
+      console.error('❌ เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้:', error)
+      set.status = 500
+      return {
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้'
+      }
+    }
+  })
+
+  // ============================
   // ➕ เพิ่มผู้ใช้ใหม่ (สำหรับหน้าจัดการผู้ใช้)
   // ============================
   .post('/users', async ({ request, set }) => {
@@ -144,131 +257,162 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
     }
 
     try {
-      const { first_name, last_name, email, citizen_id, position, department, role, password, province_id, district_id, subdistrict_id, zip_code } = await request.json()
-      
-      console.log(`➕ Admin: เพิ่มผู้ใช้ใหม่ ${first_name} ${last_name} (${role})`)
-      console.log(`📍 ข้อมูลที่อยู่: จังหวัด=${province_id}, อำเภอ=${district_id}, ตำบล=${subdistrict_id}, รหัสไปรษณีย์=${zip_code}`)
-      
-      // Hash password
-      const hashedPassword = await Bun.password.hash(password)
-      
-      // ตรวจสอบอีเมลซ้ำ
-      const existingEmail = await Promise.all([
-        prisma.users.findFirst({ where: { email } }),
-        prisma.officer.findFirst({ where: { email } }),
-        prisma.executive.findFirst({ where: { email } }),
-        prisma.admin.findFirst({ where: { email } })
-      ])
-      
-      if (existingEmail.some(result => result !== null)) {
+      const body = await request.json()
+      console.log(`➕ Admin: เพิ่มผู้ใช้ใหม่ ${body.first_name} ${body.last_name} (${body.role})`)
+      console.log(`📍 ข้อมูลที่อยู่: จังหวัด=${body.province_id}, อำเภอ=${body.district_id}, ตำบล=${body.subdistrict_id}, รหัสไปรษณีย์=${body.zip_code}`)
+
+      // ตรวจสอบข้อมูลพื้นฐานก่อนแฮชรหัสผ่าน
+      if (!body.email || !body.password || !body.first_name || !body.last_name || !body.role) {
         set.status = 400
-        return {
-          success: false,
-          message: 'อีเมลนี้มีผู้ใช้แล้ว',
-          error: 'email already exists'
-        }
+        return { success: false, message: 'กรอกข้อมูลไม่ครบ (ต้องมี first_name, last_name, email, password, role)' }
       }
-      
-      // ตรวจสอบเลขบัตรประชาชนซ้ำ
-      const existingCitizenId = await Promise.all([
-        prisma.users.findFirst({ where: { citizen_id } }),
-        prisma.officer.findFirst({ where: { citizen_id } }),
-        prisma.executive.findFirst({ where: { citizen_id } }),
-        prisma.admin.findFirst({ where: { citizen_id } })
-      ])
-      
-      if (existingCitizenId.some(result => result !== null)) {
-        set.status = 400
-        return {
-          success: false,
-          message: 'เลขบัตรประชาชนนี้มีผู้ใช้แล้ว',
-          error: 'citizen_id already exists'
+
+      // Hash password หลังตรวจสอบข้อมูลครบถ้วนแล้ว
+      const bcrypt = await import('bcryptjs')
+      const hashedPassword = await bcrypt.hash(body.password, 10)
+
+      // ตรวจสอบอีเมลซ้ำด้วย unique lookup และส่งสถานะ 409
+      const existingInUsers = await prisma.users.findUnique({ where: { email: body.email } })
+      const existingInOfficer = await prisma.officer.findUnique({ where: { email: body.email } })
+      const existingInExecutive = await prisma.executive.findUnique({ where: { email: body.email } })
+      const existingInAdmin = await prisma.admin.findUnique({ where: { email: body.email } })
+
+      if (existingInUsers || existingInOfficer || existingInExecutive || existingInAdmin) {
+        set.status = 409
+        return { success: false, message: 'อีเมลนี้ถูกใช้งานแล้ว' }
+      }
+
+      // ตรวจสอบเลขบัตรประชาชนซ้ำ (เฉพาะเมื่อส่งมา)
+      if (body.citizen_id) {
+        const existingCitizenInUsers = await prisma.users.findUnique({ where: { citizen_id: body.citizen_id } })
+        const existingCitizenInOfficer = await prisma.officer.findUnique({ where: { citizen_id: body.citizen_id } })
+        const existingCitizenInExecutive = await prisma.executive.findUnique({ where: { citizen_id: body.citizen_id } })
+        const existingCitizenInAdmin = await prisma.admin.findUnique({ where: { citizen_id: body.citizen_id } })
+
+        if (existingCitizenInUsers || existingCitizenInOfficer || existingCitizenInExecutive || existingCitizenInAdmin) {
+          set.status = 409
+          return { success: false, message: 'เลขบัตรประชาชนนี้ถูกใช้งานแล้ว' }
         }
       }
 
       let newUser
       
       // สร้างผู้ใช้ใน table ที่เหมาะสมตาม role
-      switch(role) {
+      switch(body.role) {
         case 'user':
           newUser = await prisma.users.create({
             data: {
               role_id: 1, // role_id สำหรับ user
-              first_name,
-              last_name,
-              email,
-              citizen_id,
-              position: position || null,
-              department: department || null,
-              password: hashedPassword, // ใช้ password แทน password_hash
+              email: body.email,
+              password: hashedPassword,
+              first_name: body.first_name,
+              last_name: body.last_name,
+              citizen_id: body.citizen_id || null,
+              position: body.position || null,
+              department: body.department || null,
               // Address fields
-              province_id: province_id ? parseInt(province_id) : null,
-              district_id: district_id ? parseInt(district_id) : null,
-              subdistrict_id: subdistrict_id ? parseInt(subdistrict_id) : null,
-              zip_code: zip_code ? parseInt(zip_code) : null,
+              province_id: body.province_id ? parseInt(body.province_id) : null,
+              district_id: body.district_id ? parseInt(body.district_id) : null,
+              subdistrict_id: body.subdistrict_id ? parseInt(body.subdistrict_id) : null,
+              zip_code: body.zip_code ? parseInt(body.zip_code) : null,
               created_at: new Date()
             }
           })
           break
           
         case 'officer':
-          newUser = await prisma.officer.create({
-            data: {
-              role_id: 2, // role_id สำหรับ officer
-              first_name,
-              last_name,
-              email,
-              citizen_id,
-              position: position || 'เจ้าหน้าที่',
-              department: department || 'ไม่ระบุ',
-              password: hashedPassword, // ใช้ password แทน password_hash
-              // Address fields
-              province_id: province_id ? parseInt(province_id) : null,
-              district_id: district_id ? parseInt(district_id) : null,
-              subdistrict_id: subdistrict_id ? parseInt(subdistrict_id) : null,
-              zip_code: zip_code ? parseInt(zip_code) : null,
-              created_at: new Date()
-            }
-          })
+          // officer ต้องมี position ที่อยู่ในรายการที่รองรับ
+          if (!body.position || !ALL_OFFICER_POSITIONS.includes(body.position)) {
+            set.status = 400
+            return { success: false, message: 'ตำแหน่งเจ้าหน้าที่ไม่ถูกต้อง' }
+          }
+
+          // คำนวณ department จาก position หากไม่ได้ส่งมา
+          {
+            const derivedDept = getDepartmentFromPosition(body.position)
+            const finalDept = body.department || derivedDept || 'ไม่ระบุ'
+            newUser = await prisma.officer.create({
+              data: {
+                role_id: 2, // role_id สำหรับ officer
+                email: body.email,
+                password: hashedPassword,
+                first_name: body.first_name,
+                last_name: body.last_name,
+                citizen_id: body.citizen_id || null,
+                position: body.position, // เก็บเป็นชื่อไทยที่เลือก
+                department: finalDept,
+                // Address fields
+                province_id: body.province_id ? parseInt(body.province_id) : null,
+                district_id: body.district_id ? parseInt(body.district_id) : null,
+                subdistrict_id: body.subdistrict_id ? parseInt(body.subdistrict_id) : null,
+                zip_code: body.zip_code ? parseInt(body.zip_code) : null,
+                created_at: new Date()
+              }
+            })
+          }
           break
           
         case 'executive':
-          newUser = await prisma.executive.create({
-            data: {
-              role_id: 3, // role_id สำหรับ executive
-              first_name,
-              last_name,
-              email,
-              citizen_id,
-              position: position || 'ผู้บริหาร',
-              department: department || 'ไม่ระบุ',
-              password: hashedPassword, // ใช้ password แทน password_hash
-              // Address fields
-              province_id: province_id ? parseInt(province_id) : null,
-              district_id: district_id ? parseInt(district_id) : null,
-              subdistrict_id: subdistrict_id ? parseInt(subdistrict_id) : null,
-              zip_code: zip_code ? parseInt(zip_code) : null,
-              created_at: new Date()
+          // executive ต้องเป็นตำแหน่งที่รองรับ และต้องแปลงเป็นคีย์ภายใน
+          if (!body.position || !isValidPosition(body.position)) {
+            set.status = 400
+            return { success: false, message: 'ตำแหน่งผู้บริหารไม่ถูกต้อง' }
+          }
+
+          {
+            const execType = getExecutivePositionType(body.position) // 'university_executive' | 'faculty_executive'
+            if (!execType) {
+              set.status = 400
+              return { success: false, message: 'ตำแหน่งผู้บริหารไม่ถูกต้อง' }
             }
-          })
+
+            // department: ระดับมหาวิทยาลัย → สำนักงานอธิการบดี, ระดับคณะ → ดึงจาก position ถ้าไม่ส่งมา
+            const derivedDept = execType === 'university_executive'
+              ? 'สำนักงานอธิการบดี'
+              : (getDepartmentFromPosition(body.position) || body.department)
+
+            if (execType === 'faculty_executive' && !derivedDept) {
+              set.status = 400
+              return { success: false, message: 'กรุณาระบุคณะของผู้บริหารระดับคณะ' }
+            }
+
+            newUser = await prisma.executive.create({
+              data: {
+                role_id: 4, // role_id สำหรับ executive
+                email: body.email,
+                password: hashedPassword,
+                first_name: body.first_name,
+                last_name: body.last_name,
+                citizen_id: body.citizen_id || null,
+                position: body.position, // เก็บตำแหน่งภาษาไทยตามที่ผู้ใช้เลือก
+                department: derivedDept,
+                // Address fields
+                province_id: body.province_id ? parseInt(body.province_id) : null,
+                district_id: body.district_id ? parseInt(body.district_id) : null,
+                subdistrict_id: body.subdistrict_id ? parseInt(body.subdistrict_id) : null,
+                zip_code: body.zip_code ? parseInt(body.zip_code) : null,
+                created_at: new Date()
+              }
+            })
+          }
           break
           
         case 'admin':
           newUser = await prisma.admin.create({
             data: {
-              role_id: 4, // role_id สำหรับ admin
-              first_name,
-              last_name,
-              email,
-              citizen_id,
-              position: position || 'ผู้ดูแลระบบ',
-              department: department || 'สำนักงานอธิการบดี',
-              password: hashedPassword, // ใช้ password แทน password_hash
+              role_id: 3, // role_id สำหรับ admin
+              email: body.email,
+              password: hashedPassword,
+              first_name: body.first_name,
+              last_name: body.last_name,
+              citizen_id: body.citizen_id || null,
+              position: body.position || 'ผู้ดูแลระบบ',
+              department: body.department || 'สำนักงานอธิการบดี',
               // Address fields
-              province_id: province_id ? parseInt(province_id) : null,
-              district_id: district_id ? parseInt(district_id) : null,
-              subdistrict_id: subdistrict_id ? parseInt(subdistrict_id) : null,
-              zip_code: zip_code ? parseInt(zip_code) : null,
+              province_id: body.province_id ? parseInt(body.province_id) : null,
+              district_id: body.district_id ? parseInt(body.district_id) : null,
+              subdistrict_id: body.subdistrict_id ? parseInt(body.subdistrict_id) : null,
+              zip_code: body.zip_code ? parseInt(body.zip_code) : null,
               created_at: new Date()
             }
           })
@@ -278,10 +422,17 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
           throw new Error('Invalid role specified')
       }
       
+      // ไม่ส่ง password กลับ + เติม position_display (ชื่อไทย)
+      const { password, ...safeUser } = newUser || {}
+      const responseData = {
+        ...safeUser,
+        role: body.role,
+        position_display: positionDisplay(body.role, safeUser.position, safeUser.department)
+      }
       return {
         success: true,
-        message: `เพิ่มผู้ใช้ ${role} สำเร็จ`,
-        data: { ...newUser, role }
+        message: `เพิ่มผู้ใช้ ${body.role} สำเร็จ`,
+        data: responseData
       }
       
     } catch (error) {
@@ -424,7 +575,11 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
       return {
         success: true,
         message: `แก้ไขข้อมูลผู้ใช้สำเร็จ`,
-        data: { ...updatedUser, role: originalRole }
+        data: {
+          ...updatedUser,
+          role: originalRole,
+          position_display: positionDisplay(originalRole, updatedUser.position, updatedUser.department)
+        }
       }
       
     } catch (error) {
@@ -703,7 +858,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
     try {
       console.log('👁️ Admin: ดูข้อมูล Executive ทั้งหมด')
       
-      const executives = await prisma.executive.findMany({
+      let executives = await prisma.executive.findMany({
         select: {
           executive_id: true,
           role_id: true,
@@ -717,6 +872,11 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
           created_at: true
         }
       })
+      // เติมตำแหน่งภาษาไทยเพื่อแสดงผล
+      executives = executives.map(e => ({
+        ...e,
+        position_display: positionDisplay('executive', e.position, e.department)
+      }))
       
       return {
         success: true,
@@ -804,10 +964,26 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
         success: true,
         message: `Admin เห็นข้อมูลทุกคน จาก 4 tables`,
         data: {
-          users: users.map(u => ({...u, role: 'user'})),
-          officers: officers.map(o => ({...o, role: 'officer'})),
-          admins: admins.map(a => ({...a, role: 'admin'})),
-          executives: executives.map(e => ({...e, role: 'executive'}))
+          users: users.map(u => ({
+            ...u,
+            role: 'user',
+            position_display: positionDisplay('user', u.position, u.department)
+          })),
+          officers: officers.map(o => ({
+            ...o,
+            role: 'officer',
+            position_display: positionDisplay('officer', o.position, o.department)
+          })),
+          admins: admins.map(a => ({
+            ...a,
+            role: 'admin',
+            position_display: positionDisplay('admin', a.position, a.department)
+          })),
+          executives: executives.map(e => ({
+            ...e,
+            role: 'executive',
+            position_display: positionDisplay('executive', e.position, e.department)
+          }))
         },
         summary: {
           total: users.length + officers.length + admins.length + executives.length,
@@ -833,10 +1009,10 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
   // ============================
   .post('/promote/user-to-officer', async ({ request, body, set }) => {
     // ตรวจสอบสิทธิ์ admin
-    const user = await authMiddleware(request, set)
-    if (user.success === false) return user
+    const auth = await authMiddleware(request, set)
+    if (auth.success === false) return auth
     
-    if (!isAdmin(user)) {
+    if (!isAdmin(auth)) {
       set.status = 403
       return {
         success: false,
@@ -856,11 +1032,11 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
       }
       
       // Simple promotion logic - แทนที่ role-transfer function
-      const user = await prisma.users.findUnique({
+      const targetUser = await prisma.users.findUnique({
         where: { email: body.email }
       })
       
-      if (!user) {
+      if (!targetUser) {
         set.status = 404
         return {
           success: false,
@@ -881,25 +1057,28 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
         }
       }
       
-      // สร้าง officer ใหม่
+      // สร้าง officer ใหม่ พร้อมคัดลอกข้อมูลที่อยู่
       await prisma.officer.create({
         data: {
           role_id: 2, // officer role
-          first_name: user.first_name,
-          last_name: user.last_name,
-          email: user.email,
-          password: user.password,
-          citizen_id: user.citizen_id,
-          position: user.position,
-          department: user.department,
-          zip_code: user.zip_code
+          first_name: targetUser.first_name,
+          last_name: targetUser.last_name,
+          email: targetUser.email,
+          password: targetUser.password,
+          citizen_id: targetUser.citizen_id,
+          position: targetUser.position,
+          department: targetUser.department,
+          province_id: targetUser.province_id,
+          district_id: targetUser.district_id,
+          subdistrict_id: targetUser.subdistrict_id,
+          zip_code: targetUser.zip_code
         }
       })
       
       // ลบ user เดิม
-      await prisma.users.delete({
-        where: { email: body.email }
-      })
+      await prisma.users.delete({ where: { email: body.email } })
+
+      return { success: true, message: `เปลี่ยน ${body.email} เป็น Officer สำเร็จ` }
       
     } catch (error) {
       console.error('❌ เกิดข้อผิดพลาด:', error)
@@ -916,181 +1095,56 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
   // ============================
   .post('/promote/officer-to-admin', async ({ request, body, set }) => {
     // ตรวจสอบสิทธิ์ admin
-    const user = await authMiddleware(request, set)
-    if (user.success === false) return user
-    
-    if (!isAdmin(user)) {
+    const auth = await authMiddleware(request, set)
+    if (auth.success === false) return auth
+    if (!isAdmin(auth)) {
       set.status = 403
-      return {
-        success: false,
-        message: 'การเข้าถึงจำกัดเฉพาะผู้ดูแลระบบเท่านั้น'
-      }
+      return { success: false, message: 'การเข้าถึงจำกัดเฉพาะผู้ดูแลระบบเท่านั้น' }
     }
 
     try {
       console.log('👆 Admin: เปลี่ยน Officer → Admin')
-      
-      if (!body.email) {
+      if (!body?.email) {
         set.status = 400
-        return { 
-          success: false, 
-          message: 'กรุณาระบุอีเมล' 
-        }
+        return { success: false, message: 'กรุณาระบุอีเมล' }
       }
-      
-      // Simple promotion logic - แทนที่ role-transfer function  
-      const officer = await prisma.officer.findUnique({
-        where: { email: body.email }
-      })
-      
+
+      const officer = await prisma.officer.findUnique({ where: { email: body.email } })
       if (!officer) {
         set.status = 404
-        return {
-          success: false,
-          message: `ไม่พบ officer: ${body.email}`
-        }
+        return { success: false, message: `ไม่พบ officer: ${body.email}` }
       }
-      
-      // ตรวจสอบว่ามี admin ที่ใช้อีเมลนี้แล้วหรือไม่
-      const existingAdmin = await prisma.admin.findUnique({
-        where: { email: body.email }
-      })
-      
+
+      const existingAdmin = await prisma.admin.findUnique({ where: { email: body.email } })
       if (existingAdmin) {
         set.status = 409
-        return {
-          success: false,
-          message: `มี admin ที่ใช้อีเมลนี้แล้ว: ${body.email}`
-        }
+        return { success: false, message: `มี admin ที่ใช้อีเมลนี้แล้ว: ${body.email}` }
       }
-      
-      // สร้าง admin ใหม่
+
       await prisma.admin.create({
         data: {
-          role_id: 1, // admin role
+          role_id: 3,
           first_name: officer.first_name,
           last_name: officer.last_name,
           email: officer.email,
           password: officer.password,
           citizen_id: officer.citizen_id,
-          position: officer.position,
-          department: officer.department,
+          position: 'ผู้ดูแลระบบ',
+          department: 'สำนักงานอธิการบดี',
+          province_id: officer.province_id,
+          district_id: officer.district_id,
+          subdistrict_id: officer.subdistrict_id,
           zip_code: officer.zip_code
         }
       })
-      
-      // ลบ officer เดิม
-      await prisma.officer.delete({
-        where: { email: body.email }
-      })
-      
-      return {
-        success: true,
-        message: `เปลี่ยน ${body.email} เป็น Admin สำเร็จ`
-      }
-      
+
+      await prisma.officer.delete({ where: { email: body.email } })
+
+      return { success: true, message: `เปลี่ยน ${body.email} เป็น Admin สำเร็จ` }
     } catch (error) {
       console.error('❌ เกิดข้อผิดพลาด:', error)
       set.status = 500
-      return { 
-        success: false, 
-        message: 'เกิดข้อผิดพลาดในการเปลี่ยน role' 
-      }
-    }
-  })
-
-  // ============================
-  // 👤 ดูข้อมูลผู้ใช้รายคน (สำหรับการแก้ไข)
-  // ============================
-  .get('/users/:userId/:role', async ({ params, request, set }) => {
-    // ตรวจสอบสิทธิ์ admin
-    const user = await authMiddleware(request, set)
-    if (user.success === false) return user
-    
-    if (!isAdmin(user)) {
-      set.status = 403
-      return {
-        success: false,
-        message: 'การเข้าถึงจำกัดเฉพาะผู้ดูแลระบบเท่านั้น'
-      }
-    }
-
-    try {
-      const { userId, role } = params
-      console.log(`👤 Admin: ดูข้อมูลผู้ใช้ ID: ${userId}, Role: ${role}`)
-      
-      let userData = null
-      
-      // ดึงข้อมูลตาม role พร้อม address information
-      if (role === 'user') {
-        userData = await prisma.users.findUnique({
-          where: { user_id: parseInt(userId) },
-          include: {
-            province: true,
-            district: true,
-            subdistrict: true
-          }
-        })
-      } else if (role === 'officer') {
-        userData = await prisma.officer.findUnique({
-          where: { officer_id: parseInt(userId) },
-          include: {
-            province: true,
-            district: true,
-            subdistrict: true
-          }
-        })
-      } else if (role === 'executive') {
-        userData = await prisma.executive.findUnique({
-          where: { executive_id: parseInt(userId) },
-          include: {
-            province: true,
-            district: true,
-            subdistrict: true
-          }
-        })
-      } else if (role === 'admin') {
-        userData = await prisma.admin.findUnique({
-          where: { admin_id: parseInt(userId) },
-          include: {
-            province: true,
-            district: true,
-            subdistrict: true
-          }
-        })
-      }
-
-      if (!userData) {
-        set.status = 404
-        return {
-          success: false,
-          message: 'ไม่พบข้อมูลผู้ใช้'
-        }
-      }
-
-      // เพิ่ม role และจัดรูปแบบข้อมูล address
-      const responseData = {
-        ...userData,
-        role,
-        // เพิ่มข้อมูลที่อยู่ที่มีชื่อ
-        province_name: userData.province?.province_name || null,
-        district_name: userData.district?.district_name || null,
-        subdistrict_name: userData.subdistrict?.subdistrict_name || null,
-      }
-
-      return {
-        success: true,
-        message: `ดึงข้อมูลผู้ใช้ ${userData.first_name} ${userData.last_name}`,
-        data: responseData
-      }
-      
-    } catch (error) {
-      console.error('❌ เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้:', error)
-      set.status = 500
-      return {
-        success: false,
-        message: 'เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้'
-      }
+      return { success: false, message: 'เกิดข้อผิดพลาดในการเปลี่ยน role' }
     }
   })
 

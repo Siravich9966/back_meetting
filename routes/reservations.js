@@ -86,6 +86,9 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
           end_time: true,
           details_r: true,
           status_r: true,
+          // ✅ ใช้ข้อมูล multi-day เพื่อแสดงผลให้ถูกต้อง (เฉพาะวันที่เลือกจริง)
+          booking_dates: true,
+          is_multi_day: true,
           users: {
             select: {
               user_id: true,
@@ -156,44 +159,62 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
           }
         }
         
-        // อัพเดต availability จากการจองที่มีอยู่
+        // helper: แปลง Date เป็น key แบบ Local (YYYY-MM-DD) ให้ตรงกับตอนสร้าง dailyAvailability
+        const toLocalDateKey = (d) => {
+          const dt = new Date(d)
+          return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`
+        }
+
+        // อัพเดต availability จากการจองที่มีอยู่ (รองรับ multi-day non-consecutive)
         reservations.forEach(reservation => {
           const startDate = new Date(reservation.start_at)
           const endDate = new Date(reservation.end_at)
           const startTime = new Date(reservation.start_time)
           const endTime = new Date(reservation.end_time)
-          
-          // วนดูแต่ละวันที่การจองนี้ครอบคลุม
-          const currentDate = new Date(startDate)
-          while (currentDate <= endDate) {
-            const dateKey = currentDate.toISOString().split('T')[0]
-            
-            if (dailyAvailability[dateKey]) {
-              dailyAvailability[dateKey].total_reservations++
-              
-              // อัพเดต slots ที่ถูกจอง
-              const startHour = startTime.getHours()
-              const endHour = endTime.getHours()
-              
-              dailyAvailability[dateKey].slots.forEach(slot => {
-                const slotHour = parseInt(slot.time.split(':')[0])
-                if (slotHour >= startHour && slotHour < endHour) {
-                  slot.available = false
-                  slot.reservations.push({
-                    reservation_id: reservation.reservation_id,
-                    status: reservation.status_r,
-                    details: reservation.details_r,
-                    time_range: `${startTime.toTimeString().slice(0,5)}-${endTime.toTimeString().slice(0,5)}`,
-                    reserved_by: reservation.users ? `${reservation.users.first_name} ${reservation.users.last_name}` : 'Unknown',
-                    user_department: reservation.users?.department || '',
-                    user_position: reservation.users?.position || ''
-                  })
-                }
-              })
+
+          // สร้างรายการวันที่ที่ต้องทำเครื่องหมาย
+          let dateKeys = []
+          if (reservation.is_multi_day && reservation.booking_dates) {
+            // ใช้เฉพาะวันที่ผู้ใช้เลือกจริง (เช่น 1,3,6,9 หรือ 1,8,15,22,29)
+            dateKeys = reservation.booking_dates
+              .split(',')
+              .map(s => s.trim())
+              .filter(Boolean)
+              .map(ds => toLocalDateKey(new Date(ds)))
+          } else {
+            // เดิม: ครอบคลุมทุกวันตั้งแต่ start ถึง end (สำหรับ single-day หรือช่วงต่อเนื่อง)
+            const currentDate = new Date(startDate)
+            while (currentDate <= endDate) {
+              dateKeys.push(toLocalDateKey(currentDate))
+              currentDate.setDate(currentDate.getDate() + 1)
             }
-            
-            currentDate.setDate(currentDate.getDate() + 1)
           }
+
+          // ทำเครื่องหมายแต่ละวันตาม dateKeys
+          dateKeys.forEach(dateKey => {
+            if (!dailyAvailability[dateKey]) return
+
+            dailyAvailability[dateKey].total_reservations++
+
+            const startHour = startTime.getHours()
+            const endHour = endTime.getHours()
+
+            dailyAvailability[dateKey].slots.forEach(slot => {
+              const slotHour = parseInt(slot.time.split(':')[0])
+              if (slotHour >= startHour && slotHour < endHour) {
+                slot.available = false
+                slot.reservations.push({
+                  reservation_id: reservation.reservation_id,
+                  status: reservation.status_r,
+                  details: reservation.details_r,
+                  time_range: `${startTime.toTimeString().slice(0,5)}-${endTime.toTimeString().slice(0,5)}`,
+                  reserved_by: reservation.users ? `${reservation.users.first_name} ${reservation.users.last_name}` : 'Unknown',
+                  user_department: reservation.users?.department || '',
+                  user_position: reservation.users?.position || ''
+                })
+              }
+            })
+          })
         })
         
         // Debug: ตรวจสอบข้อมูลที่ส่งออกสำหรับทุกเดือน

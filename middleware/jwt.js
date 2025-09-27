@@ -351,6 +351,18 @@ export const authMiddleware = async (request, set) => {
       delete userWithRole.admin_id
     }
 
+    // เติม position_display เพื่อให้ UI แสดงตำแหน่งเป็นภาษาไทยเข้าใจง่าย
+    if (userTable === 'executive') {
+      // ตอนนี้ executive เก็บ position เป็นภาษาไทยแล้ว ไม่ต้องแปลง
+      userWithRole.position_display = userWithRole.position || null
+    } else if (userTable === 'officer') {
+      // officer เก็บ position เป็นชื่อไทยอยู่แล้วจากหน้าสมัคร
+      userWithRole.position_display = userWithRole.position || null
+    } else {
+      // users/admin แสดงตามค่าที่เก็บไว้
+      userWithRole.position_display = userWithRole.position || null
+    }
+
     // แปลง profile_image binary data เป็น URL
     if (userWithRole.profile_image) {
       const userId = userWithRole.user_id || userWithRole.officer_id || userWithRole.admin_id || userWithRole.executive_id
