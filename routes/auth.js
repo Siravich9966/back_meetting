@@ -148,7 +148,6 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
             first_name: body.first_name,
             last_name: body.last_name,
             role_id: roleId, // 3 = user
-            citizen_id: body.citizen_id || null,
             position: body.position,
             department: body.department || null,
             // Address fields - รับ IDs และ zip_code
@@ -168,7 +167,6 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
             first_name: body.first_name,
             last_name: body.last_name,
             role_id: roleId, // 2 = officer
-            citizen_id: body.citizen_id || null,
             position: body.position,
             department: departmentFromPosition || body.department,
             // Address fields - รับ IDs และ zip_code  
@@ -188,7 +186,6 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
             first_name: body.first_name,
             last_name: body.last_name,
             role_id: roleId, // 4 = executive
-            citizen_id: body.citizen_id || null,
             position: body.position, // เก็บตำแหน่งภาษาไทยตามที่ผู้ใช้เลือก
             department: departmentFromPosition ||
               (executiveType === 'university_executive' ? 'สำนักงานอธิการบดี' : body.department),
@@ -333,7 +330,6 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
           first_name: body.first_name,
           last_name: body.last_name,
           role_id: 3, // admin role
-          citizen_id: body.citizen_id || null,
           position: body.position || 'ผู้ดูแลระบบ',
           department: body.department || 'สำนักงานอธิการบดี',
           // Address fields

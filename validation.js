@@ -100,7 +100,7 @@ export const formatValidationErrors = (errors) => {
 
 // Helper: ตรวจสอบข้อมูลสำหรับ register
 export const validateRegisterData = (data) => {
-  const { email, password, first_name, last_name, citizen_id } = data
+  const { email, password, first_name, last_name } = data
   const allErrors = []
   
   // ตรวจสอบ email
@@ -122,15 +122,6 @@ export const validateRegisterData = (data) => {
   
   if (!last_name || last_name.trim().length === 0) {
     allErrors.push('กรุณาใส่นามสกุล')
-  }
-  
-  if (!citizen_id || citizen_id.trim().length === 0) {
-    allErrors.push('กรุณาใส่เลขบัตรประชาชน')
-  }
-    
-  // ตรวจสอบ citizen_id format (13 หลัก)
-  if (citizen_id && !/^\d{13}$/.test(citizen_id)) {
-    allErrors.push('เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก')
   }
   
   // ตรวจสอบ department (ถ้ามี)

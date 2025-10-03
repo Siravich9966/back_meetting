@@ -15,6 +15,11 @@
 import { Elysia } from 'elysia'
 import prisma from '../lib/prisma.js'
 import { authMiddleware, isUser, isOfficer } from '../middleware/index.js'
+import { 
+  notifyOfficersNewReservation, 
+  notifyUserReservationApproved, 
+  notifyUserReservationRejected 
+} from '../utils/emailService.js'
 
 // ฟังก์ชันแปลงสถานะเป็นภาษาไทย
 function translateStatus(status) {
@@ -434,9 +439,19 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         approved_by: reservation.officer ? `${reservation.officer.first_name} ${reservation.officer.last_name}` : null,
         rejected_reason: reservation.rejected_reason,
         created_at: reservation.created_at,
-        updated_at: reservation.updated_at
+        updated_at: reservation.updated_at,
+        // ✅ เพิ่ม booking_dates และแปลงจาก CSV เป็น array
+        booking_dates: reservation.booking_dates ? reservation.booking_dates.split(',').map(d => d.trim()) : null,
+        is_multi_day: reservation.is_multi_day
         }
       })
+
+      // Debug: ตรวจสอบข้อมูลที่ส่งกลับ
+      console.log('🔍 [USER-API-DEBUG] Sample reservation data:')
+      if (formattedReservations.length > 0) {
+        console.log('🔍 booking_dates:', formattedReservations[0].booking_dates)
+        console.log('🔍 is_multi_day:', formattedReservations[0].is_multi_day)
+      }
 
       return {
         success: true,
@@ -588,6 +603,19 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         })
 
         console.log(`✅ สร้าง multi-day reservation: ${user.first_name} จอง ${room.room_name} (${booking_dates.length} วัน)`)
+
+        // 📧 ส่งอีเมลแจ้งเตือนไปยังเจ้าหน้าที่
+        try {
+          const emailResult = await notifyOfficersNewReservation(newReservation.reservation_id)
+          if (emailResult.success) {
+            console.log(`📧 ส่งอีเมลแจ้งเตือนสำเร็จ ไปยัง ${emailResult.sentTo} เจ้าหน้าที่`)
+          } else {
+            console.log(`⚠️ ไม่สามารถส่งอีเมลแจ้งเตือนได้: ${emailResult.reason || emailResult.error}`)
+          }
+        } catch (emailError) {
+          console.error('❌ Error sending email notification:', emailError)
+          // ไม่ให้ Email error ทำให้การจองล้มเหลว
+        }
 
         return {
           success: true,
@@ -745,6 +773,19 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
       })
 
       console.log(`✅ สร้างการจองใหม่: ${user.first_name} จอง ${room.room_name}`)
+
+      // 📧 ส่งอีเมลแจ้งเตือนไปยังเจ้าหน้าที่
+      try {
+        const emailResult = await notifyOfficersNewReservation(newReservation.reservation_id)
+        if (emailResult.success) {
+          console.log(`📧 ส่งอีเมลแจ้งเตือนสำเร็จ ไปยัง ${emailResult.sentTo} เจ้าหน้าที่`)
+        } else {
+          console.log(`⚠️ ไม่สามารถส่งอีเมลแจ้งเตือนได้: ${emailResult.reason || emailResult.error}`)
+        }
+      } catch (emailError) {
+        console.error('❌ Error sending email notification:', emailError)
+        // ไม่ให้ Email error ทำให้การจองล้มเหลว
+      }
 
       return {
         success: true,
@@ -1564,7 +1605,10 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
           user_department: r.users.department,
           processed_by: r.officer ? `${r.officer.first_name} ${r.officer.last_name}` : null,
           created_at: r.created_at,
-          updated_at: r.updated_at
+          updated_at: r.updated_at,
+          // ✅ เพิ่ม booking_dates และแปลงจาก CSV เป็น array
+          booking_dates: r.booking_dates ? r.booking_dates.split(',').map(d => d.trim()) : null,
+          is_multi_day: r.is_multi_day
           }
         }),
         pagination: {
@@ -1684,6 +1728,19 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       })
 
       console.log(`✅ อนุมัติการจอง: ${user.first_name} อนุมัติการจอง ${reservation.meeting_room.room_name}`)
+
+      // 📧 ส่งอีเมลแจ้งผู้จองว่าได้รับการอนุมัติ
+      try {
+        const emailResult = await notifyUserReservationApproved(reservationId, user.officer_id)
+        if (emailResult.success) {
+          console.log(`📧 ส่งอีเมลแจ้งการอนุมัติสำเร็จ ไปยัง ${reservation.users.email}`)
+        } else {
+          console.log(`⚠️ ไม่สามารถส่งอีเมลแจ้งการอนุมัติได้: ${emailResult.reason || emailResult.error}`)
+        }
+      } catch (emailError) {
+        console.error('❌ Error sending approval email:', emailError)
+        // ไม่ให้ Email error ทำให้การอนุมัติล้มเหลว
+      }
 
       return {
         success: true,
@@ -1817,6 +1874,19 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       })
 
       console.log(`❌ ปฏิเสธการจอง: ${user.first_name} ปฏิเสธการจอง ${reservation.meeting_room.room_name}`)
+
+      // 📧 ส่งอีเมลแจ้งผู้จองว่าถูกปฏิเสธ
+      try {
+        const emailResult = await notifyUserReservationRejected(reservationId, user.officer_id, reason.trim())
+        if (emailResult.success) {
+          console.log(`📧 ส่งอีเมลแจ้งการปฏิเสธสำเร็จ ไปยัง ${reservation.users.email}`)
+        } else {
+          console.log(`⚠️ ไม่สามารถส่งอีเมลแจ้งการปฏิเสธได้: ${emailResult.reason || emailResult.error}`)
+        }
+      } catch (emailError) {
+        console.error('❌ Error sending rejection email:', emailError)
+        // ไม่ให้ Email error ทำให้การปฏิเสธล้มเหลว
+      }
 
       return {
         success: true,

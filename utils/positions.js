@@ -10,6 +10,7 @@ import { DEPARTMENTS } from './departments.js'
 export const POSITIONS = {
   // บุคลากรทั่วไป → จะไปตาราง users
   GENERAL_STAFF: 'บุคลากร/อาจารย์ มหาวิทยาลัยราชภัฏมหาสารคาม',
+  OTHER: 'อื่นๆ',
   
   // ผู้บริหาร → จะไปตาราง executive
   UNIVERSITY_EXECUTIVE: 'ผู้บริหารระดับมหาวิทยาลัย',
@@ -47,6 +48,7 @@ export const ALL_OFFICER_POSITIONS = [
 // รวม Position ทั้งหมด
 export const ALL_POSITIONS = [
   POSITIONS.GENERAL_STAFF,
+  POSITIONS.OTHER,
   POSITIONS.UNIVERSITY_EXECUTIVE,
   ...FACULTY_EXECUTIVE_POSITIONS,
   ...ALL_OFFICER_POSITIONS
@@ -59,7 +61,7 @@ export const isValidPosition = (position) => {
 
 // ฟังก์ชันกำหนดว่า position จะไปตารางไหน
 export const getTableFromPosition = (position) => {
-  if (position === POSITIONS.GENERAL_STAFF) {
+  if (position === POSITIONS.GENERAL_STAFF || position === POSITIONS.OTHER) {
     return 'users'
   }
   
@@ -129,7 +131,7 @@ export const getPositionGroups = () => {
   return {
     general: {
       label: 'บุคลากรทั่วไป',
-      positions: [POSITIONS.GENERAL_STAFF]
+      positions: [POSITIONS.GENERAL_STAFF, POSITIONS.OTHER]
     },
     executives: {
       label: 'ผู้บริหาร',

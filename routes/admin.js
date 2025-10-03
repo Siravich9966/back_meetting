@@ -57,6 +57,9 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
             subdistrict_id: true,
             zip_code: true,
             created_at: true
+          },
+          orderBy: {
+            created_at: 'asc'  // เรียงจากเก่าไปใหม่
           }
         }),
         prisma.officer.findMany({
@@ -74,6 +77,9 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
             subdistrict_id: true,
             zip_code: true,
             created_at: true
+          },
+          orderBy: {
+            created_at: 'asc'  // เรียงจากเก่าไปใหม่
           }
         }),
         prisma.executive.findMany({
@@ -91,6 +97,9 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
             subdistrict_id: true,
             zip_code: true,
             created_at: true
+          },
+          orderBy: {
+            created_at: 'asc'  // เรียงจากเก่าไปใหม่
           }
         }),
         prisma.admin.findMany({
@@ -108,6 +117,9 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
             subdistrict_id: true,
             zip_code: true,
             created_at: true
+          },
+          orderBy: {
+            created_at: 'asc'  // เรียงจากเก่าไปใหม่
           }
         })
       ])
@@ -123,8 +135,8 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
         position_display: positionDisplay(u.role, u.position, u.department)
       }))
 
-      // เรียงตาม created_at จากใหม่ไปเก่า
-      allUsers.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      // เรียงตาม created_at จากเก่าไปใหม่ (ตามที่อาจารย์ต้องการ)
+      allUsers.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
       
       return {
         success: true,
@@ -282,19 +294,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
         return { success: false, message: 'อีเมลนี้ถูกใช้งานแล้ว' }
       }
 
-      // ตรวจสอบเลขบัตรประชาชนซ้ำ (เฉพาะเมื่อส่งมา)
-      if (body.citizen_id) {
-        const existingCitizenInUsers = await prisma.users.findUnique({ where: { citizen_id: body.citizen_id } })
-        const existingCitizenInOfficer = await prisma.officer.findUnique({ where: { citizen_id: body.citizen_id } })
-        const existingCitizenInExecutive = await prisma.executive.findUnique({ where: { citizen_id: body.citizen_id } })
-        const existingCitizenInAdmin = await prisma.admin.findUnique({ where: { citizen_id: body.citizen_id } })
-
-        if (existingCitizenInUsers || existingCitizenInOfficer || existingCitizenInExecutive || existingCitizenInAdmin) {
-          set.status = 409
-          return { success: false, message: 'เลขบัตรประชาชนนี้ถูกใช้งานแล้ว' }
-        }
-      }
-
       let newUser
       
       // สร้างผู้ใช้ใน table ที่เหมาะสมตาม role
@@ -307,7 +306,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
               password: hashedPassword,
               first_name: body.first_name,
               last_name: body.last_name,
-              citizen_id: body.citizen_id || null,
               position: body.position || null,
               department: body.department || null,
               // Address fields
@@ -338,7 +336,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 password: hashedPassword,
                 first_name: body.first_name,
                 last_name: body.last_name,
-                citizen_id: body.citizen_id || null,
                 position: body.position, // เก็บเป็นชื่อไทยที่เลือก
                 department: finalDept,
                 // Address fields
@@ -383,7 +380,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 password: hashedPassword,
                 first_name: body.first_name,
                 last_name: body.last_name,
-                citizen_id: body.citizen_id || null,
                 position: body.position, // เก็บตำแหน่งภาษาไทยตามที่ผู้ใช้เลือก
                 department: derivedDept,
                 // Address fields
@@ -405,7 +401,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
               password: hashedPassword,
               first_name: body.first_name,
               last_name: body.last_name,
-              citizen_id: body.citizen_id || null,
               position: body.position || 'ผู้ดูแลระบบ',
               department: body.department || 'สำนักงานอธิการบดี',
               // Address fields
@@ -464,7 +459,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
 
     try {
       const { userId } = params
-      const { first_name, last_name, email, citizen_id, department, originalRole, zip_code, province_id, district_id, subdistrict_id } = await request.json()
+      const { first_name, last_name, email, department, originalRole, zip_code, province_id, district_id, subdistrict_id } = await request.json()
       
       console.log(`✏️ Admin: แก้ไขข้อมูลผู้ใช้ ID=${userId}, Role=${originalRole}`)
       
@@ -485,22 +480,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
         }
       }
       
-      // ตรวจสอบเลขบัตรประชาชนซ้ำ (ยกเว้นตัวเอง)
-      const existingCitizenId = await Promise.all([
-        prisma.users.findFirst({ where: { citizen_id, NOT: { user_id: originalRole === 'user' ? parseInt(userId) : undefined } } }),
-        prisma.officer.findFirst({ where: { citizen_id, NOT: { officer_id: originalRole === 'officer' ? parseInt(userId) : undefined } } }),
-        prisma.executive.findFirst({ where: { citizen_id, NOT: { executive_id: originalRole === 'executive' ? parseInt(userId) : undefined } } }),
-        prisma.admin.findFirst({ where: { citizen_id, NOT: { admin_id: originalRole === 'admin' ? parseInt(userId) : undefined } } })
-      ])
-      
-      if (existingCitizenId.some(result => result !== null)) {
-        set.status = 400
-        return {
-          success: false,
-          message: 'เลขบัตรประชาชนนี้มีผู้ใช้อื่นใช้แล้ว',
-          error: 'citizen_id already exists'
-        }
-      }
+
 
       let updatedUser
       
@@ -513,7 +493,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 first_name,
                 last_name,
                 email,
-                citizen_id,
                 department: department || 'ไม่ระบุ',
                 zip_code: zip_code ? parseInt(zip_code, 10) : null,
                 province_id: province_id ? parseInt(province_id, 10) : null,
@@ -529,7 +508,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 first_name,
                 last_name,
                 email,
-                citizen_id,
                 department: department || 'ไม่ระบุ',
                 zip_code: zip_code ? parseInt(zip_code, 10) : null,
                 province_id: province_id ? parseInt(province_id, 10) : null,
@@ -545,7 +523,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 first_name,
                 last_name,
                 email,
-                citizen_id,
                 department: department || 'ไม่ระบุ',
                 zip_code: zip_code ? parseInt(zip_code, 10) : null,
                 province_id: province_id ? parseInt(province_id, 10) : null,
@@ -561,7 +538,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 first_name,
                 last_name,
                 email,
-                citizen_id,
                 department: department || 'ไม่ระบุ',
                 zip_code: zip_code ? parseInt(zip_code, 10) : null,
                 province_id: province_id ? parseInt(province_id, 10) : null,
@@ -1215,71 +1191,6 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
     }
   })
 
-  // ============================
-  // 🆔 เช็คเลขบัตรประชาชนซ้ำ (สำหรับการแก้ไข)
-  // ============================
-  .post('/check-citizen-id', async ({ request, set, body }) => {
-    // ตรวจสอบสิทธิ์ admin
-    const user = await authMiddleware(request, set)
-    if (user.success === false) return user
-    
-    if (!isAdmin(user)) {
-      set.status = 403
-      return {
-        success: false,
-        message: 'การเข้าถึงจำกัดเฉพาะผู้ดูแลระบบเท่านั้น'
-      }
-    }
 
-    try {
-      const { citizen_id, userId, role } = body
-
-      console.log(`🆔 Admin: เช็คเลขบัตรประชาชนซ้ำ - ${citizen_id} (ยกเว้น ${role} ID: ${userId})`)
-      
-      // เช็คเลขบัตรประชาชนซ้ำในทุก table ยกเว้นผู้ใช้ปัจจุบัน
-      const [existingUsers, existingOfficers, existingExecutives, existingAdmins] = await Promise.all([
-        prisma.users.findFirst({
-          where: {
-            citizen_id,
-            NOT: role === 'user' ? { user_id: parseInt(userId) } : undefined
-          }
-        }),
-        prisma.officer.findFirst({
-          where: {
-            citizen_id,
-            NOT: role === 'officer' ? { officer_id: parseInt(userId) } : undefined
-          }
-        }),
-        prisma.executive.findFirst({
-          where: {
-            citizen_id,
-            NOT: role === 'executive' ? { executive_id: parseInt(userId) } : undefined
-          }
-        }),
-        prisma.admin.findFirst({
-          where: {
-            citizen_id,
-            NOT: role === 'admin' ? { admin_id: parseInt(userId) } : undefined
-          }
-        })
-      ])
-
-      const citizenIdExists = existingUsers || existingOfficers || existingExecutives || existingAdmins
-
-      return {
-        success: true,
-        available: !citizenIdExists,
-        message: citizenIdExists ? 'เลขบัตรประชาชนนี้ถูกใช้แล้ว' : 'เลขบัตรประชาชนนี้ใช้ได้'
-      }
-      
-    } catch (error) {
-      console.error('❌ เกิดข้อผิดพลาดในการตรวจสอบเลขบัตรประชาชน:', error)
-      set.status = 500
-      return {
-        success: false,
-        message: 'เกิดข้อผิดพลาดในการตรวจสอบเลขบัตรประชาชน'
-      }
-    }
-  })
 
 export default adminRoutes

@@ -73,6 +73,11 @@ export type District = $Result.DefaultSelection<Prisma.$DistrictPayload>
  * 
  */
 export type Subdistrict = $Result.DefaultSelection<Prisma.$SubdistrictPayload>
+/**
+ * Model email_log
+ * 
+ */
+export type email_log = $Result.DefaultSelection<Prisma.$email_logPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -311,6 +316,16 @@ export class PrismaClient<
     * ```
     */
   get subdistrict(): Prisma.SubdistrictDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.email_log`: Exposes CRUD operations for the **email_log** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Email_logs
+    * const email_logs = await prisma.email_log.findMany()
+    * ```
+    */
+  get email_log(): Prisma.email_logDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -369,7 +384,7 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.16.2
+   * Prisma Client JS version: 6.16.0
    * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
    */
   export type PrismaVersion = {
@@ -762,7 +777,8 @@ export namespace Prisma {
     users: 'users',
     Province: 'Province',
     District: 'District',
-    Subdistrict: 'Subdistrict'
+    Subdistrict: 'Subdistrict',
+    email_log: 'email_log'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -781,7 +797,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "equipment" | "meeting_room" | "officer" | "reservation" | "review" | "roles" | "executive" | "users" | "province" | "district" | "subdistrict"
+      modelProps: "admin" | "equipment" | "meeting_room" | "officer" | "reservation" | "review" | "roles" | "executive" | "users" | "province" | "district" | "subdistrict" | "email_log"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1673,6 +1689,80 @@ export namespace Prisma {
           }
         }
       }
+      email_log: {
+        payload: Prisma.$email_logPayload<ExtArgs>
+        fields: Prisma.email_logFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.email_logFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.email_logFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload>
+          }
+          findFirst: {
+            args: Prisma.email_logFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.email_logFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload>
+          }
+          findMany: {
+            args: Prisma.email_logFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload>[]
+          }
+          create: {
+            args: Prisma.email_logCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload>
+          }
+          createMany: {
+            args: Prisma.email_logCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.email_logCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload>[]
+          }
+          delete: {
+            args: Prisma.email_logDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload>
+          }
+          update: {
+            args: Prisma.email_logUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload>
+          }
+          deleteMany: {
+            args: Prisma.email_logDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.email_logUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.email_logUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload>[]
+          }
+          upsert: {
+            args: Prisma.email_logUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$email_logPayload>
+          }
+          aggregate: {
+            args: Prisma.Email_logAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmail_log>
+          }
+          groupBy: {
+            args: Prisma.email_logGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Email_logGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.email_logCountArgs<ExtArgs>
+            result: $Utils.Optional<Email_logCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1781,6 +1871,7 @@ export namespace Prisma {
     province?: ProvinceOmit
     district?: DistrictOmit
     subdistrict?: SubdistrictOmit
+    email_log?: email_logOmit
   }
 
   /* Types for Logging */
@@ -17327,6 +17418,1061 @@ export namespace Prisma {
 
 
   /**
+   * Model email_log
+   */
+
+  export type AggregateEmail_log = {
+    _count: Email_logCountAggregateOutputType | null
+    _avg: Email_logAvgAggregateOutputType | null
+    _sum: Email_logSumAggregateOutputType | null
+    _min: Email_logMinAggregateOutputType | null
+    _max: Email_logMaxAggregateOutputType | null
+  }
+
+  export type Email_logAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Email_logSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Email_logMinAggregateOutputType = {
+    id: number | null
+    recipient: string | null
+    subject: string | null
+    email_type: string | null
+    sent_date: Date | null
+    status: string | null
+    created_at: Date | null
+  }
+
+  export type Email_logMaxAggregateOutputType = {
+    id: number | null
+    recipient: string | null
+    subject: string | null
+    email_type: string | null
+    sent_date: Date | null
+    status: string | null
+    created_at: Date | null
+  }
+
+  export type Email_logCountAggregateOutputType = {
+    id: number
+    recipient: number
+    subject: number
+    email_type: number
+    sent_date: number
+    status: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type Email_logAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type Email_logSumAggregateInputType = {
+    id?: true
+  }
+
+  export type Email_logMinAggregateInputType = {
+    id?: true
+    recipient?: true
+    subject?: true
+    email_type?: true
+    sent_date?: true
+    status?: true
+    created_at?: true
+  }
+
+  export type Email_logMaxAggregateInputType = {
+    id?: true
+    recipient?: true
+    subject?: true
+    email_type?: true
+    sent_date?: true
+    status?: true
+    created_at?: true
+  }
+
+  export type Email_logCountAggregateInputType = {
+    id?: true
+    recipient?: true
+    subject?: true
+    email_type?: true
+    sent_date?: true
+    status?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type Email_logAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which email_log to aggregate.
+     */
+    where?: email_logWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of email_logs to fetch.
+     */
+    orderBy?: email_logOrderByWithRelationInput | email_logOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: email_logWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` email_logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` email_logs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned email_logs
+    **/
+    _count?: true | Email_logCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Email_logAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Email_logSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Email_logMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Email_logMaxAggregateInputType
+  }
+
+  export type GetEmail_logAggregateType<T extends Email_logAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmail_log]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmail_log[P]>
+      : GetScalarType<T[P], AggregateEmail_log[P]>
+  }
+
+
+
+
+  export type email_logGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: email_logWhereInput
+    orderBy?: email_logOrderByWithAggregationInput | email_logOrderByWithAggregationInput[]
+    by: Email_logScalarFieldEnum[] | Email_logScalarFieldEnum
+    having?: email_logScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Email_logCountAggregateInputType | true
+    _avg?: Email_logAvgAggregateInputType
+    _sum?: Email_logSumAggregateInputType
+    _min?: Email_logMinAggregateInputType
+    _max?: Email_logMaxAggregateInputType
+  }
+
+  export type Email_logGroupByOutputType = {
+    id: number
+    recipient: string
+    subject: string
+    email_type: string
+    sent_date: Date
+    status: string
+    created_at: Date
+    _count: Email_logCountAggregateOutputType | null
+    _avg: Email_logAvgAggregateOutputType | null
+    _sum: Email_logSumAggregateOutputType | null
+    _min: Email_logMinAggregateOutputType | null
+    _max: Email_logMaxAggregateOutputType | null
+  }
+
+  type GetEmail_logGroupByPayload<T extends email_logGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Email_logGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Email_logGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Email_logGroupByOutputType[P]>
+            : GetScalarType<T[P], Email_logGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type email_logSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recipient?: boolean
+    subject?: boolean
+    email_type?: boolean
+    sent_date?: boolean
+    status?: boolean
+    created_at?: boolean
+  }, ExtArgs["result"]["email_log"]>
+
+  export type email_logSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recipient?: boolean
+    subject?: boolean
+    email_type?: boolean
+    sent_date?: boolean
+    status?: boolean
+    created_at?: boolean
+  }, ExtArgs["result"]["email_log"]>
+
+  export type email_logSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recipient?: boolean
+    subject?: boolean
+    email_type?: boolean
+    sent_date?: boolean
+    status?: boolean
+    created_at?: boolean
+  }, ExtArgs["result"]["email_log"]>
+
+  export type email_logSelectScalar = {
+    id?: boolean
+    recipient?: boolean
+    subject?: boolean
+    email_type?: boolean
+    sent_date?: boolean
+    status?: boolean
+    created_at?: boolean
+  }
+
+  export type email_logOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "recipient" | "subject" | "email_type" | "sent_date" | "status" | "created_at", ExtArgs["result"]["email_log"]>
+
+  export type $email_logPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "email_log"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      recipient: string
+      subject: string
+      email_type: string
+      sent_date: Date
+      status: string
+      created_at: Date
+    }, ExtArgs["result"]["email_log"]>
+    composites: {}
+  }
+
+  type email_logGetPayload<S extends boolean | null | undefined | email_logDefaultArgs> = $Result.GetResult<Prisma.$email_logPayload, S>
+
+  type email_logCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<email_logFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Email_logCountAggregateInputType | true
+    }
+
+  export interface email_logDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['email_log'], meta: { name: 'email_log' } }
+    /**
+     * Find zero or one Email_log that matches the filter.
+     * @param {email_logFindUniqueArgs} args - Arguments to find a Email_log
+     * @example
+     * // Get one Email_log
+     * const email_log = await prisma.email_log.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends email_logFindUniqueArgs>(args: SelectSubset<T, email_logFindUniqueArgs<ExtArgs>>): Prisma__email_logClient<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Email_log that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {email_logFindUniqueOrThrowArgs} args - Arguments to find a Email_log
+     * @example
+     * // Get one Email_log
+     * const email_log = await prisma.email_log.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends email_logFindUniqueOrThrowArgs>(args: SelectSubset<T, email_logFindUniqueOrThrowArgs<ExtArgs>>): Prisma__email_logClient<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Email_log that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {email_logFindFirstArgs} args - Arguments to find a Email_log
+     * @example
+     * // Get one Email_log
+     * const email_log = await prisma.email_log.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends email_logFindFirstArgs>(args?: SelectSubset<T, email_logFindFirstArgs<ExtArgs>>): Prisma__email_logClient<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Email_log that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {email_logFindFirstOrThrowArgs} args - Arguments to find a Email_log
+     * @example
+     * // Get one Email_log
+     * const email_log = await prisma.email_log.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends email_logFindFirstOrThrowArgs>(args?: SelectSubset<T, email_logFindFirstOrThrowArgs<ExtArgs>>): Prisma__email_logClient<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Email_logs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {email_logFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Email_logs
+     * const email_logs = await prisma.email_log.findMany()
+     * 
+     * // Get first 10 Email_logs
+     * const email_logs = await prisma.email_log.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const email_logWithIdOnly = await prisma.email_log.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends email_logFindManyArgs>(args?: SelectSubset<T, email_logFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Email_log.
+     * @param {email_logCreateArgs} args - Arguments to create a Email_log.
+     * @example
+     * // Create one Email_log
+     * const Email_log = await prisma.email_log.create({
+     *   data: {
+     *     // ... data to create a Email_log
+     *   }
+     * })
+     * 
+     */
+    create<T extends email_logCreateArgs>(args: SelectSubset<T, email_logCreateArgs<ExtArgs>>): Prisma__email_logClient<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Email_logs.
+     * @param {email_logCreateManyArgs} args - Arguments to create many Email_logs.
+     * @example
+     * // Create many Email_logs
+     * const email_log = await prisma.email_log.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends email_logCreateManyArgs>(args?: SelectSubset<T, email_logCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Email_logs and returns the data saved in the database.
+     * @param {email_logCreateManyAndReturnArgs} args - Arguments to create many Email_logs.
+     * @example
+     * // Create many Email_logs
+     * const email_log = await prisma.email_log.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Email_logs and only return the `id`
+     * const email_logWithIdOnly = await prisma.email_log.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends email_logCreateManyAndReturnArgs>(args?: SelectSubset<T, email_logCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Email_log.
+     * @param {email_logDeleteArgs} args - Arguments to delete one Email_log.
+     * @example
+     * // Delete one Email_log
+     * const Email_log = await prisma.email_log.delete({
+     *   where: {
+     *     // ... filter to delete one Email_log
+     *   }
+     * })
+     * 
+     */
+    delete<T extends email_logDeleteArgs>(args: SelectSubset<T, email_logDeleteArgs<ExtArgs>>): Prisma__email_logClient<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Email_log.
+     * @param {email_logUpdateArgs} args - Arguments to update one Email_log.
+     * @example
+     * // Update one Email_log
+     * const email_log = await prisma.email_log.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends email_logUpdateArgs>(args: SelectSubset<T, email_logUpdateArgs<ExtArgs>>): Prisma__email_logClient<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Email_logs.
+     * @param {email_logDeleteManyArgs} args - Arguments to filter Email_logs to delete.
+     * @example
+     * // Delete a few Email_logs
+     * const { count } = await prisma.email_log.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends email_logDeleteManyArgs>(args?: SelectSubset<T, email_logDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Email_logs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {email_logUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Email_logs
+     * const email_log = await prisma.email_log.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends email_logUpdateManyArgs>(args: SelectSubset<T, email_logUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Email_logs and returns the data updated in the database.
+     * @param {email_logUpdateManyAndReturnArgs} args - Arguments to update many Email_logs.
+     * @example
+     * // Update many Email_logs
+     * const email_log = await prisma.email_log.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Email_logs and only return the `id`
+     * const email_logWithIdOnly = await prisma.email_log.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends email_logUpdateManyAndReturnArgs>(args: SelectSubset<T, email_logUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Email_log.
+     * @param {email_logUpsertArgs} args - Arguments to update or create a Email_log.
+     * @example
+     * // Update or create a Email_log
+     * const email_log = await prisma.email_log.upsert({
+     *   create: {
+     *     // ... data to create a Email_log
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Email_log we want to update
+     *   }
+     * })
+     */
+    upsert<T extends email_logUpsertArgs>(args: SelectSubset<T, email_logUpsertArgs<ExtArgs>>): Prisma__email_logClient<$Result.GetResult<Prisma.$email_logPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Email_logs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {email_logCountArgs} args - Arguments to filter Email_logs to count.
+     * @example
+     * // Count the number of Email_logs
+     * const count = await prisma.email_log.count({
+     *   where: {
+     *     // ... the filter for the Email_logs we want to count
+     *   }
+     * })
+    **/
+    count<T extends email_logCountArgs>(
+      args?: Subset<T, email_logCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Email_logCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Email_log.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Email_logAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Email_logAggregateArgs>(args: Subset<T, Email_logAggregateArgs>): Prisma.PrismaPromise<GetEmail_logAggregateType<T>>
+
+    /**
+     * Group by Email_log.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {email_logGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends email_logGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: email_logGroupByArgs['orderBy'] }
+        : { orderBy?: email_logGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, email_logGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmail_logGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the email_log model
+   */
+  readonly fields: email_logFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for email_log.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__email_logClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the email_log model
+   */
+  interface email_logFieldRefs {
+    readonly id: FieldRef<"email_log", 'Int'>
+    readonly recipient: FieldRef<"email_log", 'String'>
+    readonly subject: FieldRef<"email_log", 'String'>
+    readonly email_type: FieldRef<"email_log", 'String'>
+    readonly sent_date: FieldRef<"email_log", 'DateTime'>
+    readonly status: FieldRef<"email_log", 'String'>
+    readonly created_at: FieldRef<"email_log", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * email_log findUnique
+   */
+  export type email_logFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * Filter, which email_log to fetch.
+     */
+    where: email_logWhereUniqueInput
+  }
+
+  /**
+   * email_log findUniqueOrThrow
+   */
+  export type email_logFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * Filter, which email_log to fetch.
+     */
+    where: email_logWhereUniqueInput
+  }
+
+  /**
+   * email_log findFirst
+   */
+  export type email_logFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * Filter, which email_log to fetch.
+     */
+    where?: email_logWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of email_logs to fetch.
+     */
+    orderBy?: email_logOrderByWithRelationInput | email_logOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for email_logs.
+     */
+    cursor?: email_logWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` email_logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` email_logs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of email_logs.
+     */
+    distinct?: Email_logScalarFieldEnum | Email_logScalarFieldEnum[]
+  }
+
+  /**
+   * email_log findFirstOrThrow
+   */
+  export type email_logFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * Filter, which email_log to fetch.
+     */
+    where?: email_logWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of email_logs to fetch.
+     */
+    orderBy?: email_logOrderByWithRelationInput | email_logOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for email_logs.
+     */
+    cursor?: email_logWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` email_logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` email_logs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of email_logs.
+     */
+    distinct?: Email_logScalarFieldEnum | Email_logScalarFieldEnum[]
+  }
+
+  /**
+   * email_log findMany
+   */
+  export type email_logFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * Filter, which email_logs to fetch.
+     */
+    where?: email_logWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of email_logs to fetch.
+     */
+    orderBy?: email_logOrderByWithRelationInput | email_logOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing email_logs.
+     */
+    cursor?: email_logWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` email_logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` email_logs.
+     */
+    skip?: number
+    distinct?: Email_logScalarFieldEnum | Email_logScalarFieldEnum[]
+  }
+
+  /**
+   * email_log create
+   */
+  export type email_logCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * The data needed to create a email_log.
+     */
+    data: XOR<email_logCreateInput, email_logUncheckedCreateInput>
+  }
+
+  /**
+   * email_log createMany
+   */
+  export type email_logCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many email_logs.
+     */
+    data: email_logCreateManyInput | email_logCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * email_log createManyAndReturn
+   */
+  export type email_logCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * The data used to create many email_logs.
+     */
+    data: email_logCreateManyInput | email_logCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * email_log update
+   */
+  export type email_logUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * The data needed to update a email_log.
+     */
+    data: XOR<email_logUpdateInput, email_logUncheckedUpdateInput>
+    /**
+     * Choose, which email_log to update.
+     */
+    where: email_logWhereUniqueInput
+  }
+
+  /**
+   * email_log updateMany
+   */
+  export type email_logUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update email_logs.
+     */
+    data: XOR<email_logUpdateManyMutationInput, email_logUncheckedUpdateManyInput>
+    /**
+     * Filter which email_logs to update
+     */
+    where?: email_logWhereInput
+    /**
+     * Limit how many email_logs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * email_log updateManyAndReturn
+   */
+  export type email_logUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * The data used to update email_logs.
+     */
+    data: XOR<email_logUpdateManyMutationInput, email_logUncheckedUpdateManyInput>
+    /**
+     * Filter which email_logs to update
+     */
+    where?: email_logWhereInput
+    /**
+     * Limit how many email_logs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * email_log upsert
+   */
+  export type email_logUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * The filter to search for the email_log to update in case it exists.
+     */
+    where: email_logWhereUniqueInput
+    /**
+     * In case the email_log found by the `where` argument doesn't exist, create a new email_log with this data.
+     */
+    create: XOR<email_logCreateInput, email_logUncheckedCreateInput>
+    /**
+     * In case the email_log was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<email_logUpdateInput, email_logUncheckedUpdateInput>
+  }
+
+  /**
+   * email_log delete
+   */
+  export type email_logDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+    /**
+     * Filter which email_log to delete.
+     */
+    where: email_logWhereUniqueInput
+  }
+
+  /**
+   * email_log deleteMany
+   */
+  export type email_logDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which email_logs to delete
+     */
+    where?: email_logWhereInput
+    /**
+     * Limit how many email_logs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * email_log without action
+   */
+  export type email_logDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the email_log
+     */
+    select?: email_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the email_log
+     */
+    omit?: email_logOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -17531,6 +18677,19 @@ export namespace Prisma {
   };
 
   export type SubdistrictScalarFieldEnum = (typeof SubdistrictScalarFieldEnum)[keyof typeof SubdistrictScalarFieldEnum]
+
+
+  export const Email_logScalarFieldEnum: {
+    id: 'id',
+    recipient: 'recipient',
+    subject: 'subject',
+    email_type: 'email_type',
+    sent_date: 'sent_date',
+    status: 'status',
+    created_at: 'created_at'
+  };
+
+  export type Email_logScalarFieldEnum = (typeof Email_logScalarFieldEnum)[keyof typeof Email_logScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -18739,6 +19898,70 @@ export namespace Prisma {
     zip_code?: StringNullableWithAggregatesFilter<"Subdistrict"> | string | null
   }
 
+  export type email_logWhereInput = {
+    AND?: email_logWhereInput | email_logWhereInput[]
+    OR?: email_logWhereInput[]
+    NOT?: email_logWhereInput | email_logWhereInput[]
+    id?: IntFilter<"email_log"> | number
+    recipient?: StringFilter<"email_log"> | string
+    subject?: StringFilter<"email_log"> | string
+    email_type?: StringFilter<"email_log"> | string
+    sent_date?: DateTimeFilter<"email_log"> | Date | string
+    status?: StringFilter<"email_log"> | string
+    created_at?: DateTimeFilter<"email_log"> | Date | string
+  }
+
+  export type email_logOrderByWithRelationInput = {
+    id?: SortOrder
+    recipient?: SortOrder
+    subject?: SortOrder
+    email_type?: SortOrder
+    sent_date?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type email_logWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: email_logWhereInput | email_logWhereInput[]
+    OR?: email_logWhereInput[]
+    NOT?: email_logWhereInput | email_logWhereInput[]
+    recipient?: StringFilter<"email_log"> | string
+    subject?: StringFilter<"email_log"> | string
+    email_type?: StringFilter<"email_log"> | string
+    sent_date?: DateTimeFilter<"email_log"> | Date | string
+    status?: StringFilter<"email_log"> | string
+    created_at?: DateTimeFilter<"email_log"> | Date | string
+  }, "id">
+
+  export type email_logOrderByWithAggregationInput = {
+    id?: SortOrder
+    recipient?: SortOrder
+    subject?: SortOrder
+    email_type?: SortOrder
+    sent_date?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    _count?: email_logCountOrderByAggregateInput
+    _avg?: email_logAvgOrderByAggregateInput
+    _max?: email_logMaxOrderByAggregateInput
+    _min?: email_logMinOrderByAggregateInput
+    _sum?: email_logSumOrderByAggregateInput
+  }
+
+  export type email_logScalarWhereWithAggregatesInput = {
+    AND?: email_logScalarWhereWithAggregatesInput | email_logScalarWhereWithAggregatesInput[]
+    OR?: email_logScalarWhereWithAggregatesInput[]
+    NOT?: email_logScalarWhereWithAggregatesInput | email_logScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"email_log"> | number
+    recipient?: StringWithAggregatesFilter<"email_log"> | string
+    subject?: StringWithAggregatesFilter<"email_log"> | string
+    email_type?: StringWithAggregatesFilter<"email_log"> | string
+    sent_date?: DateTimeWithAggregatesFilter<"email_log"> | Date | string
+    status?: StringWithAggregatesFilter<"email_log"> | string
+    created_at?: DateTimeWithAggregatesFilter<"email_log"> | Date | string
+  }
+
   export type adminCreateInput = {
     first_name: string
     last_name: string
@@ -19874,6 +21097,73 @@ export namespace Prisma {
     zip_code?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type email_logCreateInput = {
+    recipient: string
+    subject: string
+    email_type: string
+    sent_date?: Date | string
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type email_logUncheckedCreateInput = {
+    id?: number
+    recipient: string
+    subject: string
+    email_type: string
+    sent_date?: Date | string
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type email_logUpdateInput = {
+    recipient?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    email_type?: StringFieldUpdateOperationsInput | string
+    sent_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type email_logUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recipient?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    email_type?: StringFieldUpdateOperationsInput | string
+    sent_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type email_logCreateManyInput = {
+    id?: number
+    recipient: string
+    subject: string
+    email_type: string
+    sent_date?: Date | string
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type email_logUpdateManyMutationInput = {
+    recipient?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    email_type?: StringFieldUpdateOperationsInput | string
+    sent_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type email_logUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recipient?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    email_type?: StringFieldUpdateOperationsInput | string
+    sent_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -20846,6 +22136,44 @@ export namespace Prisma {
   export type SubdistrictSumOrderByAggregateInput = {
     subdistrict_id?: SortOrder
     district_id?: SortOrder
+  }
+
+  export type email_logCountOrderByAggregateInput = {
+    id?: SortOrder
+    recipient?: SortOrder
+    subject?: SortOrder
+    email_type?: SortOrder
+    sent_date?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type email_logAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type email_logMaxOrderByAggregateInput = {
+    id?: SortOrder
+    recipient?: SortOrder
+    subject?: SortOrder
+    email_type?: SortOrder
+    sent_date?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type email_logMinOrderByAggregateInput = {
+    id?: SortOrder
+    recipient?: SortOrder
+    subject?: SortOrder
+    email_type?: SortOrder
+    sent_date?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type email_logSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type rolesCreateNestedOneWithoutAdminInput = {

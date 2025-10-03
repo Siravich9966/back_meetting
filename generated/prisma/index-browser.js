@@ -20,11 +20,11 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.16.2
+ * Prisma Client JS version: 6.16.0
  * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
  */
 Prisma.prismaVersion = {
-  client: "6.16.2",
+  client: "6.16.0",
   engine: "1c57fdcd7e44b29b9313256c76699e91c3ac3c43"
 }
 
@@ -277,6 +277,16 @@ exports.Prisma.SubdistrictScalarFieldEnum = {
   zip_code: 'zip_code'
 };
 
+exports.Prisma.Email_logScalarFieldEnum = {
+  id: 'id',
+  recipient: 'recipient',
+  subject: 'subject',
+  email_type: 'email_type',
+  sent_date: 'sent_date',
+  status: 'status',
+  created_at: 'created_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -305,7 +315,8 @@ exports.Prisma.ModelName = {
   users: 'users',
   Province: 'Province',
   District: 'District',
-  Subdistrict: 'Subdistrict'
+  Subdistrict: 'Subdistrict',
+  email_log: 'email_log'
 };
 
 /**

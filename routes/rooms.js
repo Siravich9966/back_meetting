@@ -552,9 +552,13 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
 
-          // จัดการรูปภาพ
+          // จัดการรูปภาพจาก FormData
+          console.log('📋 Request body keys:', Object.keys(body))
+          console.log('📋 Body image:', body.image)
+          
           const image = body.image
-          if (!image || !image.name) {
+          if (!image) {
+            console.log('❌ No image found in body')
             set.status = 400
             return {
               success: false,
@@ -562,27 +566,65 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
 
+          if (!image.name) {
+            console.log('❌ Image has no name property')
+            set.status = 400
+            return {
+              success: false,
+              message: 'ไฟล์รูปภาพไม่ถูกต้อง'
+            }
+          }
+
+          console.log('📷 Image file details:', {
+            name: image.name,
+            size: image.size,
+            type: image.type
+          })
+
           console.log('📷 Processing image upload for room:', roomId)
 
           // แปลงไฟล์เป็น Buffer เพื่อเก็บใน database
-          const arrayBuffer = await image.arrayBuffer()
-          const imageBuffer = Buffer.from(arrayBuffer)
+          let arrayBuffer, imageBuffer
+          try {
+            console.log('🔄 Converting image to buffer...')
+            arrayBuffer = await image.arrayBuffer()
+            imageBuffer = Buffer.from(arrayBuffer)
+            console.log('✅ Image buffer created, size:', imageBuffer.length, 'bytes')
+          } catch (bufferError) {
+            console.error('❌ Error converting image to buffer:', bufferError)
+            set.status = 500
+            return {
+              success: false,
+              message: 'เกิดข้อผิดพลาดในการประมวลผลรูปภาพ'
+            }
+          }
 
           console.log('💾 Saving image to database, size:', imageBuffer.length, 'bytes')
 
           // อัพเดทเฉพาะรูปภาพ
-          const updatedRoom = await prisma.meeting_room.update({
-            where: { room_id: roomId },
-            data: {
-              image: imageBuffer,
-              updated_at: new Date()
-            },
-            select: {
-              room_id: true,
-              image: true,
-              updated_at: true
+          let updatedRoom
+          try {
+            updatedRoom = await prisma.meeting_room.update({
+              where: { room_id: roomId },
+              data: {
+                image: imageBuffer,
+                updated_at: new Date()
+              },
+              select: {
+                room_id: true,
+                image: true,
+                updated_at: true
+              }
+            })
+            console.log('✅ Database update successful')
+          } catch (dbError) {
+            console.error('❌ Database error:', dbError)
+            set.status = 500
+            return {
+              success: false,
+              message: 'เกิดข้อผิดพลาดในการบันทึกรูปภาพ'
             }
-          })
+          }
 
           console.log('✅ Image updated successfully for room:', roomId)
           console.log('📊 Updated room image size:', updatedRoom.image ? updatedRoom.image.length : 0, 'bytes')

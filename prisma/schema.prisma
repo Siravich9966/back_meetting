@@ -257,3 +257,17 @@ model Subdistrict {
   
   @@map("tb_Subdistrict")
 }
+
+// Email Log - เก็บประวัติการส่งอีเมลและจำกัดโควต้า
+model email_log {
+  id           Int      @id @default(autoincrement())
+  recipient    String   @db.VarChar(255)
+  subject      String   @db.VarChar(500)
+  email_type   String   @db.VarChar(50)  // 'new_reservation', 'reservation_approved', 'reservation_rejected'
+  sent_date    DateTime @default(now()) @db.Timestamptz(6)
+  status       String   @default("sent") @db.VarChar(20)  // 'sent', 'failed'
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([sent_date], name: "idx_email_log_sent_date")
+  @@index([email_type], name: "idx_email_log_type")
+}
