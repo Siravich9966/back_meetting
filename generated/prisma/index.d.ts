@@ -2361,6 +2361,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -2382,6 +2383,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -2403,6 +2405,7 @@ export namespace Prisma {
     citizen_id: number
     position: number
     department: number
+    status: number
     reset_token: number
     reset_token_expiry: number
     province_id: number
@@ -2444,6 +2447,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -2465,6 +2469,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -2486,6 +2491,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -2594,6 +2600,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -2634,6 +2641,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -2659,6 +2667,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -2684,6 +2693,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -2709,6 +2719,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -2720,7 +2731,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type adminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"admin_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "reset_token" | "reset_token_expiry" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["admin"]>
+  export type adminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"admin_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "status" | "reset_token" | "reset_token_expiry" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["admin"]>
   export type adminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
     province?: boolean | admin$provinceArgs<ExtArgs>
@@ -2758,6 +2769,7 @@ export namespace Prisma {
       citizen_id: string | null
       position: string | null
       department: string | null
+      status: string | null
       reset_token: string | null
       reset_token_expiry: Date | null
       province_id: number | null
@@ -3203,6 +3215,7 @@ export namespace Prisma {
     readonly citizen_id: FieldRef<"admin", 'String'>
     readonly position: FieldRef<"admin", 'String'>
     readonly department: FieldRef<"admin", 'String'>
+    readonly status: FieldRef<"admin", 'String'>
     readonly reset_token: FieldRef<"admin", 'String'>
     readonly reset_token_expiry: FieldRef<"admin", 'DateTime'>
     readonly province_id: FieldRef<"admin", 'Int'>
@@ -6065,6 +6078,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -6086,6 +6100,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -6107,6 +6122,7 @@ export namespace Prisma {
     citizen_id: number
     position: number
     department: number
+    status: number
     reset_token: number
     reset_token_expiry: number
     province_id: number
@@ -6148,6 +6164,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -6169,6 +6186,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -6190,6 +6208,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -6298,6 +6317,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -6338,6 +6358,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -6365,6 +6386,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -6390,6 +6412,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -6415,6 +6438,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -6426,7 +6450,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type officerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"officer_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "reset_token" | "reset_token_expiry" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["officer"]>
+  export type officerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"officer_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "status" | "reset_token" | "reset_token_expiry" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["officer"]>
   export type officerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
     province?: boolean | officer$provinceArgs<ExtArgs>
@@ -6467,6 +6491,7 @@ export namespace Prisma {
       citizen_id: string | null
       position: string | null
       department: string | null
+      status: string | null
       reset_token: string | null
       reset_token_expiry: Date | null
       province_id: number | null
@@ -6913,6 +6938,7 @@ export namespace Prisma {
     readonly citizen_id: FieldRef<"officer", 'String'>
     readonly position: FieldRef<"officer", 'String'>
     readonly department: FieldRef<"officer", 'String'>
+    readonly status: FieldRef<"officer", 'String'>
     readonly reset_token: FieldRef<"officer", 'String'>
     readonly reset_token_expiry: FieldRef<"officer", 'DateTime'>
     readonly province_id: FieldRef<"officer", 'Int'>
@@ -11089,6 +11115,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -11110,6 +11137,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -11131,6 +11159,7 @@ export namespace Prisma {
     citizen_id: number
     position: number
     department: number
+    status: number
     reset_token: number
     reset_token_expiry: number
     province_id: number
@@ -11172,6 +11201,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -11193,6 +11223,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -11214,6 +11245,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -11322,6 +11354,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string
     department: string
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -11362,6 +11395,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -11387,6 +11421,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -11412,6 +11447,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -11437,6 +11473,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -11448,7 +11485,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type executiveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"executive_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "reset_token" | "reset_token_expiry" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["executive"]>
+  export type executiveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"executive_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "status" | "reset_token" | "reset_token_expiry" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["executive"]>
   export type executiveInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     roles?: boolean | rolesDefaultArgs<ExtArgs>
     province?: boolean | executive$provinceArgs<ExtArgs>
@@ -11486,6 +11523,7 @@ export namespace Prisma {
       citizen_id: string | null
       position: string
       department: string
+      status: string | null
       reset_token: string | null
       reset_token_expiry: Date | null
       province_id: number | null
@@ -11931,6 +11969,7 @@ export namespace Prisma {
     readonly citizen_id: FieldRef<"executive", 'String'>
     readonly position: FieldRef<"executive", 'String'>
     readonly department: FieldRef<"executive", 'String'>
+    readonly status: FieldRef<"executive", 'String'>
     readonly reset_token: FieldRef<"executive", 'String'>
     readonly reset_token_expiry: FieldRef<"executive", 'DateTime'>
     readonly province_id: FieldRef<"executive", 'Int'>
@@ -12451,6 +12490,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -12472,6 +12512,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -12493,6 +12534,7 @@ export namespace Prisma {
     citizen_id: number
     position: number
     department: number
+    status: number
     reset_token: number
     reset_token_expiry: number
     province_id: number
@@ -12534,6 +12576,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -12555,6 +12598,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -12576,6 +12620,7 @@ export namespace Prisma {
     citizen_id?: true
     position?: true
     department?: true
+    status?: true
     reset_token?: true
     reset_token_expiry?: true
     province_id?: true
@@ -12684,6 +12729,7 @@ export namespace Prisma {
     citizen_id: string | null
     position: string | null
     department: string | null
+    status: string | null
     reset_token: string | null
     reset_token_expiry: Date | null
     province_id: number | null
@@ -12724,6 +12770,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -12752,6 +12799,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -12777,6 +12825,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -12802,6 +12851,7 @@ export namespace Prisma {
     citizen_id?: boolean
     position?: boolean
     department?: boolean
+    status?: boolean
     reset_token?: boolean
     reset_token_expiry?: boolean
     province_id?: boolean
@@ -12813,7 +12863,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "reset_token" | "reset_token_expiry" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
+  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "role_id" | "first_name" | "last_name" | "email" | "password" | "citizen_id" | "position" | "department" | "status" | "reset_token" | "reset_token_expiry" | "province_id" | "district_id" | "subdistrict_id" | "zip_code" | "profile_image" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
   export type usersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     reservation?: boolean | users$reservationArgs<ExtArgs>
     review?: boolean | users$reviewArgs<ExtArgs>
@@ -12856,6 +12906,7 @@ export namespace Prisma {
       citizen_id: string | null
       position: string | null
       department: string | null
+      status: string | null
       reset_token: string | null
       reset_token_expiry: Date | null
       province_id: number | null
@@ -13303,6 +13354,7 @@ export namespace Prisma {
     readonly citizen_id: FieldRef<"users", 'String'>
     readonly position: FieldRef<"users", 'String'>
     readonly department: FieldRef<"users", 'String'>
+    readonly status: FieldRef<"users", 'String'>
     readonly reset_token: FieldRef<"users", 'String'>
     readonly reset_token_expiry: FieldRef<"users", 'DateTime'>
     readonly province_id: FieldRef<"users", 'Int'>
@@ -18496,6 +18548,7 @@ export namespace Prisma {
     citizen_id: 'citizen_id',
     position: 'position',
     department: 'department',
+    status: 'status',
     reset_token: 'reset_token',
     reset_token_expiry: 'reset_token_expiry',
     province_id: 'province_id',
@@ -18548,6 +18601,7 @@ export namespace Prisma {
     citizen_id: 'citizen_id',
     position: 'position',
     department: 'department',
+    status: 'status',
     reset_token: 'reset_token',
     reset_token_expiry: 'reset_token_expiry',
     province_id: 'province_id',
@@ -18614,6 +18668,7 @@ export namespace Prisma {
     citizen_id: 'citizen_id',
     position: 'position',
     department: 'department',
+    status: 'status',
     reset_token: 'reset_token',
     reset_token_expiry: 'reset_token_expiry',
     province_id: 'province_id',
@@ -18638,6 +18693,7 @@ export namespace Prisma {
     citizen_id: 'citizen_id',
     position: 'position',
     department: 'department',
+    status: 'status',
     reset_token: 'reset_token',
     reset_token_expiry: 'reset_token_expiry',
     province_id: 'province_id',
@@ -18814,6 +18870,7 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"admin"> | string | null
     position?: StringNullableFilter<"admin"> | string | null
     department?: StringNullableFilter<"admin"> | string | null
+    status?: StringNullableFilter<"admin"> | string | null
     reset_token?: StringNullableFilter<"admin"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"admin"> | Date | string | null
     province_id?: IntNullableFilter<"admin"> | number | null
@@ -18839,6 +18896,7 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
     reset_token?: SortOrderInput | SortOrder
     reset_token_expiry?: SortOrderInput | SortOrder
     province_id?: SortOrderInput | SortOrder
@@ -18867,6 +18925,7 @@ export namespace Prisma {
     password?: StringFilter<"admin"> | string
     position?: StringNullableFilter<"admin"> | string | null
     department?: StringNullableFilter<"admin"> | string | null
+    status?: StringNullableFilter<"admin"> | string | null
     reset_token?: StringNullableFilter<"admin"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"admin"> | Date | string | null
     province_id?: IntNullableFilter<"admin"> | number | null
@@ -18892,6 +18951,7 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
     reset_token?: SortOrderInput | SortOrder
     reset_token_expiry?: SortOrderInput | SortOrder
     province_id?: SortOrderInput | SortOrder
@@ -18921,6 +18981,7 @@ export namespace Prisma {
     citizen_id?: StringNullableWithAggregatesFilter<"admin"> | string | null
     position?: StringNullableWithAggregatesFilter<"admin"> | string | null
     department?: StringNullableWithAggregatesFilter<"admin"> | string | null
+    status?: StringNullableWithAggregatesFilter<"admin"> | string | null
     reset_token?: StringNullableWithAggregatesFilter<"admin"> | string | null
     reset_token_expiry?: DateTimeNullableWithAggregatesFilter<"admin"> | Date | string | null
     province_id?: IntNullableWithAggregatesFilter<"admin"> | number | null
@@ -19095,6 +19156,7 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"officer"> | string | null
     position?: StringNullableFilter<"officer"> | string | null
     department?: StringNullableFilter<"officer"> | string | null
+    status?: StringNullableFilter<"officer"> | string | null
     reset_token?: StringNullableFilter<"officer"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"officer"> | Date | string | null
     province_id?: IntNullableFilter<"officer"> | number | null
@@ -19121,6 +19183,7 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
     reset_token?: SortOrderInput | SortOrder
     reset_token_expiry?: SortOrderInput | SortOrder
     province_id?: SortOrderInput | SortOrder
@@ -19150,6 +19213,7 @@ export namespace Prisma {
     password?: StringFilter<"officer"> | string
     position?: StringNullableFilter<"officer"> | string | null
     department?: StringNullableFilter<"officer"> | string | null
+    status?: StringNullableFilter<"officer"> | string | null
     reset_token?: StringNullableFilter<"officer"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"officer"> | Date | string | null
     province_id?: IntNullableFilter<"officer"> | number | null
@@ -19176,6 +19240,7 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
     reset_token?: SortOrderInput | SortOrder
     reset_token_expiry?: SortOrderInput | SortOrder
     province_id?: SortOrderInput | SortOrder
@@ -19205,6 +19270,7 @@ export namespace Prisma {
     citizen_id?: StringNullableWithAggregatesFilter<"officer"> | string | null
     position?: StringNullableWithAggregatesFilter<"officer"> | string | null
     department?: StringNullableWithAggregatesFilter<"officer"> | string | null
+    status?: StringNullableWithAggregatesFilter<"officer"> | string | null
     reset_token?: StringNullableWithAggregatesFilter<"officer"> | string | null
     reset_token_expiry?: DateTimeNullableWithAggregatesFilter<"officer"> | Date | string | null
     province_id?: IntNullableWithAggregatesFilter<"officer"> | number | null
@@ -19463,6 +19529,7 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"executive"> | string | null
     position?: StringFilter<"executive"> | string
     department?: StringFilter<"executive"> | string
+    status?: StringNullableFilter<"executive"> | string | null
     reset_token?: StringNullableFilter<"executive"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"executive"> | Date | string | null
     province_id?: IntNullableFilter<"executive"> | number | null
@@ -19488,6 +19555,7 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrderInput | SortOrder
     reset_token?: SortOrderInput | SortOrder
     reset_token_expiry?: SortOrderInput | SortOrder
     province_id?: SortOrderInput | SortOrder
@@ -19516,6 +19584,7 @@ export namespace Prisma {
     password?: StringFilter<"executive"> | string
     position?: StringFilter<"executive"> | string
     department?: StringFilter<"executive"> | string
+    status?: StringNullableFilter<"executive"> | string | null
     reset_token?: StringNullableFilter<"executive"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"executive"> | Date | string | null
     province_id?: IntNullableFilter<"executive"> | number | null
@@ -19541,6 +19610,7 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrderInput | SortOrder
     reset_token?: SortOrderInput | SortOrder
     reset_token_expiry?: SortOrderInput | SortOrder
     province_id?: SortOrderInput | SortOrder
@@ -19570,6 +19640,7 @@ export namespace Prisma {
     citizen_id?: StringNullableWithAggregatesFilter<"executive"> | string | null
     position?: StringWithAggregatesFilter<"executive"> | string
     department?: StringWithAggregatesFilter<"executive"> | string
+    status?: StringNullableWithAggregatesFilter<"executive"> | string | null
     reset_token?: StringNullableWithAggregatesFilter<"executive"> | string | null
     reset_token_expiry?: DateTimeNullableWithAggregatesFilter<"executive"> | Date | string | null
     province_id?: IntNullableWithAggregatesFilter<"executive"> | number | null
@@ -19594,6 +19665,7 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"users"> | string | null
     position?: StringNullableFilter<"users"> | string | null
     department?: StringNullableFilter<"users"> | string | null
+    status?: StringNullableFilter<"users"> | string | null
     reset_token?: StringNullableFilter<"users"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"users"> | Date | string | null
     province_id?: IntNullableFilter<"users"> | number | null
@@ -19621,6 +19693,7 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
     reset_token?: SortOrderInput | SortOrder
     reset_token_expiry?: SortOrderInput | SortOrder
     province_id?: SortOrderInput | SortOrder
@@ -19651,6 +19724,7 @@ export namespace Prisma {
     password?: StringFilter<"users"> | string
     position?: StringNullableFilter<"users"> | string | null
     department?: StringNullableFilter<"users"> | string | null
+    status?: StringNullableFilter<"users"> | string | null
     reset_token?: StringNullableFilter<"users"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"users"> | Date | string | null
     province_id?: IntNullableFilter<"users"> | number | null
@@ -19678,6 +19752,7 @@ export namespace Prisma {
     citizen_id?: SortOrderInput | SortOrder
     position?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
     reset_token?: SortOrderInput | SortOrder
     reset_token_expiry?: SortOrderInput | SortOrder
     province_id?: SortOrderInput | SortOrder
@@ -19707,6 +19782,7 @@ export namespace Prisma {
     citizen_id?: StringNullableWithAggregatesFilter<"users"> | string | null
     position?: StringNullableWithAggregatesFilter<"users"> | string | null
     department?: StringNullableWithAggregatesFilter<"users"> | string | null
+    status?: StringNullableWithAggregatesFilter<"users"> | string | null
     reset_token?: StringNullableWithAggregatesFilter<"users"> | string | null
     reset_token_expiry?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
     province_id?: IntNullableWithAggregatesFilter<"users"> | number | null
@@ -19970,6 +20046,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -19992,6 +20069,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -20011,6 +20089,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20033,6 +20112,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20054,6 +20134,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -20073,6 +20154,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20091,6 +20173,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20269,6 +20352,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -20292,6 +20376,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -20312,6 +20397,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20335,6 +20421,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20357,6 +20444,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -20376,6 +20464,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20394,6 +20483,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20646,6 +20736,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -20668,6 +20759,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -20687,6 +20779,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20709,6 +20802,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20730,6 +20824,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -20749,6 +20844,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20767,6 +20863,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20786,6 +20883,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -20810,6 +20908,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -20831,6 +20930,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20855,6 +20955,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20878,6 +20979,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -20897,6 +20999,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20915,6 +21018,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21269,6 +21373,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -21299,6 +21404,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -21320,6 +21426,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -21565,6 +21672,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -21595,6 +21703,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -21616,6 +21725,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -21874,6 +21984,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -21904,6 +22015,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -21925,6 +22037,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -21955,6 +22068,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -21985,6 +22099,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -22006,6 +22121,7 @@ export namespace Prisma {
     citizen_id?: SortOrder
     position?: SortOrder
     department?: SortOrder
+    status?: SortOrder
     reset_token?: SortOrder
     reset_token_expiry?: SortOrder
     province_id?: SortOrder
@@ -24555,6 +24671,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -24577,6 +24694,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -24635,6 +24753,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -24658,6 +24777,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -24694,6 +24814,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -24716,6 +24837,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -24786,6 +24908,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -24809,6 +24932,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -24863,6 +24987,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -24886,6 +25011,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -24962,6 +25088,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -24985,6 +25112,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -25005,6 +25133,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -25025,6 +25154,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -25054,6 +25184,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -25074,6 +25205,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -25103,6 +25235,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -25124,6 +25257,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -25154,6 +25288,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -25176,6 +25311,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -25228,6 +25364,7 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"admin"> | string | null
     position?: StringNullableFilter<"admin"> | string | null
     department?: StringNullableFilter<"admin"> | string | null
+    status?: StringNullableFilter<"admin"> | string | null
     reset_token?: StringNullableFilter<"admin"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"admin"> | Date | string | null
     province_id?: IntNullableFilter<"admin"> | number | null
@@ -25268,6 +25405,7 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"executive"> | string | null
     position?: StringFilter<"executive"> | string
     department?: StringFilter<"executive"> | string
+    status?: StringNullableFilter<"executive"> | string | null
     reset_token?: StringNullableFilter<"executive"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"executive"> | Date | string | null
     province_id?: IntNullableFilter<"executive"> | number | null
@@ -25308,6 +25446,7 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"officer"> | string | null
     position?: StringNullableFilter<"officer"> | string | null
     department?: StringNullableFilter<"officer"> | string | null
+    status?: StringNullableFilter<"officer"> | string | null
     reset_token?: StringNullableFilter<"officer"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"officer"> | Date | string | null
     province_id?: IntNullableFilter<"officer"> | number | null
@@ -25348,6 +25487,7 @@ export namespace Prisma {
     citizen_id?: StringNullableFilter<"users"> | string | null
     position?: StringNullableFilter<"users"> | string | null
     department?: StringNullableFilter<"users"> | string | null
+    status?: StringNullableFilter<"users"> | string | null
     reset_token?: StringNullableFilter<"users"> | string | null
     reset_token_expiry?: DateTimeNullableFilter<"users"> | Date | string | null
     province_id?: IntNullableFilter<"users"> | number | null
@@ -25912,6 +26052,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -25935,6 +26076,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     district_id?: number | null
@@ -25965,6 +26107,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -25986,6 +26129,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     district_id?: number | null
@@ -26014,6 +26158,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -26036,6 +26181,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     district_id?: number | null
@@ -26065,6 +26211,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -26086,6 +26233,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     district_id?: number | null
@@ -26254,6 +26402,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -26277,6 +26426,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -26307,6 +26457,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -26328,6 +26479,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -26356,6 +26508,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -26378,6 +26531,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -26407,6 +26561,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -26428,6 +26583,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -26598,6 +26754,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -26621,6 +26778,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -26651,6 +26809,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -26672,6 +26831,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -26700,6 +26860,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -26722,6 +26883,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -26751,6 +26913,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     zip_code?: number | null
@@ -26772,6 +26935,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -27091,6 +27255,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -27111,6 +27276,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -27131,6 +27297,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -27151,6 +27318,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -27170,6 +27338,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27190,6 +27359,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27210,6 +27380,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27229,6 +27400,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27249,6 +27421,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27269,6 +27442,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27288,6 +27462,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27309,6 +27484,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27330,6 +27506,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27349,6 +27526,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27371,6 +27549,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27393,6 +27572,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27517,6 +27697,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     district_id?: number | null
@@ -27537,6 +27718,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     district_id?: number | null
@@ -27557,6 +27739,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     district_id?: number | null
@@ -27577,6 +27760,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     district_id?: number | null
@@ -27619,6 +27803,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27642,6 +27827,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     district_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27664,6 +27850,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     district_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27682,6 +27869,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27703,6 +27891,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     district_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27723,6 +27912,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     district_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27741,6 +27931,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27763,6 +27954,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     district_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27784,6 +27976,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     district_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27802,6 +27995,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27823,6 +28017,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     district_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27843,6 +28038,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     district_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27869,6 +28065,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -27889,6 +28086,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -27909,6 +28107,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -27929,6 +28128,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -27972,6 +28172,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27995,6 +28196,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28017,6 +28219,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28035,6 +28238,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28056,6 +28260,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28076,6 +28281,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28094,6 +28300,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28116,6 +28323,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28137,6 +28345,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28155,6 +28364,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28176,6 +28386,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28196,6 +28407,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28216,6 +28428,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -28236,6 +28449,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -28256,6 +28470,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position?: string | null
     department?: string | null
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -28276,6 +28491,7 @@ export namespace Prisma {
     citizen_id?: string | null
     position: string
     department: string
+    status?: string | null
     reset_token?: string | null
     reset_token_expiry?: Date | string | null
     province_id?: number | null
@@ -28294,6 +28510,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28317,6 +28534,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28339,6 +28557,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28357,6 +28576,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28378,6 +28598,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28398,6 +28619,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28416,6 +28638,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28438,6 +28661,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28459,6 +28683,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28477,6 +28702,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zip_code?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28498,6 +28724,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28518,6 +28745,7 @@ export namespace Prisma {
     citizen_id?: NullableStringFieldUpdateOperationsInput | string | null
     position?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token?: NullableStringFieldUpdateOperationsInput | string | null
     reset_token_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     province_id?: NullableIntFieldUpdateOperationsInput | number | null

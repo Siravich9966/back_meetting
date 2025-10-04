@@ -12,6 +12,11 @@ import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma.js'
 import { validateRegisterData, formatValidationErrors } from '../validation.js'
 import { isValidDepartment, getAllDepartments } from '../utils/departments.js'
+import { 
+  getSuccessfulRegistrationEmail, 
+  getNewUserNotificationForAdmin 
+} from '../utils/approvalEmailTemplates.js'
+import { sendEmail } from '../utils/emailService.js'
 import {
   isValidPosition,
   getTableFromPosition,
@@ -200,12 +205,50 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
 
       console.log(`✅ สร้างผู้ใช้ใหม่สำเร็จใน ${targetTable} table`)
 
+      // ส่งอีเมลแจ้งเตือนผู้ใช้ว่าต้องรอการอนุมัติ
+      try {
+        const successEmail = getSuccessfulRegistrationEmail(body.first_name, body.last_name)
+        await sendEmail(body.email, successEmail.subject, successEmail.html)
+        console.log('✅ ส่งอีเมลแจ้งเตือนผู้ใช้เรียบร้อย')
+      } catch (emailError) {
+        console.error('❌ ส่งอีเมลแจ้งเตือนผู้ใช้ไม่สำเร็จ:', emailError)
+        // ไม่ให้ error นี้หยุดการสมัครสมาชิก
+      }
+
+      // ส่งอีเมลแจ้งเตือน Admin ว่ามีผู้ใช้ใหม่
+      try {
+        // หา email ของ admin ทั้งหมด
+        const admins = await prisma.admin.findMany({
+          where: { status: 'approved' },
+          select: { email: true }
+        })
+
+        if (admins.length > 0) {
+          const adminEmail = getNewUserNotificationForAdmin(
+            body.first_name, 
+            body.last_name, 
+            body.email, 
+            body.position, 
+            body.department
+          )
+
+          // ส่งให้ admin ทุกคน
+          for (const admin of admins) {
+            await sendEmail(admin.email, adminEmail.subject, adminEmail.html)
+          }
+          console.log('✅ ส่งอีเมลแจ้งเตือน Admin เรียบร้อย')
+        }
+      } catch (emailError) {
+        console.error('❌ ส่งอีเมลแจ้งเตือน Admin ไม่สำเร็จ:', emailError)
+        // ไม่ให้ error นี้หยุดการสมัครสมาชิก
+      }
+
       // ลบ password ออกจาก response
       const { password, ...userWithoutPassword } = newUser
 
       return {
         success: true,
-        message: `สมัครสมาชิกสำเร็จ! บันทึกข้อมูลใน ${targetTable} table`,
+        message: `สมัครสมาชิกสำเร็จ! กรุณารอการอนุมัติจากผู้ดูแลระบบ`,
         user: {
           ...userWithoutPassword,
           userTable: targetTable,
@@ -497,6 +540,18 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       }
 
       console.log('✅ รหัสผ่านถูกต้อง')
+
+      // ตรวจสอบสถานะการอนุมัติ
+      if (user.status !== 'approved') {
+        console.log(`❌ ผู้ใช้ยังไม่ได้รับการอนุมัติ สถานะ: ${user.status}`)
+        set.status = 403
+        return {
+          success: false,
+          message: user.status === 'pending' 
+            ? 'บัญชีของคุณรอการอนุมัติจากผู้ดูแลระบบ' 
+            : 'บัญชีของคุณไม่ได้รับการอนุมัติ'
+        }
+      }
 
       // สร้าง JWT Token
       const jwt = await import('jsonwebtoken')

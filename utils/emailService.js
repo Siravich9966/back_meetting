@@ -17,6 +17,10 @@ import {
 let transporter = null
 const createTransporter = () => {
   if (!transporter) {
+    console.log('🔧 [EMAIL] Creating new Gmail transporter...')
+    console.log(`📧 [EMAIL] Gmail User: ${process.env.GMAIL_USER}`)
+    console.log(`🔑 [EMAIL] App Password exists: ${process.env.GMAIL_APP_PASSWORD ? 'YES' : 'NO'}`)
+    
     transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -25,7 +29,21 @@ const createTransporter = () => {
       },
       pool: true, // ใช้ connection pool
       maxConnections: 5, // สูงสุด 5 connections พร้อมกัน
-      maxMessages: 100 // ส่งได้สูงสุด 100 อีเมลต่อ connection
+      maxMessages: 100, // ส่งได้สูงสุด 100 อีเมลต่อ connection
+      tls: {
+        rejectUnauthorized: false // อนุญาต self-signed certificates
+      },
+      debug: false, // ปิด debug mode - ไม่ต้องการ logs ยาวๆ
+      logger: false // ปิด logging - ไม่ต้องการ SMTP details
+    })
+    
+    // ทดสอบ connection เมื่อสร้าง transporter ใหม่
+    transporter.verify((error, success) => {
+      if (error) {
+        console.error('❌ [EMAIL] Gmail connection failed:', error.message)
+      } else {
+        console.log('✅ [EMAIL] Gmail connection verified successfully')
+      }
     })
   }
   return transporter
@@ -69,6 +87,87 @@ const logEmailSent = async (to, subject, type = 'notification') => {
     })
   } catch (error) {
     console.error('❌ [EMAIL-LOG] Error:', error)
+  }
+}
+
+// ฟังก์ชันส่งอีเมลทั่วไป
+const sendEmail = async (to, subject, html, text = '') => {
+  try {
+    console.log(`📧 [SEND-EMAIL] Preparing to send email to: ${to}`)
+    
+    // ตรวจสอบโควต้า
+    const canSend = await checkEmailQuota()
+    if (!canSend) {
+      throw new Error('เกินโควต้าการส่งอีเมลประจำวัน (450 อีเมล)')
+    }
+
+    // สร้าง transporter
+    let emailTransporter = createTransporter()
+
+    // ข้อมูลอีเมล
+    const mailOptions = {
+      from: {
+        name: 'ระบบจองห้องประชุม - มหาวิทยาลัยราชภัฏมหาสารคาม',
+        address: process.env.GMAIL_USER
+      },
+      to: to,
+      subject: subject,
+      html: html,
+      text: text || subject // ใช้ subject เป็น text fallback ถ้าไม่มี text
+    }
+
+    // ส่งอีเมลพร้อม retry mechanism
+    let info
+    let retryCount = 0
+    const maxRetries = 3
+    
+    while (retryCount < maxRetries) {
+      try {
+        console.log(`📧 [SEND-EMAIL] Attempt ${retryCount + 1}/${maxRetries} to send email to: ${to}`)
+        info = await emailTransporter.sendMail(mailOptions)
+        console.log(`✅ [SEND-EMAIL] Email sent successfully to: ${to}`)
+        console.log(`📋 [SEND-EMAIL] Message ID: ${info.messageId}`)
+        break // สำเร็จแล้ว ออกจาก loop
+      } catch (emailError) {
+        retryCount++
+        console.error(`❌ [SEND-EMAIL] Attempt ${retryCount} failed:`, emailError.message)
+        
+        if (retryCount >= maxRetries) {
+          throw emailError // ครบจำนวนครั้งแล้ว ให้ throw error
+        }
+        
+        // รอสักครู่ก่อน retry (exponential backoff)
+        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount))
+        
+        // สร้าง transporter ใหม่สำหรับ retry
+        transporter = null // reset global transporter
+        emailTransporter = createTransporter() // สร้างใหม่
+      }
+    }
+
+    // บันทึก log เฉพาะเมื่อส่งสำเร็จ
+    try {
+      await logEmailSent(to, subject, 'approval')
+    } catch (logError) {
+      console.error('❌ [SEND-EMAIL] Failed to log email:', logError.message)
+      // ไม่ throw error เพื่อไม่ให้ส่งอีเมลสำเร็จแล้วแต่ fail เพราะ log
+    }
+
+    return {
+      success: true,
+      messageId: info.messageId
+    }
+
+  } catch (error) {
+    console.error(`❌ [SEND-EMAIL] Failed to send email to: ${to}`, error.message)
+    console.error(`❌ [SEND-EMAIL] Error details:`, error)
+    
+    // Return error info แทนการ throw เพื่อให้ API ทำงานต่อได้
+    return {
+      success: false,
+      error: error.message,
+      details: error.code || 'UNKNOWN_ERROR'
+    }
   }
 }
 
@@ -509,6 +608,7 @@ const notifyUserReservationRejected = async (reservationId, officerId, reason = 
 }
 
 export {
+  sendEmail,
   notifyOfficersNewReservation,
   notifyUserReservationApproved,
   notifyUserReservationRejected,

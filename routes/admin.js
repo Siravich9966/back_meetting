@@ -5,6 +5,11 @@
 import { Elysia } from 'elysia'
 import prisma from '../lib/prisma.js'
 import { authMiddleware, isAdmin } from '../middleware/index.js'
+import { 
+  getAccountApprovedEmail, 
+  getAccountRejectedEmail 
+} from '../utils/approvalEmailTemplates.js'
+import { sendEmail } from '../utils/emailService.js'
 import {
   isValidPosition,
   getDepartmentFromPosition,
@@ -308,6 +313,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
               last_name: body.last_name,
               position: body.position || null,
               department: body.department || null,
+              status: 'approved', // Admin เพิ่ม = อนุมัติเลย
               // Address fields
               province_id: body.province_id ? parseInt(body.province_id) : null,
               district_id: body.district_id ? parseInt(body.district_id) : null,
@@ -338,6 +344,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 last_name: body.last_name,
                 position: body.position, // เก็บเป็นชื่อไทยที่เลือก
                 department: finalDept,
+                status: 'approved', // Admin เพิ่ม = อนุมัติเลย
                 // Address fields
                 province_id: body.province_id ? parseInt(body.province_id) : null,
                 district_id: body.district_id ? parseInt(body.district_id) : null,
@@ -382,6 +389,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
                 last_name: body.last_name,
                 position: body.position, // เก็บตำแหน่งภาษาไทยตามที่ผู้ใช้เลือก
                 department: derivedDept,
+                status: 'approved', // Admin เพิ่ม = อนุมัติเลย
                 // Address fields
                 province_id: body.province_id ? parseInt(body.province_id) : null,
                 district_id: body.district_id ? parseInt(body.district_id) : null,
@@ -403,6 +411,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
               last_name: body.last_name,
               position: body.position || 'ผู้ดูแลระบบ',
               department: body.department || 'สำนักงานอธิการบดี',
+              status: 'approved', // Admin เพิ่ม = อนุมัติเลย
               // Address fields
               province_id: body.province_id ? parseInt(body.province_id) : null,
               district_id: body.district_id ? parseInt(body.district_id) : null,
@@ -630,6 +639,18 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
           })
           break
         case 'admin':
+          // ตรวจสอบจำนวนแอดมินก่อนลบ - ต้องมีมากกว่า 1 คน
+          const adminCount = await prisma.admin.count()
+          
+          if (adminCount <= 1) {
+            set.status = 400
+            return {
+              success: false,
+              message: 'ไม่สามารถลบผู้ดูแลระบบได้ เนื่องจากต้องมีผู้ดูแลระบบอย่างน้อย 1 คนในระบบ',
+              error: 'CANNOT_DELETE_LAST_ADMIN'
+            }
+          }
+          
           deleteResult = await prisma.admin.delete({
             where: { admin_id: parseInt(userId) }
           })
@@ -891,6 +912,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
       
       const [users, officers, admins, executives] = await Promise.all([
         prisma.users.findMany({
+          where: { status: 'approved' }, // เฉพาะคนที่ approved เท่านั้น
           select: {
             user_id: true,
             first_name: true,
@@ -902,6 +924,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
           }
         }),
         prisma.officer.findMany({
+          where: { status: 'approved' }, // เฉพาะคนที่ approved เท่านั้น
           select: {
             officer_id: true,
             first_name: true,
@@ -913,6 +936,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
           }
         }),
         prisma.admin.findMany({
+          where: { status: 'approved' }, // เฉพาะคนที่ approved เท่านั้น
           select: {
             admin_id: true,
             first_name: true,
@@ -924,6 +948,7 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
           }
         }),
         prisma.executive.findMany({
+          where: { status: 'approved' }, // เฉพาะคนที่ approved เท่านั้น
           select: {
             executive_id: true,
             first_name: true,
@@ -1191,6 +1216,311 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
     }
   })
 
+  // ============================
+  // 👥 ดูรายการผู้ใช้รออนุมัติ
+  // ============================
+  .get('/pending-users', async ({ request, set }) => {
+    const user = await authMiddleware(request, set)
+    if (user.success === false) return user
+    
+    if (!isAdmin(user)) {
+      set.status = 403
+      return {
+        success: false,
+        message: 'การเข้าถึงจำกัดเฉพาะผู้ดูแลระบบเท่านั้น'
+      }
+    }
 
+    try {
+      console.log('👥 Admin: ดูรายการผู้ใช้รออนุมัติ')
+      
+      const [users, officers, executives, admins] = await Promise.all([
+        prisma.users.findMany({
+          where: { status: 'pending' },
+          select: {
+            user_id: true,
+            first_name: true,
+            last_name: true,
+            email: true,
+            citizen_id: true,
+            position: true,
+            department: true,
+            created_at: true,
+            status: true
+          },
+          orderBy: { created_at: 'desc' }
+        }),
+        prisma.officer.findMany({
+          where: { status: 'pending' },
+          select: {
+            officer_id: true,
+            first_name: true,
+            last_name: true,
+            email: true,
+            citizen_id: true,
+            position: true,
+            department: true,
+            created_at: true,
+            status: true
+          },
+          orderBy: { created_at: 'desc' }
+        }),
+        prisma.executive.findMany({
+          where: { status: 'pending' },
+          select: {
+            executive_id: true,
+            first_name: true,
+            last_name: true,
+            email: true,
+            citizen_id: true,
+            position: true,
+            department: true,
+            created_at: true,
+            status: true
+          },
+          orderBy: { created_at: 'desc' }
+        }),
+        prisma.admin.findMany({
+          where: { status: 'pending' },
+          select: {
+            admin_id: true,
+            first_name: true,
+            last_name: true,
+            email: true,
+            citizen_id: true,
+            position: true,
+            department: true,
+            created_at: true,
+            status: true
+          },
+          orderBy: { created_at: 'desc' }
+        })
+      ])
+
+      const allPendingUsers = [
+        ...users.map(u => ({ ...u, role: 'user' })),
+        ...officers.map(o => ({ ...o, role: 'officer' })),
+        ...executives.map(e => ({ ...e, role: 'executive' })),
+        ...admins.map(a => ({ ...a, role: 'admin' }))
+      ]
+
+      return {
+        success: true,
+        message: `ดึงรายการผู้ใช้รออนุมัติ (${allPendingUsers.length} คน)`,
+        data: allPendingUsers
+      }
+      
+    } catch (error) {
+      console.error('❌ เกิดข้อผิดพลาดในการดึงรายการผู้ใช้รออนุมัติ:', error)
+      set.status = 500
+      return { 
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการดึงรายการผู้ใช้รออนุมัติ'
+      }
+    }
+  })
+
+  // ============================
+  // ✅ อนุมัติผู้ใช้
+  // ============================
+  .post('/approve-user', async ({ request, set, body }) => {
+    const user = await authMiddleware(request, set)
+    if (user.success === false) return user
+    
+    if (!isAdmin(user)) {
+      set.status = 403
+      return {
+        success: false,
+        message: 'การเข้าถึงจำกัดเฉพาะผู้ดูแลระบบเท่านั้น'
+      }
+    }
+
+    try {
+      const { userId, role } = body
+
+      if (!userId || !role) {
+        set.status = 400
+        return {
+          success: false,
+          message: 'ข้อมูลไม่ครบถ้วน'
+        }
+      }
+
+      let updatedUser = null
+      let userEmail = null
+
+      switch (role) {
+        case 'user':
+          updatedUser = await prisma.users.update({
+            where: { user_id: userId },
+            data: { status: 'approved' }
+          })
+          userEmail = updatedUser.email
+          break
+        case 'officer':
+          updatedUser = await prisma.officer.update({
+            where: { officer_id: userId },
+            data: { status: 'approved' }
+          })
+          userEmail = updatedUser.email
+          break
+        case 'executive':
+          updatedUser = await prisma.executive.update({
+            where: { executive_id: userId },
+            data: { status: 'approved' }
+          })
+          userEmail = updatedUser.email
+          break
+        case 'admin':
+          updatedUser = await prisma.admin.update({
+            where: { admin_id: userId },
+            data: { status: 'approved' }
+          })
+          userEmail = updatedUser.email
+          break
+        default:
+          set.status = 400
+          return {
+            success: false,
+            message: 'ประเภทผู้ใช้ไม่ถูกต้อง'
+          }
+      }
+
+      console.log(`✅ Admin: อนุมัติผู้ใช้ ${role} ID: ${userId}`)
+
+      // ส่งอีเมลแจ้งเตือนผู้ใช้ว่าได้รับการอนุมัติ (แบบ non-blocking)
+      const approvedEmail = getAccountApprovedEmail(updatedUser.first_name, updatedUser.last_name)
+      const emailResult = await sendEmail(userEmail, approvedEmail.subject, approvedEmail.html)
+      
+      if (emailResult.success) {
+        console.log('✅ ส่งอีเมลแจ้งเตือนการอนุมัติเรียบร้อย')
+      } else {
+        console.error('❌ ส่งอีเมลแจ้งเตือนการอนุมัติไม่สำเร็จ:', emailResult.error)
+        // ไม่ block การอนุมัติ แม้อีเมลส่งไม่ได้
+      }
+
+      return {
+        success: true,
+        message: 'อนุมัติผู้ใช้เรียบร้อยแล้ว',
+        data: { userId, role, email: userEmail }
+      }
+      
+    } catch (error) {
+      console.error('❌ เกิดข้อผิดพลาดในการอนุมัติผู้ใช้:', error)
+      set.status = 500
+      return { 
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการอนุมัติผู้ใช้'
+      }
+    }
+  })
+
+  // ============================
+  // ❌ ปฏิเสธผู้ใช้
+  // ============================
+  .post('/reject-user', async ({ request, set, body }) => {
+    const user = await authMiddleware(request, set)
+    if (user.success === false) return user
+    
+    if (!isAdmin(user)) {
+      set.status = 403
+      return {
+        success: false,
+        message: 'การเข้าถึงจำกัดเฉพาะผู้ดูแลระบบเท่านั้น'
+      }
+    }
+
+    try {
+      const { userId, role } = body
+
+      if (!userId || !role) {
+        set.status = 400
+        return {
+          success: false,
+          message: 'ข้อมูลไม่ครับถ้วน'
+        }
+      }
+
+      let updatedUser = null
+      let userEmail = null
+
+      // ดึงข้อมูลผู้ใช้ก่อนลบ (เพื่อส่งอีเมล)
+      switch (role) {
+        case 'user':
+          updatedUser = await prisma.users.findUnique({
+            where: { user_id: userId }
+          })
+          userEmail = updatedUser.email
+          // ลบข้อมูลออกจาก database
+          await prisma.users.delete({
+            where: { user_id: userId }
+          })
+          break
+        case 'officer':
+          updatedUser = await prisma.officer.findUnique({
+            where: { officer_id: userId }
+          })
+          userEmail = updatedUser.email
+          // ลบข้อมูลออกจาก database
+          await prisma.officer.delete({
+            where: { officer_id: userId }
+          })
+          break
+        case 'executive':
+          updatedUser = await prisma.executive.findUnique({
+            where: { executive_id: userId }
+          })
+          userEmail = updatedUser.email
+          // ลบข้อมูลออกจาก database
+          await prisma.executive.delete({
+            where: { executive_id: userId }
+          })
+          break
+        case 'admin':
+          updatedUser = await prisma.admin.findUnique({
+            where: { admin_id: userId }
+          })
+          userEmail = updatedUser.email
+          // ลบข้อมูลออกจาก database
+          await prisma.admin.delete({
+            where: { admin_id: userId }
+          })
+          break
+        default:
+          set.status = 400
+          return {
+            success: false,
+            message: 'ประเภทผู้ใช้ไม่ถูกต้อง'
+          }
+      }
+
+      console.log(`❌ Admin: ปฏิเสธและลบผู้ใช้ ${role} ID: ${userId}`)
+
+      // ส่งอีเมลแจ้งเตือนผู้ใช้ว่าถูกปฏิเสธ (ก่อนลบข้อมูล, แบบ non-blocking)
+      const rejectedEmail = getAccountRejectedEmail(updatedUser.first_name, updatedUser.last_name)
+      const emailResult = await sendEmail(userEmail, rejectedEmail.subject, rejectedEmail.html)
+      
+      if (emailResult.success) {
+        console.log('✅ ส่งอีเมลแจ้งเตือนการปฏิเสธเรียบร้อย')
+      } else {
+        console.error('❌ ส่งอีเมลแจ้งเตือนการปฏิเสธไม่สำเร็จ:', emailResult.error)
+        // ไม่ block การปฏิเสธ แม้อีเมลส่งไม่ได้
+      }
+
+      return {
+        success: true,
+        message: 'ปฏิเสธและลบข้อมูลผู้ใช้เรียบร้อยแล้ว',
+        data: { userId, role, email: userEmail }
+      }
+      
+    } catch (error) {
+      console.error('❌ เกิดข้อผิดพลาดในการปฏิเสธผู้ใช้:', error)
+      set.status = 500
+      return { 
+        success: false,
+        message: 'เกิดข้อผิดพลาดในการปฏิเสธผู้ใช้'
+      }
+    }
+  })
 
 export default adminRoutes

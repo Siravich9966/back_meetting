@@ -12,6 +12,9 @@ export const POSITIONS = {
   GENERAL_STAFF: 'บุคลากร/อาจารย์ มหาวิทยาลัยราชภัฏมหาสารคาม',
   OTHER: 'อื่นๆ',
   
+  // ผู้ดูแลระบบ → จะไปตาราง admin
+  ADMIN: 'ผู้ดูแลระบบ',
+  
   // ผู้บริหาร → จะไปตาราง executive
   UNIVERSITY_EXECUTIVE: 'ผู้บริหารระดับมหาวิทยาลัย',
   
@@ -49,6 +52,7 @@ export const ALL_OFFICER_POSITIONS = [
 export const ALL_POSITIONS = [
   POSITIONS.GENERAL_STAFF,
   POSITIONS.OTHER,
+  POSITIONS.ADMIN,
   POSITIONS.UNIVERSITY_EXECUTIVE,
   ...FACULTY_EXECUTIVE_POSITIONS,
   ...ALL_OFFICER_POSITIONS
@@ -63,6 +67,10 @@ export const isValidPosition = (position) => {
 export const getTableFromPosition = (position) => {
   if (position === POSITIONS.GENERAL_STAFF || position === POSITIONS.OTHER) {
     return 'users'
+  }
+  
+  if (position === POSITIONS.ADMIN) {
+    return 'admin'
   }
   
   if (position === POSITIONS.UNIVERSITY_EXECUTIVE || 
@@ -132,6 +140,10 @@ export const getPositionGroups = () => {
     general: {
       label: 'บุคลากรทั่วไป',
       positions: [POSITIONS.GENERAL_STAFF, POSITIONS.OTHER]
+    },
+    admin: {
+      label: 'ผู้ดูแลระบบ',
+      positions: [POSITIONS.ADMIN]
     },
     executives: {
       label: 'ผู้บริหาร',
