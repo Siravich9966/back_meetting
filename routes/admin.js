@@ -474,17 +474,37 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
       
       // ตรวจสอบอีเมลซ้ำ (ยกเว้นตัวเอง)
       const existingEmail = await Promise.all([
-        prisma.users.findFirst({ where: { email, NOT: { user_id: originalRole === 'user' ? parseInt(userId) : undefined } } }),
-        prisma.officer.findFirst({ where: { email, NOT: { officer_id: originalRole === 'officer' ? parseInt(userId) : undefined } } }),
-        prisma.executive.findFirst({ where: { email, NOT: { executive_id: originalRole === 'executive' ? parseInt(userId) : undefined } } }),
-        prisma.admin.findFirst({ where: { email, NOT: { admin_id: originalRole === 'admin' ? parseInt(userId) : undefined } } })
+        prisma.users.findFirst({ 
+          where: { 
+            email, 
+            NOT: originalRole === 'user' ? { user_id: parseInt(userId) } : {} 
+          } 
+        }),
+        prisma.officer.findFirst({ 
+          where: { 
+            email, 
+            NOT: originalRole === 'officer' ? { officer_id: parseInt(userId) } : {} 
+          } 
+        }),
+        prisma.executive.findFirst({ 
+          where: { 
+            email, 
+            NOT: originalRole === 'executive' ? { executive_id: parseInt(userId) } : {} 
+          } 
+        }),
+        prisma.admin.findFirst({ 
+          where: { 
+            email, 
+            NOT: originalRole === 'admin' ? { admin_id: parseInt(userId) } : {} 
+          } 
+        })
       ])
       
       if (existingEmail.some(result => result !== null)) {
         set.status = 400
         return {
           success: false,
-          message: 'อีเมลนี้มีผู้ใช้อื่นใช้แล้ว',
+          message: '❌ ข้อมูลที่กรอกมีการใช้งานแล้วในระบบ กรุณาตรวจสอบ Email',
           error: 'email already exists'
         }
       }

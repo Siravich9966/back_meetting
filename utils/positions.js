@@ -109,10 +109,10 @@ export const getDepartmentFromPosition = (position) => {
   if (position.startsWith('เจ้าหน้าที่ดูแลห้องประชุม')) {
     const department = position.replace('เจ้าหน้าที่ดูแลห้องประชุม', '')
     
-    // แมปตำแหน่งพิเศษกับคณะ
-    if (department === 'อาคาร 72 พรรษา') return 'สำนักงานอธิการบดี'
-    if (department === 'หอประชุมเฉลิมพระเกียรติ 80 พรรษา') return 'สำนักงานอธิการบดี'
-    if (department === 'อาคาร 34 เฉลิมพระเกียรติ 60 ปี') return 'สำนักงานอธิการบดี'
+    // แมปตำแหน่งพิเศษกับคณะ - แยกเป็น department เฉพาะตัว
+    if (department === 'อาคาร 72 พรรษา') return 'อาคาร 72 พรรษา'
+    if (department === 'หอประชุมเฉลิมพระเกียรติ 80 พรรษา') return 'หอประชุมเฉลิมพระเกียรติ 80 พรรษา'
+    if (department === 'อาคาร 34 เฉลิมพระเกียรติ 60 ปี') return 'อาคาร 34 เฉลิมพระเกียรติ 60 ปี'
     
     // สำหรับคณะอื่นๆ ให้ return department ตรงๆ
     return department

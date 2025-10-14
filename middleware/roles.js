@@ -7,6 +7,8 @@
 // EXECUTIVE = ผู้บริหาร ดูได้อย่างเดียว แก้ไขไม่ได้
 // ===================================================================
 
+import { getExecutivePositionType } from '../utils/positions.js'
+
 // Basic Role Checking Functions
 export const isAdmin = (user) => user?.role === 'admin'
 
@@ -20,9 +22,9 @@ export const isUser = (user) => ['user', 'officer', 'admin', 'executive'].includ
 export const isExecutive = (user) => user?.role === 'executive' 
 
 export const isUniversityExecutive = (user) => 
-  user?.role === 'executive' && user?.position === 'university_executive'
+  user?.role === 'executive' && getExecutivePositionType(user?.position) === 'university_executive'
 
 export const isFacultyExecutive = (user) => 
-  user?.role === 'executive' && user?.position === 'faculty_executive'
+  user?.role === 'executive' && getExecutivePositionType(user?.position) === 'faculty_executive'
 
 // ใน 3-table system ไม่ใช้ role_status แล้ว - ลบออก
