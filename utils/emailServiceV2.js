@@ -176,7 +176,7 @@ const notifyOfficersNewReservation = async (reservationId) => {
 
     const allOfficers = await prisma.officer.findMany({
       where: {
-        position: {
+        department: {
           contains: reservation.meeting_room.department
         }
       }

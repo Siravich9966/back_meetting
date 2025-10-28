@@ -73,15 +73,33 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
         })
       }
       
-      // ดึงการจองที่ approved และ pending ในช่วงเวลานั้น พร้อมข้อมูลผู้จอง
+      // ดึงการจองที่ approved และ pending ที่ทับซ้อนกับเดือนนั้น พร้อมข้อมูลผู้จอง
+      // 🔥 แก้ไข: หาการจองที่ทับซ้อนกับช่วงเวลา ไม่ใช่แค่ที่อยู่ในช่วงเวลา
       const reservations = await prisma.reservation.findMany({
         where: {
           room_id: parseInt(roomId),
           status_r: { in: ['approved', 'pending'] },
-          start_at: {
-            gte: startDate,
-            lte: endDate
-          }
+          OR: [
+            // การจองที่เริ่มในเดือนนี้
+            {
+              start_at: {
+                gte: startDate,
+                lte: endDate
+              }
+            },
+            // การจองที่สิ้นสุดในเดือนนี้
+            {
+              end_at: {
+                gte: startDate,
+                lte: endDate
+              }
+            },
+            // การจองที่ครอบคลุมเดือนนี้ (เริ่มก่อนหน้า สิ้นสุดหลังจาก)
+            {
+              start_at: { lte: startDate },
+              end_at: { gte: endDate }
+            }
+          ]
         },
         select: {
           reservation_id: true,
@@ -105,6 +123,23 @@ export const reservationRoutes = new Elysia({ prefix: '/reservations' })
           }
         },
         orderBy: { start_at: 'asc' }
+      })
+
+      // 🔍 Debug: ตรวจสอบการจองที่ดึงมาได้
+      console.log('🔍 [BACKEND-CALENDAR] Reservations found:', {
+        month: parseInt(month),
+        year: parseInt(year),
+        roomId: parseInt(roomId),
+        dateRange: `${startDate.toISOString().split('T')[0]} to ${endDate.toISOString().split('T')[0]}`,
+        reservationsCount: reservations.length,
+        reservations: reservations.map(r => ({
+          id: r.reservation_id,
+          start_at: r.start_at.toISOString().split('T')[0],
+          end_at: r.end_at.toISOString().split('T')[0],
+          status: r.status_r,
+          is_multi_day: r.is_multi_day,
+          booking_dates: r.booking_dates
+        }))
       })
 
       // ถ้าต้องการ detailed view แสดง availability slots
@@ -979,7 +1014,9 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
             start_time: reservation.start_time,
             end_time: reservation.end_time,
             details: reservation.details_r,
-            status: translateStatus(reservation.status_r)
+            status: translateStatus(reservation.status_r),
+            booking_dates: reservation.booking_dates, // เพิ่มข้อมูลวันที่ที่เลือกไว้
+            is_multi_day: reservation.is_multi_day    // เพิ่มข้อมูลว่าเป็น multi-day หรือไม่
           },
           approval: {
             approved_by: reservation.officer ? 
@@ -1020,7 +1057,13 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
 
     try {
       const { id } = params
-      const { start_at, end_at, start_time, end_time, details_r } = body
+      const { start_at, end_at, start_time, end_time, details_r, booking_dates } = body
+      
+      console.log('🔍 [UPDATE-RESERVATION] Received data:', {
+        id, start_at, end_at, start_time, end_time, 
+        details_r: details_r?.slice(0, 50),
+        booking_dates: booking_dates || 'not provided'
+      })
 
       // ตรวจสอบการจองที่มีอยู่
       const existingReservation = await prisma.reservation.findUnique({
@@ -1094,7 +1137,14 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
       }
 
       // ตรวจสอบการจองที่ซ้อนทับ (ยกเว้นการจองปัจจุบัน)
-      // ดึงการจองทั้งหมดในห้องเดียวกันที่ไม่ใช่การจองปัจจุบัน
+      // ดึงเฉพาะการจองที่อนุมัติแล้วเท่านั้น เพราะการจองที่รออนุมัติสามารถแก้ไขได้
+      console.log('🔍 [CONFLICT-DEBUG] Checking conflicts for:', {
+        currentReservationId: parseInt(id),
+        roomId: existingReservation.room_id,
+        newTimeRange: `${startTime.toISOString()} - ${endTime.toISOString()}`,
+        note: 'Checking both PENDING and APPROVED reservations (excluding current reservation)'
+      })
+      
       const allReservationsInRoom = await prisma.reservation.findMany({
         where: {
           room_id: existingReservation.room_id,
@@ -1102,29 +1152,88 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
             not: parseInt(id) // ยกเว้นการจองปัจจุบัน
           },
           status_r: {
-            in: ['pending', 'approved']
+            in: ['pending', 'approved'] // เช็คทั้งการจองที่รออนุมัติและอนุมัติแล้ว
           }
         }
       })
+      
+      console.log('🔍 [CONFLICT-DEBUG] Found other reservations:', allReservationsInRoom.map(r => ({
+        id: r.reservation_id,
+        dates: `${r.start_at} - ${r.end_at}`,
+        times: `${r.start_time} - ${r.end_time}`,
+        status: r.status_r
+      })))
+
+      // สร้างรายการวันที่ที่ผู้ใช้ต้องการจอง
+      const newBookingDates = []
+      if (booking_dates && booking_dates.trim()) {
+        // ใช้ booking_dates ที่ส่งมาจาก frontend
+        const dateArray = booking_dates.trim().split(',').map(d => d.trim()).filter(Boolean)
+        newBookingDates.push(...dateArray)
+      } else {
+        // สร้างจาก start_at ถึง end_at
+        const currentDate = new Date(startDate)
+        while (currentDate <= endDate) {
+          newBookingDates.push(currentDate.toISOString().split('T')[0])
+          currentDate.setDate(currentDate.getDate() + 1)
+        }
+      }
+
+      console.log('🔍 [CONFLICT-CHECK] New booking dates to check:', newBookingDates)
 
       // ตรวจสอบ conflict ทั้งวันที่และเวลา
       const conflictReservations = allReservationsInRoom.filter(reservation => {
-        // เช็ควันที่ทับซ้อนก่อน
-        const reservationStartDate = new Date(reservation.start_at)
-        const reservationEndDate = new Date(reservation.end_at)
-        
-        const datesOverlap = (reservationStartDate <= endDate && reservationEndDate >= startDate)
+        // สร้างรายการวันที่ของการจองที่มีอยู่
+        const existingBookingDates = []
+        if (reservation.booking_dates && reservation.booking_dates.trim()) {
+          // ใช้ booking_dates ถ้ามี
+          const dateArray = reservation.booking_dates.trim().split(',').map(d => d.trim()).filter(Boolean)
+          existingBookingDates.push(...dateArray)
+        } else {
+          // สร้างจาก start_at ถึง end_at
+          const resStartDate = new Date(reservation.start_at)
+          const resEndDate = new Date(reservation.end_at)
+          const currentDate = new Date(resStartDate)
+          while (currentDate <= resEndDate) {
+            existingBookingDates.push(currentDate.toISOString().split('T')[0])
+            currentDate.setDate(currentDate.getDate() + 1)
+          }
+        }
+
+        console.log(`🔍 [CONFLICT-CHECK] Reservation ${reservation.reservation_id} booking dates:`, existingBookingDates)
+
+        // เช็คว่ามีวันที่ซ้อนทับกันไหม
+        const datesOverlap = newBookingDates.some(newDate => 
+          existingBookingDates.includes(newDate)
+        )
         
         if (!datesOverlap) {
+          console.log(`✅ [CONFLICT-CHECK] No date overlap with reservation ${reservation.reservation_id}`)
           return false // วันที่ไม่ทับซ้อน
         }
 
-        // ถ้าวันที่ทับซ้อน ให้เช็คเวลา
-        const reservationStartTime = new Date(reservation.start_time)
-        const reservationEndTime = new Date(reservation.end_time)
+        console.log(`⚠️ [CONFLICT-CHECK] Date overlap found with reservation ${reservation.reservation_id}, checking times...`)
+
+  // ถ้าวันที่ทับซ้อน ให้เช็คเวลา (เปรียบเทียบเฉพาะเวลาในวัน ไม่เอาวันจริงมาคิด)
+  // สำหรับการจองแบบ multi-day ฟิลด์ start_time/end_time เก็บเวลาในรูป Date แต่วันที่อาจต่างกัน
+  // ดังนั้นอย่าใช้การเปรียบเทียบ Date เต็มรูปแบบ เพราะจะเกิด false positive เมื่อ endDate ต่างกัน
+  const reservationStartTime = new Date(reservation.start_time)
+  const reservationEndTime = new Date(reservation.end_time)
+
+  // เปลี่ยนเป็นเปรียบเทียบเป็น minutes ของวัน (เวลาในวันเท่านั้น)
+  const newStartMinutes = startTime.getHours() * 60 + startTime.getMinutes()
+  const newEndMinutes = endTime.getHours() * 60 + endTime.getMinutes()
+  const existingStartMinutes = reservationStartTime.getHours() * 60 + reservationStartTime.getMinutes()
+  const existingEndMinutes = reservationEndTime.getHours() * 60 + reservationEndTime.getMinutes()
+
+  // Time overlap if (newStart < existingEnd) AND (existingStart < newEnd)
+  const timesOverlap = (newStartMinutes < existingEndMinutes) && (existingStartMinutes < newEndMinutes)
         
-        // เช็คเวลาทับซ้อน: ถ้า (start < other_end) และ (end > other_start) = ทับซ้อน
-        const timesOverlap = (startTime < reservationEndTime && endTime > reservationStartTime)
+        if (timesOverlap) {
+          console.log(`❌ [CONFLICT-CHECK] Time overlap with reservation ${reservation.reservation_id}`)
+        } else {
+          console.log(`✅ [CONFLICT-CHECK] No time overlap with reservation ${reservation.reservation_id}`)
+        }
         
         return timesOverlap
       })
@@ -1133,11 +1242,13 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         roomId: existingReservation.room_id,
         excludeReservationId: parseInt(id),
         newTimeRange: `${startTime.toISOString()} - ${endTime.toISOString()}`,
-        allReservationsCount: allReservationsInRoom.length,
+        totalReservationsFound: allReservationsInRoom.length,
         conflictsFound: conflictReservations.length,
         conflicts: conflictReservations.map(r => ({
           id: r.reservation_id,
-          time: `${new Date(r.start_time).toISOString()} - ${new Date(r.end_time).toISOString()}`
+          dates: `${new Date(r.start_at).toISOString().split('T')[0]} - ${new Date(r.end_at).toISOString().split('T')[0]}`,
+          times: `${new Date(r.start_time).toISOString().split('T')[1].slice(0,5)} - ${new Date(r.end_time).toISOString().split('T')[1].slice(0,5)}`,
+          status: r.status_r
         }))
       })
 
@@ -1145,8 +1256,40 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
         set.status = 409
         return {
           success: false,
-          message: 'ช่วงเวลาใหม่ที่เลือกมีการจองอยู่แล้ว กรุณาเลือกเวลาอื่น'
+          message: `ช่วงเวลาที่เลือกมีการจองซ้อนทับอยู่แล้ว (ID: ${conflictReservations.map(r => `${r.reservation_id}[${r.status_r}]`).join(', ')}) กรุณาเลือกเวลาอื่น`
         }
+      }
+
+      // คำนวณ booking_dates และ is_multi_day
+      let finalBookingDates = null
+      let isMultiDay = false
+      
+      // ถ้า frontend ส่ง booking_dates มา ให้ใช้ตัวนั้น
+      if (booking_dates && booking_dates.trim()) {
+        finalBookingDates = booking_dates.trim()
+        const dateArray = finalBookingDates.split(',').map(d => d.trim()).filter(Boolean)
+        isMultiDay = dateArray.length > 1
+        console.log('🔍 [UPDATE-RESERVATION] Using provided booking_dates:', finalBookingDates, 'isMultiDay:', isMultiDay)
+      } else {
+        // ถ้าไม่ได้ส่งมา ให้คำนวณจาก selectedDates ใน frontend
+        // ถ้า start_at และ end_at เหมือนกัน = วันเดียว
+        // ถ้าต่างกัน = multi-day (ต่อเนื่อง)
+        if (startDate.toDateString() === endDate.toDateString()) {
+          // วันเดียว
+          finalBookingDates = null
+          isMultiDay = false
+        } else {
+          // multi-day ต่อเนื่อง
+          const dates = []
+          const currentDate = new Date(startDate)
+          while (currentDate <= endDate) {
+            dates.push(currentDate.toISOString().split('T')[0])
+            currentDate.setDate(currentDate.getDate() + 1)
+          }
+          finalBookingDates = dates.join(',')
+          isMultiDay = true
+        }
+        console.log('🔍 [UPDATE-RESERVATION] Calculated booking_dates:', finalBookingDates, 'isMultiDay:', isMultiDay)
       }
 
       // อัปเดตการจอง
@@ -1158,6 +1301,8 @@ export const userReservationRoutes = new Elysia({ prefix: '/protected/reservatio
           start_time: startTime,
           end_time: endTime,
           details_r: details_r.trim(),
+          booking_dates: finalBookingDates,
+          is_multi_day: isMultiDay,
           updated_at: new Date()
         },
         include: {
@@ -1522,7 +1667,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       const { status = 'pending', limit = 20, offset = 0 } = query
       
       // ⚠️ SECURITY FIX: เจ้าหน้าที่แต่ละคณะเห็นเฉพาะการจองในคณะที่ตัวเองรับผิดชอบตามตำแหน่ง
-      if (!user.position_department) {
+      if (!user.department) {
         set.status = 403
         return {
           success: false,
@@ -1530,7 +1675,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         }
       }
       
-      console.log(`🏢 [OFFICER] ${user.position} can access department: ${user.position_department}`)
+      console.log(`🏢 [OFFICER] ${user.position} can access department: ${user.department}`)
       
       // วันที่ปัจจุบัน (สำหรับกรองเฉพาะการจองที่ยังใช้งานได้)
       const today = new Date()
@@ -1538,7 +1683,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       
       const where = {
         meeting_room: {
-          department: user.position_department // ⚠️ SECURITY FIX: ใช้ position_department
+          department: user.department // ⚠️ SECURITY FIX: ใช้ department
         },
         // กรองเฉพาะการจองที่วันเริ่มต้องยังไม่เลยวันปัจจุบัน
         start_at: {
@@ -1683,7 +1828,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       }
 
       // ⚠️ SECURITY FIX: เจ้าหน้าที่ตรวจสอบว่าห้องอยู่ในคณะที่รับผิดชอบตามตำแหน่ง
-      if (!user.position_department) {
+      if (!user.department) {
         set.status = 403
         return {
           success: false,
@@ -1691,11 +1836,11 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         }
       }
       
-      if (reservation.meeting_room.department !== user.position_department) {
+      if (reservation.meeting_room.department !== user.department) {
         set.status = 403
         return {
           success: false,
-          message: `คุณไม่มีสิทธิ์อนุมัติการจองห้องประชุม ${reservation.meeting_room.department} (รับผิดชอบเฉพาะ ${user.position_department})`
+          message: `คุณไม่มีสิทธิ์อนุมัติการจองห้องประชุม ${reservation.meeting_room.department} (รับผิดชอบเฉพาะ ${user.department})`
         }
       }
 
@@ -1828,8 +1973,8 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         }
       }
 
-      // ⚠️ SECURITY FIX: เจ้าหน้าที่ตรวจสอบว่าห้องอยู่ในคณะที่รับผิดชอบตามตำแหน่ง
-      if (!user.position_department) {
+      // ⚠️ SECURITY FIX: เจ้าหน้าที่ตรวจสอบว่าห้องอยู่ในคณะที่รับผิดชอบ
+      if (!user.department) {
         set.status = 403
         return {
           success: false,
@@ -1837,11 +1982,11 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         }
       }
       
-      if (reservation.meeting_room.department !== user.position_department) {
+      if (reservation.meeting_room.department !== user.department) {
         set.status = 403
         return {
           success: false,
-          message: `คุณไม่มีสิทธิ์ปฏิเสธการจองห้องประชุม ${reservation.meeting_room.department} (รับผิดชอบเฉพาะ ${user.position_department})`
+          message: `คุณไม่มีสิทธิ์ปฏิเสธการจองห้องประชุม ${reservation.meeting_room.department} (รับผิดชอบเฉพาะ ${user.department})`
         }
       }
 
@@ -2164,7 +2309,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       const { period = 'current_month' } = query
 
       // ⚠️ SECURITY FIX: เจ้าหน้าที่เห็นเฉพาะข้อมูลในหน่วยงานที่รับผิดชอบ
-      if (!user.position_department) {
+      if (!user.department) {
         set.status = 403
         return {
           success: false,
@@ -2172,7 +2317,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         }
       }
 
-      console.log('🏢 Officer department filter:', user.position_department)
+      console.log('🏢 Officer department filter:', user.department)
 
       // คำนวณช่วงเวลาตาม period
       let startDate, endDate
@@ -2198,7 +2343,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       }
 
       const whereCondition = {
-        meeting_room: { department: user.position_department },
+        meeting_room: { department: user.department },
         created_at: {
           gte: startDate,
           lte: endDate
@@ -2243,7 +2388,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
         
         const count = await prisma.reservation.count({
           where: {
-            meeting_room: { department: user.position_department },
+            meeting_room: { department: user.department },
             created_at: {
               gte: monthStart,
               lte: monthEnd
@@ -2285,7 +2430,7 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
       }
 
       console.log('📊 Officer reports generated:', {
-        department: user.position_department,
+        department: user.department,
         period,
         summary: reports.reservation_summary,
         rooms: reports.room_utilization.length,
@@ -2294,8 +2439,8 @@ export const officerReservationRoutes = new Elysia({ prefix: '/protected/officer
 
       return {
         success: true,
-        message: `รายงานการใช้งานในหน่วยงาน ${user.position_department}`,
-        department: user.position_department,
+        message: `รายงานการใช้งานในหน่วยงาน ${user.department}`,
+        department: user.department,
         period,
         reports
       }

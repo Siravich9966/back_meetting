@@ -6,7 +6,7 @@
 
 import { DEPARTMENTS } from './departments.js'
 
-// รายการ Position หลักสำหรับ Registration
+// รายการ Position หลักสำหรับ Registration (Simplified Version)
 export const POSITIONS = {
   // บุคลากรทั่วไป → จะไปตาราง users
   GENERAL_STAFF: 'บุคลากร/อาจารย์ มหาวิทยาลัยราชภัฏมหาสารคาม',
@@ -15,47 +15,20 @@ export const POSITIONS = {
   // ผู้ดูแลระบบ → จะไปตาราง admin
   ADMIN: 'ผู้ดูแลระบบ',
   
-  // ผู้บริหาร → จะไปตาราง executive
-  UNIVERSITY_EXECUTIVE: 'ผู้บริหารระดับมหาวิทยาลัย',
+  // ผู้บริหาร → จะไปตาราง executive (Simplified to single option)
+  EXECUTIVE: 'ผู้บริหาร',
   
-  // เจ้าหน้าที่แต่ละคณะ → จะไปตาราง officer (ต้องระบุคณะที่ดูแล)
-  UNIVERSITY_OFFICER_72: 'เจ้าหน้าที่ดูแลห้องประชุมอาคาร 72 พรรษา',
-  UNIVERSITY_OFFICER_HALL: 'เจ้าหน้าที่ดูแลห้องประชุมหอประชุมเฉลิมพระเกียรติ 80 พรรษา',
-  UNIVERSITY_OFFICER_34: 'เจ้าหน้าที่ดูแลห้องประชุมอาคาร 34 เฉลิมพระเกียรติ 60 ปี',
-  
-  // เจ้าหน้าที่คณะอื่นๆ → จะ generate ตาม DEPARTMENTS
+  // เจ้าหน้าที่ → จะไปตาราง officer (Simplified to single option)
+  OFFICER: 'เจ้าหน้าที่ดูแลห้องประชุม'
 }
 
-// สร้าง Position สำหรับผู้บริหารคณะ (Faculty Executive)
-export const FACULTY_EXECUTIVE_POSITIONS = Object.values(DEPARTMENTS)
-  .filter(dept => !dept.includes('อาคาร') && !dept.includes('หอประชุม')) // ไม่รวมอาคาร
-  .map(dept => `ผู้บริหาร${dept}`)
-
-// สร้าง Position สำหรับเจ้าหน้าที่ (Officer) ระดับคณะ
-export const OFFICER_POSITIONS = Object.values(DEPARTMENTS)
-  .map(dept => `เจ้าหน้าที่ดูแลห้องประชุม${dept}`)
-
-// เจ้าหน้าที่ทั้งหมด (ทุกคนต้องมี department)
-export const UNIVERSITY_OFFICER_POSITIONS = [
-  POSITIONS.UNIVERSITY_OFFICER_72,
-  POSITIONS.UNIVERSITY_OFFICER_HALL,
-  POSITIONS.UNIVERSITY_OFFICER_34
-]
-
-// รวม Position เจ้าหน้าที่ทั้งหมด
-export const ALL_OFFICER_POSITIONS = [
-  ...UNIVERSITY_OFFICER_POSITIONS,
-  ...OFFICER_POSITIONS
-]
-
-// รวม Position ทั้งหมด
+// รวม Position ทั้งหมด (Simplified Version)
 export const ALL_POSITIONS = [
   POSITIONS.GENERAL_STAFF,
   POSITIONS.OTHER,
   POSITIONS.ADMIN,
-  POSITIONS.UNIVERSITY_EXECUTIVE,
-  ...FACULTY_EXECUTIVE_POSITIONS,
-  ...ALL_OFFICER_POSITIONS
+  POSITIONS.EXECUTIVE,
+  POSITIONS.OFFICER
 ]
 
 // ฟังก์ชันตรวจสอบ position ที่ถูกต้อง
@@ -63,7 +36,7 @@ export const isValidPosition = (position) => {
   return ALL_POSITIONS.includes(position)
 }
 
-// ฟังก์ชันกำหนดว่า position จะไปตารางไหน
+// ฟังก์ชันกำหนดว่า position จะไปตารางไหน (Simplified Version)
 export const getTableFromPosition = (position) => {
   if (position === POSITIONS.GENERAL_STAFF || position === POSITIONS.OTHER) {
     return 'users'
@@ -73,12 +46,11 @@ export const getTableFromPosition = (position) => {
     return 'admin'
   }
   
-  if (position === POSITIONS.UNIVERSITY_EXECUTIVE || 
-      FACULTY_EXECUTIVE_POSITIONS.includes(position)) {
+  if (position === POSITIONS.EXECUTIVE) {
     return 'executive'
   }
   
-  if (ALL_OFFICER_POSITIONS.includes(position)) {
+  if (position === POSITIONS.OFFICER) {
     return 'officer'
   }
   
@@ -98,43 +70,23 @@ export const getRoleIdFromPosition = (position) => {
   }
 }
 
-// ฟังก์ชันแยกคณะจาก position
+// ฟังก์ชันแยกคณะจาก position (Simplified - now returns null since positions don't contain department info)
 export const getDepartmentFromPosition = (position) => {
-  // สำหรับผู้บริหารคณะ
-  if (position.startsWith('ผู้บริหาร') && position !== POSITIONS.UNIVERSITY_EXECUTIVE) {
-    return position.replace('ผู้บริหาร', '')
-  }
-  
-  // สำหรับเจ้าหน้าที่ทั้งหมด - ลบ prefix แล้วจะได้ department/location
-  if (position.startsWith('เจ้าหน้าที่ดูแลห้องประชุม')) {
-    const department = position.replace('เจ้าหน้าที่ดูแลห้องประชุม', '')
-    
-    // แมปตำแหน่งพิเศษกับคณะ - แยกเป็น department เฉพาะตัว
-    if (department === 'อาคาร 72 พรรษา') return 'อาคาร 72 พรรษา'
-    if (department === 'หอประชุมเฉลิมพระเกียรติ 80 พรรษา') return 'หอประชุมเฉลิมพระเกียรติ 80 พรรษา'
-    if (department === 'อาคาร 34 เฉลิมพระเกียรติ 60 ปี') return 'อาคาร 34 เฉลิมพระเกียรติ 60 ปี'
-    
-    // สำหรับคณะอื่นๆ ให้ return department ตรงๆ
-    return department
-  }
-  
+  // ตอนนี้ positions ไม่มีข้อมูล department แล้ว จะใช้ field department โดยตรงแทน
   return null
 }
 
-// ฟังก์ชันกำหนด executive position type
+// ฟังก์ชันกำหนด executive position type (Simplified - now determined by department)
 export const getExecutivePositionType = (position) => {
-  if (position === POSITIONS.UNIVERSITY_EXECUTIVE) {
-    return 'university_executive'
-  }
-  
-  if (FACULTY_EXECUTIVE_POSITIONS.includes(position)) {
-    return 'faculty_executive'
+  if (position === POSITIONS.EXECUTIVE) {
+    // ตอนนี้จะดูจาก department แทน position
+    return 'faculty_executive' // default เป็น faculty_executive
   }
   
   return null
 }
 
-// ฟังก์ชันจัดกลุ่ม positions สำหรับ UI
+// ฟังก์ชันจัดกลุ่ม positions สำหรับ UI (Simplified Version)
 export const getPositionGroups = () => {
   return {
     general: {
@@ -147,14 +99,11 @@ export const getPositionGroups = () => {
     },
     executives: {
       label: 'ผู้บริหาร',
-      positions: [
-        POSITIONS.UNIVERSITY_EXECUTIVE,
-        ...FACULTY_EXECUTIVE_POSITIONS
-      ]
+      positions: [POSITIONS.EXECUTIVE]
     },
     officers: {
       label: 'เจ้าหน้าที่ดูแลห้องประชุม',
-      positions: ALL_OFFICER_POSITIONS
+      positions: [POSITIONS.OFFICER]
     }
   }
 }
@@ -162,10 +111,6 @@ export const getPositionGroups = () => {
 export default {
   POSITIONS,
   ALL_POSITIONS,
-  FACULTY_EXECUTIVE_POSITIONS,
-  OFFICER_POSITIONS,
-  UNIVERSITY_OFFICER_POSITIONS,
-  ALL_OFFICER_POSITIONS,
   isValidPosition,
   getTableFromPosition,
   getRoleIdFromPosition,

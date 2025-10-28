@@ -14,7 +14,6 @@ import {
   isValidPosition,
   getDepartmentFromPosition,
   getExecutivePositionType,
-  ALL_OFFICER_POSITIONS,
   POSITIONS
 } from '../utils/positions.js'
 
@@ -325,8 +324,8 @@ export const adminRoutes = new Elysia({ prefix: '/protected/admin' })
           break
           
         case 'officer':
-          // officer ต้องมี position ที่อยู่ในรายการที่รองรับ
-          if (!body.position || !ALL_OFFICER_POSITIONS.includes(body.position)) {
+          // officer ต้องมี position เป็น 'เจ้าหน้าที่ดูแลห้องประชุม'
+          if (!body.position || body.position !== POSITIONS.OFFICER) {
             set.status = 400
             return { success: false, message: 'ตำแหน่งเจ้าหน้าที่ไม่ถูกต้อง' }
           }

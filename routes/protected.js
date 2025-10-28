@@ -457,7 +457,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const { period = 'current_month' } = query
 
           // ⚠️ SECURITY FIX: เจ้าหน้าที่เห็นเฉพาะข้อมูลในหน่วยงานที่รับผิดชอบ
-          if (!user.position_department) {
+          if (!user.department) {
             set.status = 403
             return {
               success: false,
@@ -465,7 +465,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
             }
           }
 
-          console.log('🏢 Officer department filter:', user.position_department)
+          console.log('🏢 Officer department filter:', user.department)
 
           // คำนวณช่วงเวลาตาม period
           let startDate, endDate
@@ -509,7 +509,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const totalReservations = await prisma.reservation.count({
             where: {
               meeting_room: {
-                department: user.position_department
+                department: user.department
               },
               start_at: {
                 gte: startDate,
@@ -523,7 +523,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const approvedReservations = await prisma.reservation.count({
             where: {
               meeting_room: {
-                department: user.position_department
+                department: user.department
               },
               start_at: {
                 gte: startDate,
@@ -536,7 +536,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const pendingReservations = await prisma.reservation.count({
             where: {
               meeting_room: {
-                department: user.position_department
+                department: user.department
               },
               start_at: {
                 gte: startDate,
@@ -551,7 +551,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const rejectedReservations = await prisma.reservation.count({
             where: {
               meeting_room: {
-                department: user.position_department
+                department: user.department
               },
               start_at: {
                 gte: startDate,
@@ -592,7 +592,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
             by: ['room_id'],
             where: {
               meeting_room: {
-                department: user.position_department
+                department: user.department
               },
               start_at: {
                 gte: startDate,
@@ -631,7 +631,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
             const monthlyReservations = await prisma.reservation.count({
               where: {
                 meeting_room: {
-                  department: user.position_department
+                  department: user.department
                 },
                 start_at: {
                   gte: monthDate,
@@ -655,7 +655,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
               monthly_trends
             },
             meta: {
-              department: user.position_department,
+              department: user.department,
               period,
               date_range: {
                 start: startDate.toISOString(),
@@ -697,11 +697,11 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const limit = parseInt(query.limit) || 5
           const offset = (page - 1) * limit
 
-          console.log('📝 Officer Reviews - User:', user.email, 'Department:', user.position_department)
+          console.log('📝 Officer Reviews - User:', user.email, 'Department:', user.department)
           console.log('📄 Pagination - Page:', page, 'Limit:', limit, 'Offset:', offset)
 
           // ⚠️ SECURITY: เจ้าหน้าที่เห็นเฉพาะรีวิวของห้องประชุมในหน่วยงานตัวเอง
-          if (!user.position_department) {
+          if (!user.department) {
             set.status = 403
             return {
               success: false,
@@ -713,7 +713,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const totalReviews = await prisma.review.count({
             where: {
               meeting_room: {
-                department: user.position_department
+                department: user.department
               }
             }
           })
@@ -721,7 +721,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const reviews = await prisma.review.findMany({
             where: {
               meeting_room: {
-                department: user.position_department
+                department: user.department
               }
             },
             include: {
@@ -777,7 +777,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
 
           const totalPages = Math.ceil(totalReviews / limit)
 
-          console.log('📝 Found', formattedReviews.length, 'reviews for department:', user.position_department)
+          console.log('📝 Found', formattedReviews.length, 'reviews for department:', user.department)
           console.log('📄 Pagination info - Total:', totalReviews, 'Pages:', totalPages, 'Current page:', page)
 
           return {
@@ -792,7 +792,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
               has_next: page < totalPages
             },
             total: totalReviews,
-            department: user.position_department
+            department: user.department
           }
 
         } catch (error) {
@@ -826,7 +826,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const actualOffset = (parseInt(page) - 1) * parseInt(limit)
           
           // ⚠️ SECURITY: เจ้าหน้าที่เห็นเฉพาะในคณะที่รับผิดชอบ
-          if (!user.position_department) {
+          if (!user.department) {
             set.status = 403
             return {
               success: false,
@@ -834,7 +834,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
             }
           }
           
-          console.log(`📋 [APPROVAL HISTORY] ${user.position} accessing: ${user.position_department}`)
+          console.log(`📋 [APPROVAL HISTORY] ${user.position} accessing: ${user.department}`)
           
           // เงื่อนไข: การจองเก่า (เก่ากว่า 2 วัน) + ในคณะที่รับผิดชอบ
           const twoDaysAgo = new Date()
@@ -843,7 +843,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const where = {
             // เฉพาะห้องที่ยังอยู่ในคณะนี้ (ไม่เอาห้องที่ถูกลบแล้ว)
             meeting_room: {
-              department: user.position_department
+              department: user.department
             },
             // การจองที่เก่ากว่า 2 วัน (สำหรับประวัติ)
             created_at: {
@@ -896,8 +896,8 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
 
           return {
             success: true,
-            message: `ประวัติการอนุมัติในคณะ ${user.position_department} (${total} รายการ)`,
-            department: user.position_department,
+            message: `ประวัติการอนุมัติในคณะ ${user.department} (${total} รายการ)`,
+            department: user.department,
             reservations: reservations.map(r => {
               // จัดการกรณีห้องถูกลบ - แยกชื่อห้องจาก details_r
               let roomName = r.meeting_room?.room_name
@@ -964,11 +964,11 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           console.log('📊 Officer Stats - User:', user.email, 'Position:', user.position)
 
           // ตรวจสอบสิทธิ์การดูแลห้องประชุม
-          if (!user.position_department) {
+          if (!user.department) {
             set.status = 403
             return {
               success: false,
-              message: 'ไม่พบข้อมูลสิทธิ์การดูแลห้องประชุม'
+              message: 'ไม่พบข้อมูลหน่วยงานที่สังกัด'
             }
           }
 
@@ -979,7 +979,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           // 1. ดึงห้องประชุมของฉัน (ในหน่วยงานที่รับผิดชอบ) พร้อมสถิติการจอง
           const myRooms = await prisma.meeting_room.findMany({
             where: {
-              department: user.position_department
+              department: user.department
             },
             include: {
               _count: {
@@ -999,7 +999,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const departmentReservationStats = await prisma.reservation.findMany({
             where: {
               meeting_room: {
-                department: user.position_department
+                department: user.department
               },
               status_r: 'approved', // เฉพาะที่อนุมัติแล้ว
             },
@@ -1033,7 +1033,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const myDepartmentPendingApprovals = await prisma.reservation.count({
             where: {
               meeting_room: {
-                department: user.position_department
+                department: user.department
               },
               status_r: 'pending'
             }
@@ -1043,7 +1043,7 @@ export const officerRoutes = new Elysia({ prefix: '/protected' })
           const myDepartmentThisMonthReservations = await prisma.reservation.count({
             where: {
               meeting_room: {
-                department: user.position_department
+                department: user.department
               },
               status_r: 'approved',
               start_at: {

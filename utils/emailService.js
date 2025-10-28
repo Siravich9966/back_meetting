@@ -298,10 +298,10 @@ const notifyOfficersNewReservation = async (reservationId) => {
       throw new Error('ไม่พบการจอง')
     }
 
-    // หาเจ้าหน้าที่ที่มีอีเมล (ตำแหน่งตรงกับคณะ)
+    // หาเจ้าหน้าที่ที่มีอีเมล (หน่วยงานตรงกับห้อง)
     const allOfficers = await prisma.officer.findMany({
       where: {
-        position: {
+        department: {
           contains: reservation.meeting_room.department
         }
       }

@@ -5,29 +5,26 @@
 // ===================================================================
 
 import { isSameDepartment as compareDepartments } from '../utils/departments.js'
-import { getDepartmentFromPosition } from '../utils/positions.js'
 import prisma from '../lib/prisma.js'
 
-// Room Management Permissions - Enhanced with position_department from JWT
+// Room Management Permissions - Department-based access control
 export const canManageRoom = async (user, roomDepartment) => {
   // Admin ไม่สามารถจัดการห้องได้ (ตามกฎหมายที่อาจารย์กำหนด)
   if (user?.role === 'admin') return false
   
-  // Officer สามารถจัดการได้เฉพาะห้องตาม position_department เท่านั้น
-  // ⚠️ SECURITY FIX: ใช้ position_department จาก JWT middleware แทน current user.department
+  // Officer สามารถจัดการได้เฉพาะห้องตาม department เท่านั้น
   if (user?.role === 'officer') {
-    if (user.position_department) {
-      const canManage = compareDepartments(user.position_department, roomDepartment)
+    if (user.department) {
+      const canManage = compareDepartments(user.department, roomDepartment)
       console.log('🔐 [SECURITY] canManageRoom check:', {
         officer_id: user.officer_id,
-        current_department: user.department,
-        position_department: user.position_department,
+        officer_department: user.department,
         room_department: roomDepartment,
         can_manage: canManage
       })
       return canManage
     } else {
-      console.log('⚠️ [WARNING] Officer without position_department:', user.email)
+      console.log('⚠️ [WARNING] Officer without department:', user.email)
       return false
     }
   }
@@ -40,10 +37,9 @@ export const canViewRoomReviews = (user, roomDepartment) => {
   // Admin ดูรีวิวได้ทุกห้อง
   if (user?.role === 'admin') return true
   
-  // Executive ดูรีวิวได้ตามระดับ
+  // Executive ดูรีวิวได้ทุกห้อง (ไม่แบ่ง University/Faculty แล้ว)
   if (user?.role === 'executive') {
-    if (user?.position === 'university_executive') return true // ดูได้ทุกห้อง
-    if (user?.position === 'faculty_executive') return user?.department === roomDepartment // ดูได้เฉพาะคณะตัวเอง
+    return true // ผู้บริหารทุกคนดูได้ทุกห้อง
   }
   
   // Officer ดูรีวิวได้เฉพาะห้องใน department ตัวเอง
@@ -82,10 +78,9 @@ export const canAccessDepartmentData = (user, targetDepartment) => {
   // Admin เข้าถึงข้อมูลทุก department ได้
   if (user?.role === 'admin') return true
   
-  // Executive เข้าถึงข้อมูลตามระดับ
+  // Executive เข้าถึงข้อมูลได้ทุก department (ไม่แบ่ง University/Faculty แล้ว)
   if (user?.role === 'executive') {
-    if (user?.position === 'university_executive') return true // เข้าถึงได้ทุก department
-    if (user?.position === 'faculty_executive') return user?.department === targetDepartment // เฉพาะคณะตัวเอง
+    return true // ผู้บริหารทุกคนเข้าถึงได้ทุก department
   }
   
   // Officer เข้าถึงข้อมูลใน department ตัวเองได้

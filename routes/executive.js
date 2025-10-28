@@ -1,19 +1,19 @@
 // ===================================================================
-// Executive Routes - สำหรับผู้บริหารมหาวิทยาลัยและคณะ (READ ONLY)
+// Executive Routes - สำหรับผู้บริหาร (READ ONLY)
 // ===================================================================
 // ไฟล์นี้จัดการ APIs สำหรับผู้บริหาร (ดูข้อมูล report เท่านั้น):
-// - University Executive: ดูข้อมูลทุกคณะ (แต่แก้ไขไม่ได้)
-// - Faculty Executive: ดูข้อมูลเฉพาะคณะตัวเอง (แต่แก้ไขไม่ได้)
+// - Executive: ดูข้อมูลทุกคณะ/หน่วยงาน (แต่แก้ไขไม่ได้)
 // 
 // NOTE: เฉพาะ ADMIN เท่านั้นที่เห็นข้อมูลส่วนตัวของ Executive ได้
 //       Executive ไม่สามารถจัดการ user อื่นได้
+//       Updated: Executive ทุกคนเห็นข้อมูลทุกหน่วยงาน (ไม่แบ่งระดับแล้ว)
 // ===================================================================
 
 import { Elysia } from 'elysia'
 import { Prisma } from '../generated/prisma/index.js'
 import prisma from '../lib/prisma.js'
-import { authMiddleware, isExecutive, isUniversityExecutive, isFacultyExecutive } from '../middleware/index.js'
-import { getDepartmentFromPosition } from '../utils/positions.js'
+import { authMiddleware, isExecutive } from '../middleware/index.js'
+// Removed getDepartmentFromPosition - now using user.department directly
 
 export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
 
@@ -33,32 +33,31 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
     try {
       let stats = {}
 
-      if (isUniversityExecutive(user)) {
-        // University Executive - ดูได้ทุกคณะ
-        console.log('📊 University Executive: Dashboard')
+      // Executive - ดูได้ทุกคณะ/หน่วยงาน
+      console.log('📊 Executive: Dashboard - ดูข้อมูลทุกหน่วยงาน')
 
-        stats = {
-          total_users: await prisma.users.count(),
-          total_officers: await prisma.officer.count(),
-          total_rooms: await prisma.meeting_room.count(),
-          total_reservations: await prisma.reservation.count(),
-          departments_summary: await prisma.meeting_room.groupBy({
-            by: ['department'],
-            _count: { room_id: true }
-          }),
-          recent_reservations: await prisma.reservation.findMany({
-            select: {
-              reservation_id: true,
-              start_at: true,
-              end_at: true,
-              status_r: true,
-              created_at: true,
-              meeting_room: {
-                select: {
-                  room_name: true,
-                  room_id: true
-                }
-              },
+      stats = {
+        total_users: await prisma.users.count(),
+        total_officers: await prisma.officer.count(),
+        total_rooms: await prisma.meeting_room.count(),
+        total_reservations: await prisma.reservation.count(),
+        departments_summary: await prisma.meeting_room.groupBy({
+          by: ['department'],
+          _count: { room_id: true }
+        }),
+        recent_reservations: await prisma.reservation.findMany({
+          select: {
+            reservation_id: true,
+            start_at: true,
+            end_at: true,
+            status_r: true,
+            created_at: true,
+            meeting_room: {
+              select: {
+                room_name: true,
+                room_id: true
+              }
+            },
               users: {
                 select: {
                   first_name: true,
@@ -82,79 +81,12 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
             }))
           })
         }
-
-      } else if (isFacultyExecutive(user)) {
-        // Faculty Executive - ดูได้เฉพาะคณะตัวเอง (ใช้ position-based)
-        // ✅ SECURITY FIX: ใช้ position-based department
-        const responsibleDepartment = getDepartmentFromPosition(user.position) || user.department
-
-        console.log('📊 Faculty Executive: Dashboard', {
-          userPosition: user.position,
-          profileDepartment: user.department,
-          responsibleDepartment: responsibleDepartment,
-          usingDepartment: responsibleDepartment
-        })
-
-        stats = {
-          my_department: responsibleDepartment,
-          department_rooms: await prisma.meeting_room.count({
-            where: { department: responsibleDepartment }
-          }),
-          department_reservations: await prisma.reservation.count({
-            where: {
-              meeting_room: {
-                department: responsibleDepartment
-              }
-            }
-          }),
-          recent_reservations: await prisma.reservation.findMany({
-            where: {
-              meeting_room: {
-                department: responsibleDepartment
-              }
-            },
-            select: {
-              reservation_id: true,
-              start_at: true,
-              end_at: true,
-              status_r: true,
-              created_at: true,
-              meeting_room: {
-                select: {
-                  room_name: true,
-                  room_id: true
-                }
-              },
-              users: {
-                select: {
-                  first_name: true,
-                  last_name: true,
-                  user_id: true
-                }
-              }
-            },
-            orderBy: { created_at: 'desc' },
-            take: 10
-          }).then(reservations => {
-            // ตรวจสอบและกรองข้อมูลที่ไม่สมบูรณ์
-            return reservations.filter(res => res && res.reservation_id).map(res => ({
-              reservation_id: res.reservation_id,
-              start_at: res.start_at,
-              end_at: res.end_at,
-              status_r: res.status_r || 'pending',
-              created_at: res.created_at,
-              room_name: res.meeting_room?.room_name || 'ไม่ระบุ',
-              user_name: res.users ? `${res.users.first_name || ''} ${res.users.last_name || ''}`.trim() : 'ไม่ระบุ'
-            }))
-          })
-        }
-      }
 
       return {
         success: true,
         message: 'ข้อมูล Dashboard ผู้บริหาร',
         executive_type: user.position,
-        department: isFacultyExecutive(user) ? getDepartmentFromPosition(user.position) || user.department : 'ทุกคณะ',
+        department: 'ทุกคณะ/หน่วยงาน',
         stats
       }
 
@@ -183,34 +115,16 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
 
     try {
       console.log('📊 Executive Reports - User:', user.email, 'Position:', user.position, 'Department:', user.department)
-      console.log('🎯 Is University Executive:', isUniversityExecutive(user))
-      console.log('🎯 Is Faculty Executive:', isFacultyExecutive(user))
 
       const { department, month, year } = query
       let whereCondition = {}
 
-      // ✅ SECURITY FIX: ใช้ position-based department แทน profile department
-      let responsibleDepartment = user.department
-      if (isFacultyExecutive(user)) {
-        responsibleDepartment = getDepartmentFromPosition(user.position) || user.department
-      }
-
-      // University Executive ดูได้ทุกคณะ, Faculty Executive ดูได้เฉพาะคณะตัวเอง
-      if (isFacultyExecutive(user)) {
-        // ⚠️ SECURITY FIX: ใช้ position-based department
-        whereCondition.meeting_room = { department: responsibleDepartment }
-
-        console.log('🏫 Faculty Executive - Reports filter:', {
-          userPosition: user.position,
-          profileDepartment: user.department,
-          responsibleDepartment: responsibleDepartment,
-          filterByDepartment: responsibleDepartment
-        })
-      } else if (department && isUniversityExecutive(user)) {
+      // Executive ดูได้ทุกคณะ/หน่วยงาน แต่สามารถ filter ตาม department ที่เลือกได้
+      if (department) {
         whereCondition.meeting_room = { department }
-        console.log('🏛️ University Executive - Filter by department:', department)
+        console.log('🏛️ Executive - Filter by department:', department)
       } else {
-        console.log('🌐 University Executive - All departments')
+        console.log('🌐 Executive - All departments')
       }
 
       // Filter by month/year if provided
@@ -256,12 +170,10 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
           ) AS this_month_count
         FROM reservation r
         JOIN meeting_room mr ON r.room_id = mr.room_id
-        ${isFacultyExecutive(user)
-          ? Prisma.sql`WHERE mr.department = ${responsibleDepartment}`
-          : whereCondition.created_at
-            ? Prisma.sql`WHERE r.created_at >= ${whereCondition.created_at.gte} AND r.created_at <= ${whereCondition.created_at.lte}`
-            : Prisma.sql``}
-        ${!isFacultyExecutive(user) && whereCondition.meeting_room?.department
+        ${whereCondition.created_at
+          ? Prisma.sql`WHERE r.created_at >= ${whereCondition.created_at.gte} AND r.created_at <= ${whereCondition.created_at.lte}`
+          : Prisma.sql``}
+        ${whereCondition.meeting_room?.department
           ? Prisma.sql`${whereCondition.created_at ? Prisma.sql` AND ` : Prisma.sql` WHERE `} mr.department = ${whereCondition.meeting_room.department}`
           : Prisma.sql``}
         GROUP BY r.room_id
@@ -285,7 +197,7 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
         meeting_room: roomDetails.find(d => d.room_id === r.room_id) || {
           room_id: r.room_id,
           room_name: 'ไม่ระบุห้อง',
-          department: isFacultyExecutive(user) ? responsibleDepartment : 'ไม่ระบุ'
+          department: room.department || 'ไม่ระบุ'
         }
       }))
       console.log('✅ room_utilization (enhanced):', room_utilization.length)
@@ -298,11 +210,8 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
         FROM reservation r
         JOIN meeting_room mr ON r.room_id = mr.room_id
         WHERE 1=1
-        ${isFacultyExecutive(user)
-          ? Prisma.sql` AND mr.department = ${responsibleDepartment}`
-          : Prisma.sql``}
-        ${!isFacultyExecutive(user) && whereCondition.meeting_room?.department
-          ? Prisma.sql` AND mr.department = ${whereCondition.meeting_room.department}`
+        ${whereCondition.meeting_room?.department
+          ? Prisma.sql`WHERE mr.department = ${whereCondition.meeting_room.department}`
           : Prisma.sql``}
         AND r.start_at >= date_trunc('month', CURRENT_DATE) - INTERVAL '11 months'
         GROUP BY 1
@@ -320,11 +229,8 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
         FROM reservation r
         JOIN meeting_room mr ON r.room_id = mr.room_id
         WHERE 1=1
-        ${isFacultyExecutive(user)
-          ? Prisma.sql` AND mr.department = ${responsibleDepartment}`
-          : Prisma.sql``}
-        ${!isFacultyExecutive(user) && whereCondition.meeting_room?.department
-          ? Prisma.sql` AND mr.department = ${whereCondition.meeting_room.department}`
+        ${whereCondition.meeting_room?.department
+          ? Prisma.sql`WHERE mr.department = ${whereCondition.meeting_room.department}`
           : Prisma.sql``}
         AND r.start_at::date >= (CURRENT_DATE - INTERVAL '29 days')
         GROUP BY 1
@@ -347,11 +253,8 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
         FROM reservation r
         JOIN meeting_room mr ON r.room_id = mr.room_id
         WHERE 1=1
-        ${isFacultyExecutive(user)
-          ? Prisma.sql` AND mr.department = ${responsibleDepartment}`
-          : Prisma.sql``}
-        ${!isFacultyExecutive(user) && whereCondition.meeting_room?.department
-          ? Prisma.sql` AND mr.department = ${whereCondition.meeting_room.department}`
+        ${whereCondition.meeting_room?.department
+          ? Prisma.sql`WHERE mr.department = ${whereCondition.meeting_room.department}`
           : Prisma.sql``}
         ${whereCondition.created_at
           ? Prisma.sql` AND r.created_at >= ${whereCondition.created_at.gte} AND r.created_at <= ${whereCondition.created_at.lte}`
@@ -365,63 +268,34 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
       console.log('📊 Querying department_stats...')
       let department_stats = []
 
-      if (isUniversityExecutive(user)) {
-        // University Executive: ดูได้ทุกคณะ
-        try {
-          const departmentReservations = await prisma.$queryRaw`
-            SELECT 
-              mr.department,
-              COUNT(r.reservation_id) as reservation_count
-            FROM reservation r
-            JOIN meeting_room mr ON r.room_id = mr.room_id
-            ${whereCondition.created_at ?
-              Prisma.sql`WHERE r.created_at >= ${whereCondition.created_at.gte} AND r.created_at <= ${whereCondition.created_at.lte}` :
-              Prisma.sql`WHERE 1=1`
-            }
-            GROUP BY mr.department
-            ORDER BY reservation_count DESC
-          `
+      // Executive: ดูได้ทุกคณะ/หน่วยงาน
+      try {
+        const departmentReservations = await prisma.$queryRaw`
+          SELECT 
+            mr.department,
+            COUNT(r.reservation_id) as reservation_count
+          FROM reservation r
+          JOIN meeting_room mr ON r.room_id = mr.room_id
+          ${whereCondition.created_at ?
+            Prisma.sql`WHERE r.created_at >= ${whereCondition.created_at.gte} AND r.created_at <= ${whereCondition.created_at.lte}` :
+            Prisma.sql`WHERE 1=1`
+          }
+          ${whereCondition.meeting_room?.department ?
+            Prisma.sql`${whereCondition.created_at ? Prisma.sql` AND ` : Prisma.sql` WHERE `} mr.department = ${whereCondition.meeting_room.department}` :
+            Prisma.sql``
+          }
+          GROUP BY mr.department
+          ORDER BY reservation_count DESC
+        `
 
-          department_stats = departmentReservations.map(dept => ({
-            department: dept.department,
-            reservations: Number(dept.reservation_count),
-            utilization: Math.min(Math.round((Number(dept.reservation_count) / 30) * 100), 100)
-          }))
-        } catch (error) {
-          console.error('❌ Error querying department_stats for University Executive:', error)
-          department_stats = []
-        }
-
-      } else if (isFacultyExecutive(user)) {
-        // Faculty Executive: ดูได้เฉพาะคณะตัวเอง
-        try {
-          console.log('📊 Faculty Executive querying department_stats for:', responsibleDepartment)
-
-          const facultyReservations = await prisma.$queryRaw`
-            SELECT 
-              mr.department,
-              COUNT(r.reservation_id) as reservation_count
-            FROM reservation r
-            JOIN meeting_room mr ON r.room_id = mr.room_id
-            WHERE mr.department = ${responsibleDepartment}
-            ${whereCondition.created_at ?
-              Prisma.sql`AND r.created_at >= ${whereCondition.created_at.gte} AND r.created_at <= ${whereCondition.created_at.lte}` :
-              Prisma.sql``
-            }
-            GROUP BY mr.department
-          `
-
-          department_stats = facultyReservations.map(dept => ({
-            department: dept.department,
-            reservations: Number(dept.reservation_count),
-            utilization: Math.min(Math.round((Number(dept.reservation_count) / 30) * 100), 100)
-          }))
-
-          console.log('✅ Faculty department_stats result:', department_stats)
-        } catch (error) {
-          console.error('❌ Error querying department_stats for Faculty Executive:', error)
-          department_stats = []
-        }
+        department_stats = departmentReservations.map(dept => ({
+          department: dept.department,
+          reservations: Number(dept.reservation_count),
+          utilization: Math.min(Math.round((Number(dept.reservation_count) / 30) * 100), 100)
+        }))
+      } catch (error) {
+        console.error('❌ Error querying department_stats:', error)
+        department_stats = []
       }
       console.log('✅ department_stats:', department_stats)
 
@@ -458,9 +332,9 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
 
       return {
         success: true,
-        message: 'รายงานสำหรับผู้บริหาร',
+        message: 'รายงานผู้บริหาร',
         executive_type: user.position,
-        department: isFacultyExecutive(user) ? responsibleDepartment : 'ทุกคณะ',
+        department: 'ทุกคณะ/หน่วยงาน',
         reports
       }
 
@@ -490,15 +364,8 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
     try {
       let whereCondition = {}
 
-      // Faculty Executive ดูได้เฉพาะคณะตัวเอง - ใช้ position-based
-      if (isFacultyExecutive(user)) {
-        const responsibleDepartment = getDepartmentFromPosition(user.position) || user.department
-        whereCondition.department = responsibleDepartment
-        console.log('🏫 Faculty Executive - Room Overview:', {
-          userPosition: user.position,
-          responsibleDepartment: responsibleDepartment
-        })
-      }
+      // Executive ดูได้ทุกห้องในทุกหน่วยงาน
+      console.log('🏫 Executive - Room Overview: ทุกหน่วยงาน')
 
       const rooms = await prisma.meeting_room.findMany({
         where: whereCondition,
@@ -518,7 +385,7 @@ export const executiveRoutes = new Elysia({ prefix: '/protected/executive' })
         success: true,
         message: 'รายการห้องประชุมสำหรับผู้บริหาร',
         executive_type: user.position,
-        accessible_departments: isFacultyExecutive(user) ? [user.department] : 'ทุกคณะ',
+        accessible_departments: 'ทุกคณะ/หน่วยงาน',
         rooms
       }
 

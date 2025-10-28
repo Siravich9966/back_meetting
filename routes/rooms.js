@@ -77,20 +77,19 @@ export const roomRoutes = new Elysia({ prefix: '/rooms' })
         where.capacity = { gte: parseInt(capacity) }
       }
 
-      // ⚠️ SECURITY FIX: Officer สามารถดูได้เฉพาะห้องตาม position_department เท่านั้น
+      // ⚠️ SECURITY FIX: Officer สามารถดูได้เฉพาะห้องตาม department เท่านั้น
       if (authenticatedUser && authenticatedUser.role === 'officer') {
-        if (authenticatedUser.position_department) {
-          where.department = authenticatedUser.position_department // บังคับให้เห็นเฉพาะห้องที่มีสิทธิ์ตาม position
-          console.log('🔐 [SECURITY] Officer room filtering by position_department:', {
+        if (authenticatedUser.department) {
+          where.department = authenticatedUser.department // บังคับให้เห็นเฉพาะห้องที่มีสิทธิ์ตาม department
+          console.log('🔐 [SECURITY] Officer room filtering by department:', {
             officer_id: authenticatedUser.officer_id,
-            current_department: authenticatedUser.department,
-            position_department: authenticatedUser.position_department,
-            filtered_by: authenticatedUser.position_department
+            department: authenticatedUser.department,
+            filtered_by: authenticatedUser.department
           })
         } else {
-          // หาก Officer ไม่มี position_department ให้ return empty result
+          // หาก Officer ไม่มี department ให้ return empty result
           where.room_id = -1 // Impossible room_id to return no results
-          console.log('⚠️ [SECURITY] Officer without position_department blocked from viewing rooms:', authenticatedUser.email)
+          console.log('⚠️ [SECURITY] Officer without department blocked from viewing rooms:', authenticatedUser.email)
         }
       } else if (department) {
         // สำหรับ role อื่นๆ หรือ public request ให้ filter ตาม parameter ปกติ
@@ -328,8 +327,8 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
 
-          // ⚠️ SECURITY FIX: ใช้ position_department จาก JWT middleware
-          if (!user.position_department) {
+          // ⚠️ SECURITY FIX: ใช้ department จาก JWT middleware
+          if (!user.department) {
             set.status = 403
             return {
               success: false,
@@ -337,20 +336,19 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
 
-          console.log('🔐 [SECURITY] Officer room creation by position_department:', {
+          console.log('🔐 [SECURITY] Officer room creation by department:', {
             officer_id: user.officer_id,
-            current_department: user.department,
-            position_department: user.position_department,
-            creating_for_department: user.position_department
+            department: user.department,
+            creating_for_department: user.department
           })
           
-          // สร้างห้องประชุมใหม่ (department ตาม position_department)
+          // สร้างห้องประชุมใหม่ (department ตาม department ของผู้ใช้)
           const newRoom = await prisma.meeting_room.create({
             data: {
               room_name,
               capacity: parseInt(capacity),
               location_m,
-              department: user.position_department, // ⚠️ SECURITY FIX: ใช้ position_department
+              department: user.department, // ⚠️ SECURITY FIX: ใช้ department
               status_m,
               image: imageBuffer, // เก็บรูปเป็น binary data ใน database
               details_m
@@ -814,8 +812,8 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
         try {
           const { status, capacity, search } = query
           
-          // ⚠️ SECURITY FIX: ใช้ position_department แทน user.department
-          if (!user.position_department) {
+          // ⚠️ SECURITY FIX: ใช้ department แทน user.department  
+          if (!user.department) {
             set.status = 403
             return {
               success: false,
@@ -823,9 +821,9 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
             }
           }
           
-          // สร้าง filter conditions (เฉพาะ position_department ตัวเอง)
+          // สร้าง filter conditions (เฉพาะ department ตัวเอง)
           const where = {
-            department: user.position_department // ⚠️ SECURITY FIX: ใช้ position_department
+            department: user.department // ⚠️ SECURITY FIX: ใช้ department
           }
           
           if (status) {
@@ -968,13 +966,12 @@ export const officerRoomRoutes = new Elysia({ prefix: '/protected/officer' })
 
           return {
             success: true,
-            message: `ห้องประชุมที่รับผิดชอบ (${user.position_department})`,
+            message: `ห้องประชุมที่รับผิดชอบ (${user.department})`,
             rooms: roomsWithImageCheck,
             total: roomsWithImageCheck.length,
-            department: user.position_department,
+            department: user.department,
             position_info: {
-              current_department: user.department,
-              position_department: user.position_department,
+              department: user.department,
               position: user.position
             }
           }

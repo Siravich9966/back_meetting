@@ -17,19 +17,19 @@ export const notificationRoutes = new Elysia({ prefix: '/protected/notifications
   // API สำหรับ Officer - ดูการจองใหม่ที่รอการอนุมัติในคณะตัวเอง
   .get('/officer', async ({ user, set }) => {
     try {
-      if (!user.position_department) {
+      if (!user.department) {
         set.status = 400
         return { success: false, message: 'ไม่พบข้อมูลคณะของเจ้าหน้าที่' }
       }
 
-      console.log('🔔 [Notifications] Officer:', user.officer_id, 'Department:', user.position_department)
+      console.log('🔔 [Notifications] Officer:', user.officer_id, 'Department:', user.department)
 
       // ดึงการจองใหม่ที่ยังรอการอนุมัติในคณะตัวเอง
       const pendingReservations = await prisma.reservation.findMany({
         where: {
           status_r: 'pending',
           meeting_room: {
-            department: user.position_department
+            department: user.department
           }
         },
         include: {
@@ -210,7 +210,7 @@ export const notificationRoutes = new Elysia({ prefix: '/protected/notifications
 
       // ตรวจสอบสิทธิ์การเข้าถึง
       const isUser = reservation.users.user_id === user.user_id
-      const isOfficer = user.position_department === reservation.meeting_room?.department
+      const isOfficer = user.department === reservation.meeting_room?.department
       
       if (!isUser && !isOfficer) {
         set.status = 403
@@ -275,7 +275,7 @@ export const notificationRoutes = new Elysia({ prefix: '/protected/notifications
 
       // ตรวจสอบสิทธิ์การเข้าถึง
       const isUser = reservation.users.user_id === user.user_id
-      const isOfficer = user.position_department === reservation.meeting_room?.department
+      const isOfficer = user.department === reservation.meeting_room?.department
       
       if (!isUser && !isOfficer) {
         set.status = 403
