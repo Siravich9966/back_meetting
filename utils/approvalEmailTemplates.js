@@ -1,5 +1,7 @@
 // Discord-style approval system email templates
 
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3580'
+
 export const getSuccessfulRegistrationEmail = (firstName, lastName) => {
   return {
     subject: '🔄 รอการตรวจสอบ - ระบบจองห้องประชุม',
@@ -112,7 +114,7 @@ export const getAccountApprovedEmail = (firstName, lastName) => {
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="http://localhost:3000/login" style="background: linear-gradient(135deg, #5865f2 0%, #3b82f6 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">
+            <a href="${FRONTEND_URL}/login" style="background: linear-gradient(135deg, #5865f2 0%, #3b82f6 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">
               🔑 เข้าสู่ระบบ
             </a>
           </div>
@@ -143,7 +145,7 @@ export const getAccountApprovedEmail = (firstName, lastName) => {
       - จัดการการจองและตรวจสอบสถานะ
       - แก้ไขข้อมูลส่วนตัวในโปรไฟล์
       
-      เข้าสู่ระบบ: http://localhost:3000/login
+      เข้าสู่ระบบ: ${FRONTEND_URL}/login
       
       ยินดีต้อนรับสู่ระบบจองห้องประชุม!
     `
@@ -187,7 +189,7 @@ export const getAccountRejectedEmail = (firstName, lastName) => {
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="http://localhost:3000/register" style="background: linear-gradient(135deg, #5865f2 0%, #3b82f6 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">
+            <a href="${FRONTEND_URL}/register" style="background: linear-gradient(135deg, #5865f2 0%, #3b82f6 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">
               📝 สมัครใหม่อีกครั้ง
             </a>
           </div>
@@ -217,7 +219,7 @@ export const getAccountRejectedEmail = (firstName, lastName) => {
       - ตรวจสอบข้อมูลให้ถูกต้องและครบถ้วน  
       - หากมีข้อสงสัยกรุณาติดต่อผู้ดูแลระบบ
       
-      สมัครใหม่: http://localhost:3000/register
+      สมัครใหม่: ${FRONTEND_URL}/register
       
       หากพบปัญหาหรือข้อสงสัย กรุณาติดต่อผู้ดูแลระบบ
     `
@@ -262,7 +264,7 @@ export const getNewUserNotificationForAdmin = (firstName, lastName, email, posit
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="http://localhost:3000/dashboard/admin/users" style="background: linear-gradient(135deg, #5865f2 0%, #3b82f6 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">
+            <a href="${FRONTEND_URL}/dashboard/admin/users" style="background: linear-gradient(135deg, #5865f2 0%, #3b82f6 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">
               👥 จัดการผู้ใช้
             </a>
           </div>
@@ -293,7 +295,7 @@ export const getNewUserNotificationForAdmin = (firstName, lastName, email, posit
       ตำแหน่ง: ${position}
       หน่วยงาน: ${department}
       
-      จัดการผู้ใช้: http://localhost:3000/dashboard/admin/users
+      จัดการผู้ใช้: ${FRONTEND_URL}/dashboard/admin/users
       
       กรุณาเข้าสู่ระบบเพื่อจัดการคำขออนุมัติ
     `

@@ -23,13 +23,13 @@ export const sendResetEmail = async (email, resetToken) => {
     // ตรวจสอบ environment variables
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
       console.log('⚠️ ไม่พบการตั้งค่าอีเมล (EMAIL_USER หรือ EMAIL_PASSWORD)')
-      console.log('📧 [DEVELOPMENT] Reset URL:', `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`)
+      console.log('📧 [DEVELOPMENT] Reset URL:', `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`)
       
       return {
         success: true, // return success เพื่อไม่ให้ระบบหยุดทำงาน
         message: 'Email configuration not set (development mode)',
         dev_info: {
-          reset_url: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`
+          reset_url: `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`
         }
       }
     }
@@ -37,7 +37,7 @@ export const sendResetEmail = async (email, resetToken) => {
     const transporter = createTransporter()
     
     // URL สำหรับรีเซ็ตรหัสผ่าน
-    const resetURL = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`
+    const resetURL = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`
     
     const mailOptions = {
       from: {

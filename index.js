@@ -32,17 +32,14 @@ import { notificationRoutes } from './routes/notifications.js' // Notification A
 
 // Configuration
 const PORT = process.env.PORT || 8000
-
+const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3580'
 // สร้าง Elysia app
 const app = new Elysia()
 
 // ตั้งค่า CORS
 app.use(cors({
   origin: [
-    'http://localhost:3000',
-    'http://localhost:3090',
-    'http://127.0.0.1:3000',
-    'http://127.0.0.1:3090'
+    frontendURL,
   ], // Support both common frontend ports
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],

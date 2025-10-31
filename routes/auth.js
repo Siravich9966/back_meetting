@@ -12,9 +12,9 @@ import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma.js'
 import { validateRegisterData, formatValidationErrors } from '../validation.js'
 import { isValidDepartment, getAllDepartments } from '../utils/departments.js'
-import { 
-  getSuccessfulRegistrationEmail, 
-  getNewUserNotificationForAdmin 
+import {
+  getSuccessfulRegistrationEmail,
+  getNewUserNotificationForAdmin
 } from '../utils/approvalEmailTemplates.js'
 import { sendEmail } from '../utils/emailService.js'
 import {
@@ -225,10 +225,10 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
 
         if (admins.length > 0) {
           const adminEmail = getNewUserNotificationForAdmin(
-            body.first_name, 
-            body.last_name, 
-            body.email, 
-            body.position, 
+            body.first_name,
+            body.last_name,
+            body.email,
+            body.position,
             body.department
           )
 
@@ -547,8 +547,8 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         set.status = 403
         return {
           success: false,
-          message: user.status === 'pending' 
-            ? 'บัญชีของคุณรอการอนุมัติจากผู้ดูแลระบบ' 
+          message: user.status === 'pending'
+            ? 'บัญชีของคุณรอการอนุมัติจากผู้ดูแลระบบ'
             : 'บัญชีของคุณไม่ได้รับการอนุมัติ'
         }
       }
@@ -913,19 +913,19 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         'department', // ✅ ปลดล็อค department ให้ทุกคนแก้ไขได้
         'province_id', 'district_id', 'subdistrict_id', 'zip_code'
       ]
-      
+
       // ข้อมูลที่เฉพาะ admin แก้ไขได้ (เพื่อป้องกันการเปลี่ยน role/สิทธิ์)
       const adminOnlyFields = ['position'] // 🔐 เฉพาะ position ที่ล็อคไว้
-      
+
       let allowedFields = [...basicFields]
-      
+
       // เฉพาะ admin เท่านั้นที่แก้ไข position ได้
       if (user.role === 'admin') {
         allowedFields.push(...adminOnlyFields)
         console.log('✅ Admin detected: allowing position updates')
       } else {
         console.log('⚠️ Non-admin user: position updates blocked, department updates allowed')
-        
+
         // เช็คว่ามีการพยายามแก้ไข position หรือไม่
         const blockedAttempts = adminOnlyFields.filter(field => body[field] !== undefined)
         if (blockedAttempts.length > 0) {
@@ -937,7 +937,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
           }
         }
       }
-      
+
       const updateData = {}
 
       // กรองเฉพาะข้อมูลที่อนุญาต
@@ -991,7 +991,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       }
 
       console.log('🎯 อัปเดต table:', tableName, 'ID:', userId)
-      
+
       // ตรวจสอบ userId ว่าเป็น undefined หรือไม่
       if (!userId) {
         console.log('❌ userId is undefined!')
@@ -1006,7 +1006,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       // ตรวจสอบ email และ citizen_id ซ้ำก่อนอัปเดต
       if (updateData.email || updateData.citizen_id) {
         console.log('🔍 ตรวจสอบข้อมูลซ้ำ...')
-        
+
         // ตรวจสอบ email ซ้ำในทุก table ยกเว้นข้อมูลตัวเอง
         if (updateData.email) {
           const emailChecks = await Promise.all([
@@ -1015,7 +1015,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
             prisma.admin.findFirst({ where: { email: updateData.email, NOT: { admin_id: tableName === 'admin' ? userId : undefined } } }),
             prisma.executive.findFirst({ where: { email: updateData.email, NOT: { executive_id: tableName === 'executive' ? userId : undefined } } })
           ])
-          
+
           const duplicateEmail = emailChecks.find(check => check !== null)
           if (duplicateEmail) {
             console.log('❌ อีเมลนี้ถูกใช้งานแล้ว')
@@ -1035,7 +1035,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
             prisma.admin.findFirst({ where: { citizen_id: updateData.citizen_id, NOT: { admin_id: tableName === 'admin' ? userId : undefined } } }),
             prisma.executive.findFirst({ where: { citizen_id: updateData.citizen_id, NOT: { executive_id: tableName === 'executive' ? userId : undefined } } })
           ])
-          
+
           const duplicateCitizen = citizenChecks.find(check => check !== null)
           if (duplicateCitizen) {
             console.log('❌ เลขบัตรประชาชนนี้ถูกใช้งานแล้ว')
